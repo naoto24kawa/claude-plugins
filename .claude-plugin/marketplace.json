@@ -1,0 +1,45 @@
+{
+  "name": "naoto24kawa-claude-plugins",
+  "owner": {
+    "name": "naoto24kawa",
+    "email": "naoto24kawa@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "review-skills",
+      "description": "レビューを行うスキル集です",
+      "version": "0.2.0",
+      "source": "./",
+      "agents": [
+        "./agents/review/implementation/review-coc-reviewer.md",
+        "./agents/review/implementation/review-garbage-detector.md",
+        "./agents/review/implementation/review-human-code-reviewer.md",
+        "./agents/review/implementation/review-kiss-reviewer.md",
+        "./agents/review/implementation/review-srp-reviewer.md",
+        "./agents/review/implementation/review-typescript-comprehensive.md",
+        "./agents/review/test/test-aaa-test-agent.md",
+        "./agents/review/test/test-test-double-agent.md",
+        "./agents/review/test/test-test-builder-agent.md",
+        "./agents/review/test/test-solid-test-agent.md",
+        "./agents/review/test/test-coordinator.md"
+      ],
+      "skills": [
+        "./skills/review/reviewing-skills",
+        "./skills/review/reviewing-ts-code",
+        "./skills/review/reviewing-test-code"
+      ]
+    },
+    {
+      "name": "notion-skills",
+      "description": "Notion公式が配布しているスキル集です",
+      "version": "1.0.0",
+      "source": "./",
+      "skills": [
+        "./skills/notion/notion-knowledge-capture",
+        "./skills/notion/notion-meeting-intelligence",
+        "./skills/notion/notion-research-documentation",
+        "./skills/notion/notion-spec-to-implementation"
+      ]
+    }
+  ]
+}

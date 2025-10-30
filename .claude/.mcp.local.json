@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "git": {
+      "timeout": 60,
+      "command": "/Users/nishikawa/.asdf/shims/uvx",
+      "args": ["mcp-server-git"],
+      "envFile": "~/.claude/.env.mcp",
+      "transportType": "stdio"
+    },
+    "playwright": {
+      "command": "/Users/nishikawa/.asdf/shims/npx",
+      "args": ["@playwright/mcp@latest", "--headless"],
+      "envFile": "~/.claude/.env.mcp"
+    },
+    "awslabs.core-mcp-server": {
+      "command": "/Users/nishikawa/.asdf/shims/uvx",
+      "args": ["awslabs.core-mcp-server@latest"],
+      "envFile": "~/.claude/.env.mcp",
+      "autoApprove": [],
+      "disabled": false
+    },
+    "awslabs.aws-documentation-mcp-server": {
+      "command": "/Users/nishikawa/.asdf/shims/uvx",
+      "args": ["awslabs.aws-documentation-mcp-server@latest"],
+      "envFile": "~/.claude/.env.mcp",
+      "disabled": false,
+      "autoApprove": []
+    },
+    "cloudflare.docs": {
+      "command": "/Users/nishikawa/.asdf/shims/npx",
+      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/sse"],
+      "envFile": "~/.claude/.env.mcp"
+    }
+  }
+}
