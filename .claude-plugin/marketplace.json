@@ -40,6 +40,39 @@
         "./skills/notion/notion-research-documentation",
         "./skills/notion/notion-spec-to-implementation"
       ]
+    },
+    {
+      "name": "aws-skills",
+      "description": "AWSに関するスキル集です",
+      "version": "0.1.0",
+      "source": "./",
+      "skills": [
+        "./skills/aws/developing-aws-solutions",
+        "./skills/aws/reviewing-aws-architecture",
+        "./skills/aws/researching-aws-documentation"
+      ],
+      "mcpServers": "./mcpServers/.mcp.aws.json"
+    },
+    {
+      "name": "cloudflare-skills",
+      "description": "Cloudflareに関するスキル集です",
+      "version": "0.1.0",
+      "source": "./",
+      "skills": [
+        "./skills/cloudflare/developing-cloudflare-solutions",
+        "./skills/cloudflare/reviewing-cloudflare-infrastructure",
+        "./skills/cloudflare/researching-cloudflare-resources"
+      ],
+      "mcpServers": "./mcpServers/.mcp.cloudflare.json"
+    },
+    {
+      "name": "testing-skills",
+      "description": "Playwrightによる動作検証のためのスキル集です",
+      "version": "0.1.0",
+      "source": "./",
+      "agents": ["./agents/playwright-tester.md"],
+      "skills": ["./skills/testing/testing-with-playwright"],
+      "mcpServers": "./mcpServers/.mcp.testing.json"
     }
   ]
 }

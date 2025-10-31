@@ -26,4 +26,5 @@
 ## 参照
 
 - [Plugin Marketplace](https://docs.claude.com/ja/docs/claude-code/plugin-marketplaces)
+  - `enablePlugins` で自動で追加できるようだが schema にまだ無いので設定が分からなかった
 - [Skill authoring best practices](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices)
