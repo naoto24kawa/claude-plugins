@@ -1,5 +1,5 @@
 ---
-name: reviewing-test-code
+name: ts-test-code-review
 description: テスト実装コードを5つの専門エージェント（AAA構造、Test Double、Test Builder、SOLID原則、TypeScript型安全性）とコーディネーターで多角的にレビューし、トレードオフを考慮した優先度付きテスト品質改善計画を策定する。「テストレビュー」「テスト品質」「テストリファクタリング」「テストカバレッジ」「モック適切性」「AAA構造」「型安全性」などの依頼時、またはテスト実装後の品質確認が必要な時に使用
 ---
 

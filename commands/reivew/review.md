@@ -1,5 +1,5 @@
 ---
-description: review-skills:reviewing-code を実行します
+description: review-skills:ts-code-review を実行します
 ---
 
-review-skills:reviewing-code を実行してください
+review-skills:ts-code-review を実行してください

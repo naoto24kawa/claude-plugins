@@ -17,8 +17,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── agents/                  # 専門エージェント定義
 │   └── review/             # コードレビュー用エージェント
 └── skills/                 # スキル定義
-    ├── reviewing-skills/   # スキルレビュー用スキル
-    └── reviewing-ts-code/  # TypeScriptコードレビュー用スキル
+    └── review/             # レビュー関連スキル
+        ├── claude-skills-review/   # スキルレビュー用スキル
+        ├── ts-code-review/         # TypeScriptコードレビュー用スキル
+        └── ts-test-code-review/    # TypeScriptテストコードレビュー用スキル
 ```
 
 ### コンポーネント構成
@@ -43,18 +45,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 専門分野に特化したレビュー観点を提供
 - 統一された報告形式（`../docs/agent-report-format.md`準拠）で結果を出力
 
-#### 3. スキル (skills/)
+#### 3. スキル (skills/review/)
 
-##### reviewing-skills
+##### claude-skills-review
 Claude Codeスキル自体をレビューするメタスキル：
 - `SKILL.md`: スキル定義（YAML frontmatter + 実行手順）
 - `CHECKLIST.md`: ベストプラクティスチェックリスト
 - `REPORT_TEMPLATE.md`: レビューレポート出力テンプレート
 - `EXAMPLES.md`: 良い例・悪い例の具体例
 
-##### reviewing-ts-code
+##### ts-code-review
 実装コードを多角的にレビューするスキル：
 - `SKILL.md`: コードレビューワークフロー定義
+- `ANALYSIS_GUIDE.md`: トレードオフ分析手法
+- `REPORT_TEMPLATE.md`: 統合レポート形式
+- `METRICS.md`: 成功指標の定義
+- `EXAMPLES.md`: レビュー結果の具体例
+
+##### ts-test-code-review
+テスト実装コードを多角的にレビューするスキル：
+- `SKILL.md`: テストレビューワークフロー定義
 - `ANALYSIS_GUIDE.md`: トレードオフ分析手法
 - `REPORT_TEMPLATE.md`: 統合レポート形式
 - `METRICS.md`: 成功指標の定義
@@ -85,10 +95,13 @@ Claude Codeスキル自体をレビューするメタスキル：
 
 ```bash
 # TypeScriptコードをレビュー
-/skill reviewing-ts-code
+/skill ts-code-review
+
+# TypeScriptテストコードをレビュー
+/skill ts-test-code-review
 
 # Claude Codeスキルをレビュー
-/skill reviewing-skills
+/skill claude-skills-review
 ```
 
 ## 開発ワークフロー
@@ -123,8 +136,6 @@ Claude Codeスキル自体をレビューするメタスキル：
 
 ### 現在のステータス
 - メインブランチ: `main`
-- 削除予定ファイル: `CLAUDE.md`（旧版）、`skills/reviewing-code/` ディレクトリ
-- 新規ファイル: `skills/reviewing-ts-code/`（追跡対象外）
 
 ### コミット時の注意点
 - プラグイン定義（marketplace.json）の変更はバージョン番号の更新を伴う
@@ -133,12 +144,12 @@ Claude Codeスキル自体をレビューするメタスキル：
 
 ## プラグインの品質保証
 
-このリポジトリ自体が `reviewing-skills` スキルを使用してレビュー可能です：
+このリポジトリ自体が `claude-skills-review` スキルを使用してレビュー可能です：
 
 ```bash
 # このリポジトリのスキルをレビュー
-/skill reviewing-skills
-# 対象: ./skills/reviewing-skills または ./skills/reviewing-ts-code
+/skill claude-skills-review
+# 対象: ./skills/review/claude-skills-review, ./skills/review/ts-code-review, ./skills/review/ts-test-code-review
 ```
 
 これにより、メタ的にスキルの品質を継続的に改善できます。

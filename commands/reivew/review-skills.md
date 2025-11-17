@@ -1,5 +1,5 @@
 ---
-description: review-skills:reviewing-skills を実行します
+description: review-skills:claude-skills-review を実行します
 ---
 
-review-skills:reviewing-skills を実行してください
+review-skills:claude-skills-review を実行してください

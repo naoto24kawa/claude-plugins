@@ -24,9 +24,9 @@
         "./agents/review/test/test-coordinator.md"
       ],
       "skills": [
-        "./skills/review/reviewing-skills",
-        "./skills/review/reviewing-ts-code",
-        "./skills/review/reviewing-test-code"
+        "./skills/claude/claude-skills-review",
+        "./skills/review/ts-code-review",
+        "./skills/review/ts-test-code-review"
       ]
     },
     {
