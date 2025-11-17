@@ -2,6 +2,19 @@
 
 This document provides concrete examples of well-designed sub-agent configurations that follow best practices.
 
+## Table of Contents
+
+1. [Example 1: Code Reviewer (Excellent)](#example-1-code-reviewer-excellent)
+2. [Example 2: Test Generator (Good)](#example-2-test-generator-good)
+3. [Example 3: API Documenter (Needs Improvement)](#example-3-api-documenter-needs-improvement)
+4. [Example 4: Security Auditor (Critical Issues)](#example-4-security-auditor-critical-issues)
+5. [Example 5: Database Schema Manager (Well-Designed)](#example-5-database-schema-manager-well-designed)
+6. [Anti-Pattern Examples](#anti-pattern-examples)
+7. [Quick Reference: Dos and Don'ts](#quick-reference-dos-and-donts)
+8. [Evaluation Rubric](#evaluation-rubric)
+
+---
+
 ## Example 1: Code Reviewer (Excellent)
 
 ### Configuration
