@@ -306,9 +306,8 @@ cat /path/to/skill/SKILL.md
 ### 即座に修正すべき（Critical/High）
 
 1. 必須フィールドの欠如
-2. 命名規則の重大な違反
-3. Description の致命的な問題
-4. エラーハンドリングの欠如
+2. Description の致命的な問題
+3. エラーハンドリングの欠如
 
 ### 早期に改善すべき（Medium）
 

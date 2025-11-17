@@ -1,7 +1,25 @@
 ---
 name: skills-review
-description: Comprehensively review Claude Code skills against best practices, evaluating quality, structure, discoverability, and efficiency across seven dimensions (naming, description, progressive disclosure, content quality, workflow, templates, technical details). Provides A-F grades with specific improvement recommendations. Use when users request "skill review," "check skill quality," "validate best practices," "skill assessment," "improve skill," or mention skill evaluation, quality check, or standards compliance.
+description: Comprehensively review Claude Code skills against best practices, evaluating quality, structure, discoverability, and efficiency across six dimensions (description, progressive disclosure, content quality, workflow, templates, technical details). Provides A-F grades with specific improvement recommendations. Use when users request "skill review," "check skill quality," "validate best practices," "skill assessment," "improve skill," or mention skill evaluation, quality check, or standards compliance.
 allowed-tools: [Read, Glob, Grep, TodoWrite]
+---
+
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [When to Use This Skill](#when-to-use-this-skill)
+3. [Review Dimensions](#review-dimensions)
+4. [Review Process](#review-process)
+   - [Step 1: Load Skill Files](#step-1-load-skill-files)
+   - [Step 2: Evaluate Against Best Practices](#step-2-evaluate-against-best-practices)
+   - [Step 3: Classify Issues by Priority](#step-3-classify-issues-by-priority)
+   - [Step 4: Generate Review Report](#step-4-generate-review-report)
+   - [Step 5: Provide Concrete Examples](#step-5-provide-concrete-examples)
+   - [Step 6: Continuous Improvement Cycle](#step-6-continuous-improvement-cycle)
+5. [Default Settings](#default-settings)
+6. [Grading Criteria](#grading-criteria)
+7. [Important Notes](#important-notes)
+
 ---
 
 ## Purpose
@@ -19,15 +37,14 @@ Use this skill when:
 
 ## Review Dimensions
 
-This skill evaluates skills across seven dimensions:
+This skill evaluates skills across six dimensions:
 
-1. **Naming Convention**: Gerund form, lowercase, hyphen-separated
-2. **Description Quality**: Third-person, specific functionality, trigger words, optimal length
-3. **Progressive Disclosure**: SKILL.md ≤500 lines, external references, single-layer depth
-4. **Content Quality**: Conciseness, time-independence, terminology consistency
-5. **Workflow**: Clear steps, validation points, error handling
-6. **Templates & Examples**: Output templates, good/bad examples
-7. **Technical Details**: Scripts, MCP tool references, dependencies
+1. **Description Quality**: Third-person, specific functionality, trigger words, optimal length
+2. **Progressive Disclosure**: SKILL.md ≤500 lines, external references, single-layer depth
+3. **Content Quality**: Conciseness, time-independence, terminology consistency
+4. **Workflow**: Clear steps, validation points, error handling
+5. **Templates & Examples**: Output templates, good/bad examples
+6. **Technical Details**: Scripts, MCP tool references, dependencies
 
 ## Review Process
 
@@ -37,14 +54,34 @@ Load the target skill's files:
 - SKILL.md (required)
 - Related reference files (if present)
 
-Verify that SKILL.md exists and has valid YAML frontmatter.
+**Verification**: Verify that SKILL.md exists and has valid YAML frontmatter.
+
+**Error Handling**:
+
+If SKILL.md is not found:
+1. Check common alternative paths:
+   - `./SKILL.md` (current directory)
+   - `./[skill-name]/SKILL.md` (skill directory)
+   - `./skills/[skill-name]/SKILL.md` (nested structure)
+2. If still not found, report error with searched paths
+3. Suggest user to verify the skill directory path
+
+If YAML frontmatter is invalid:
+1. Check for missing `---` delimiters
+2. Verify required fields exist (`name`, `description`)
+3. Check for YAML syntax errors (indentation, special characters)
+4. Provide specific error message with line number if possible
+
+If reference files are missing:
+1. Note missing files in review report
+2. Continue review with available files
+3. Flag as Medium priority issue in final report
 
 ### Step 2: Evaluate Against Best Practices
 
-Systematically evaluate the skill using the comprehensive checklist in `CHECKLIST.md`. This checklist covers all seven review dimensions with specific criteria and scoring.
+Systematically evaluate the skill using the comprehensive checklist in `CHECKLIST.md`. This checklist covers all six review dimensions with specific criteria and scoring.
 
 Key evaluation points:
-- **Naming**: Gerund form, lowercase, meaningful
 - **Description**: Third-person, trigger words, 200-800 characters optimal
 - **Structure**: SKILL.md ≤500 lines, single-layer references
 - **Content**: Concise, time-independent, consistent terminology
@@ -78,10 +115,37 @@ Required sections:
 
 For each issue, provide before/after examples showing the recommended fix. Reference `EXAMPLES.md` for common patterns and anti-patterns.
 
+### Step 6: Continuous Improvement Cycle
+
+After implementing recommended improvements, re-review the skill to verify changes and identify any remaining issues.
+
+**Workflow**:
+
+1. **Implement Changes**: Apply high and medium priority improvements first
+2. **Verify Changes**: Ensure each change addresses the identified issue
+3. **Re-Review**: Run the review process again on the updated skill
+4. **Compare Scores**: Track improvement from initial to post-improvement score
+5. **Iterate**: Continue until achieving target grade (typically B or higher)
+
+**Success Criteria**:
+
+- All Critical and High priority issues resolved
+- Grade improved by at least one level (e.g., C → B)
+- No new issues introduced by changes
+- Documentation updated to reflect improvements
+
+**Validation Points**:
+
+- SKILL.md still within 500-line recommendation
+- All internal references still valid
+- YAML frontmatter remains valid
+- Description still within 1024 character limit
+
+This feedback loop ensures continuous quality improvement and validates that changes have the intended effect.
+
 ## Default Settings
 
 ### Evaluation Criteria
-- **Naming**: Strongly recommend gerund form (verb+-ing)
 - **Description**: Require trigger words ("Use when...")
 - **Line Count**: Recommend SKILL.md ≤500 lines, warn if exceeded
 - **Reference Depth**: Recommend single layer, warn if deeper
