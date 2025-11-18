@@ -6,74 +6,91 @@
   },
   "plugins": [
     {
-      "name": "review-skills",
-      "description": "レビューを行うスキル集です",
-      "version": "0.2.0",
+      "name": "review",
+      "description": "コードレビューのためのプラグイン",
+      "version": "0.1.0",
       "source": "./",
       "agents": [
-        "./agents/review/implementation/review-coc-reviewer.md",
-        "./agents/review/implementation/review-garbage-detector.md",
-        "./agents/review/implementation/review-human-code-reviewer.md",
-        "./agents/review/implementation/review-kiss-reviewer.md",
-        "./agents/review/implementation/review-srp-reviewer.md",
-        "./agents/review/implementation/review-typescript-comprehensive.md",
-        "./agents/review/test/test-aaa-test-agent.md",
-        "./agents/review/test/test-test-double-agent.md",
-        "./agents/review/test/test-test-builder-agent.md",
-        "./agents/review/test/test-solid-test-agent.md",
-        "./agents/review/test/test-coordinator.md"
+        "./skills/review/ts-code-review/agents/review-coc-reviewer.md",
+        "./skills/review/ts-code-review/agents/review-garbage-detector.md",
+        "./skills/review/ts-code-review/agents/review-human-code-reviewer.md",
+        "./skills/review/ts-code-review/agents/review-kiss-reviewer.md",
+        "./skills/review/ts-code-review/agents/review-srp-reviewer.md",
+        "./skills/review/ts-code-review/agents/review-typescript-comprehensive.md",
+        "./skills/review/ts-test-code-review/agents/test-aaa-test-agent.md", 
+        "./skills/review/ts-test-code-review/agents/test-coordinator.md", 
+        "./skills/review/ts-test-code-review/agents/test-solid-test-agent.md", 
+        "./skills/review/ts-test-code-review/agents/test-test-builder-agent.md", 
+        "./skills/review/ts-test-code-review/agents/test-test-double-agent.md"
       ],
       "skills": [
-        "./skills/claude/skills-review",
-        "./skills/claude/subagent-review",
         "./skills/review/ts-code-review",
         "./skills/review/ts-test-code-review"
       ]
     },
     {
-      "name": "notion-skills",
-      "description": "Notion公式が配布しているスキル集です",
-      "version": "1.0.0",
+      "name": "test",
+      "description": "動作検証のためのプラグイン",
+      "version": "0.1.0",
+      "source": "./",
+      "agents": ["./skills/test/test-with-playwright/agents/playwright-tester.md"],
+      "skills": ["./skills/test/test-with-playwright"],
+      "mcpServers": "./skills/test/test-with-playwright/.mcp.json"
+    },
+    {
+      "name": "git",
+      "description": "Git操作のためのプラグイン",
+      "version": "0.1.0",
+      "source": "./",
+      "skills": ["./skills/git/worktree-manage"]
+    },
+    {
+      "name": "claude",
+      "description": "claude開発のためのプラグイン",
+      "version": "0.1.0",
       "source": "./",
       "skills": [
-        "./skills/notion/notion-knowledge-capture",
-        "./skills/notion/notion-meeting-intelligence",
-        "./skills/notion/notion-research-documentation",
-        "./skills/notion/notion-spec-to-implementation"
+        "./skills/claude/skill-review",
+        "./skills/claude/subagent-review"
       ]
     },
     {
-      "name": "aws-skills",
+      "name": "notion",
+      "description": "Notion公式が配布しているプラグイン",
+      "version": "1.0.0",
+      "source": "./",
+      "skills": [
+        "./skills/notion/knowledge-capture",
+        "./skills/notion/meeting-intelligence",
+        "./skills/notion/research-documentation",
+        "./skills/notion/spec-to-implementation"
+      ]
+    },
+    {
+      "name": "aws",
       "description": "AWSに関するスキル集です",
       "version": "0.1.0",
       "source": "./",
+      "agents": ["./skills/aws/aws-specialist.md"],
       "skills": [
-        "./skills/aws/developing-aws-solutions",
-        "./skills/aws/reviewing-aws-architecture",
-        "./skills/aws/researching-aws-documentation"
+        "./skills/aws/developer",
+        "./skills/aws/research-documentation",
+        "./skills/aws/review-architecture"
       ],
-      "mcpServers": "./mcpServers/.mcp.aws.json"
+      "mcpServers": "./skills/aws/.mcp.json"
     },
     {
-      "name": "cloudflare-skills",
+      "name": "cloudflare",
       "description": "Cloudflareに関するスキル集です",
       "version": "0.1.0",
       "source": "./",
+      "agents": ["./skills/cloudflare/cloudflare-specialist.md"],
       "skills": [
-        "./skills/cloudflare/developing-cloudflare-solutions",
-        "./skills/cloudflare/reviewing-cloudflare-infrastructure",
-        "./skills/cloudflare/researching-cloudflare-resources"
+        "./skills/cloudflare/developer", 
+        "./skills/cloudflare/research-resources", 
+        "./skills/cloudflare/review-infrastructure"
       ],
-      "mcpServers": "./mcpServers/.mcp.cloudflare.json"
-    },
-    {
-      "name": "testing-skills",
-      "description": "Playwrightによる動作検証のためのスキル集です",
-      "version": "0.1.0",
-      "source": "./",
-      "agents": ["./agents/playwright-tester.md"],
-      "skills": ["./skills/testing/testing-with-playwright"],
-      "mcpServers": "./mcpServers/.mcp.testing.json"
+      "mcpServers": "./skills/cloudflare/.mcp.json"
     }
   ]
 }

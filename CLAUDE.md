@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Claude Code用のプラグインマーケットプレースです。5つのプラグイン群（review-skills、notion-skills、aws-skills、cloudflare-skills、testing-skills）を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、改善提案、インフラ管理などを自動化します。
+Claude Code用のプラグインマーケットプレースです。7つのプラグイン（review、test、git、claude、notion、aws、cloudflare）を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、動作検証、Git操作、インフラ管理などを自動化します。
 
 ## アーキテクチャ
 
@@ -13,85 +13,119 @@ Claude Code用のプラグインマーケットプレースです。5つのプ�
 ```
 .
 ├── .claude-plugin/
-│   └── marketplace.json     # 5つのプラグイン定義
-├── agents/
-│   ├── aws-specialist.md
-│   ├── cloudflare-specialist.md
-│   ├── playwright-tester.md
-│   └── review/
-│       ├── implementation/   # 実装レビュー用エージェント
-│       └── test/            # テストレビュー用エージェント
-├── mcpServers/              # MCP サーバー設定
-│   ├── .mcp.aws.json
-│   ├── .mcp.cloudflare.json
-│   └── .mcp.testing.json
+│   └── marketplace.json        # 7つのプラグイン定義
 └── skills/
-    ├── aws/                 # AWS開発・レビュー・調査
-    ├── cloudflare/          # Cloudflare開発・レビュー・調査
-    ├── claude/              # スキル/サブエージェントレビュー
-    ├── notion/              # Notion連携（4スキル）
-    ├── review/              # コードレビュー
-    └── testing/             # Playwright テスト
+    ├── aws/                    # AWS開発・レビュー・調査
+    │   ├── .mcp.json          # AWS MCP サーバー設定
+    │   └── aws-specialist.md  # AWS専門エージェント
+    ├── cloudflare/             # Cloudflare開発・レビュー・調査
+    │   ├── .mcp.json          # Cloudflare MCP サーバー設定
+    │   └── cloudflare-specialist.md
+    ├── claude/                 # Claude Code スキル/エージェントレビュー
+    │   ├── skill-review/
+    │   └── subagent-review/
+    ├── git/                    # Git操作
+    │   └── worktree-manage/
+    ├── notion/                 # Notion連携（4スキル）
+    │   ├── knowledge-capture/
+    │   ├── meeting-intelligence/
+    │   ├── research-documentation/
+    │   └── spec-to-implementation/
+    ├── review/                 # コードレビュー
+    │   ├── ts-code-review/
+    │   │   └── agents/        # 実装レビュー用エージェント
+    │   └── ts-test-code-review/
+    │       └── agents/        # テストレビュー用エージェント
+    └── test/                   # 動作検証
+        └── test-with-playwright/
+            ├── .mcp.json      # Playwright MCP サーバー設定
+            └── agents/
 ```
 
-### コンポーネント構成
+### プラグイン構成
 
-#### 1. マーケットプレース設定 (.claude-plugin/marketplace.json)
-5つのプラグインを定義：
-- **review-skills** (v0.2.0): コードレビュー、スキルレビュー、サブエージェントレビュー
-- **notion-skills** (v1.0.0): Notion連携（Knowledge Capture、Meeting Intelligence、Research Documentation、Spec to Implementation）
-- **aws-skills** (v0.1.0): AWS開発、アーキテクチャレビュー、ドキュメント調査
-- **cloudflare-skills** (v0.1.0): Cloudflare開発、インフラレビュー、リソース調査
-- **testing-skills** (v0.1.0): Playwright による動作検証
+marketplace.jsonで定義されている7つのプラグイン：
 
-#### 2. エージェント
+#### 1. review (v0.1.0)
+実装コードとテストコードのレビューを行う専門エージェント群を提供：
 
-##### 実装レビュー用 (agents/review/implementation/)
-- **review-srp-reviewer.md**: Single Responsibility Principle
-- **review-human-code-reviewer.md**: Code for Humans（可読性）
-- **review-kiss-reviewer.md**: KISS原則
-- **review-coc-reviewer.md**: Convention over Configuration
-- **review-typescript-comprehensive.md**: TypeScript 型安全性
-- **review-garbage-detector.md**: 不要ファイル検出
+**エージェント（実装レビュー）:**
+- `review-srp-reviewer`: Single Responsibility Principle
+- `review-human-code-reviewer`: Code for Humans（可読性）
+- `review-kiss-reviewer`: KISS原則
+- `review-coc-reviewer`: Convention over Configuration
+- `review-typescript-comprehensive`: TypeScript 型安全性
+- `review-garbage-detector`: 不要ファイル検出
 
-##### テストレビュー用 (agents/review/test/)
-- **test-aaa-test-agent.md**: Arrange-Act-Assert Pattern
-- **test-test-double-agent.md**: Test Double Pattern（Mock、Stub、Fake）
-- **test-test-builder-agent.md**: Test Data Builder Pattern
-- **test-solid-test-agent.md**: SOLID Principles for Tests
-- **test-coordinator.md**: 複数エージェントの結果統合とトレードオフ調整
+**エージェント（テストレビュー）:**
+- `test-aaa-test-agent`: Arrange-Act-Assert Pattern
+- `test-test-double-agent`: Test Double Pattern（Mock、Stub、Fake）
+- `test-test-builder-agent`: Test Data Builder Pattern
+- `test-solid-test-agent`: SOLID Principles for Tests
+- `test-coordinator`: 複数エージェントの結果統合とトレードオフ調整
 
-##### その他
-- **aws-specialist.md**: AWS開発支援
-- **cloudflare-specialist.md**: Cloudflare開発支援
-- **playwright-tester.md**: Playwright動作検証
+**スキル:**
+- `ts-code-review`: TypeScript実装コードの多角的レビュー
+- `ts-test-code-review`: TypeScriptテストコードの多角的レビュー
 
-#### 3. スキル
+#### 2. test (v0.1.0)
+Playwrightを使用した動作検証：
 
-##### Review系 (skills/review/, skills/claude/)
-- **ts-code-review**: TypeScript実装コードの多角的レビュー
-- **ts-test-code-review**: TypeScriptテストコードの多角的レビュー
-- **skills-review**: Claude Codeスキルのレビュー
-- **subagent-review**: サブエージェント実装のレビュー
+**エージェント:**
+- `playwright-tester`: E2Eテスト・動作検証
 
-##### AWS系 (skills/aws/)
-- **developing-aws-solutions**: Lambda、ECS、RDS等の実装・デプロイ
-- **reviewing-aws-architecture**: Well-Architected Framework準拠レビュー
-- **researching-aws-documentation**: 公式ドキュメント検索・参照
+**スキル:**
+- `test-with-playwright`: Playwright による動作検証
 
-##### Cloudflare系 (skills/cloudflare/)
-- **developing-cloudflare-solutions**: Workers、Pages、R2等の実装
-- **reviewing-cloudflare-infrastructure**: パフォーマンス・セキュリティレビュー
-- **researching-cloudflare-resources**: MCP経由のリソース調査
+**MCP:** Playwright MCP サーバー (`skills/test/test-with-playwright/.mcp.json`)
 
-##### Notion系 (skills/notion/)
-- **notion-knowledge-capture**: 会話をドキュメント化
-- **notion-meeting-intelligence**: 会議準備資料作成
-- **notion-research-documentation**: リサーチレポート作成
-- **notion-spec-to-implementation**: 仕様からタスク化
+#### 3. git (v0.1.0)
+Git worktree の管理：
 
-##### Testing系 (skills/testing/)
-- **testing-with-playwright**: E2Eテスト・動作検証
+**スキル:**
+- `worktree-manage`: Git worktree の作成・管理・クリーンアップ
+
+#### 4. claude (v0.1.0)
+Claude Code のスキルとサブエージェントのレビュー：
+
+**スキル:**
+- `skill-review`: Claude Codeスキルのレビュー
+- `subagent-review`: サブエージェント実装のレビュー
+
+#### 5. notion (v1.0.0)
+Notion連携による知識管理とドキュメント作成：
+
+**スキル:**
+- `knowledge-capture`: 会話をドキュメント化
+- `meeting-intelligence`: 会議準備資料作成
+- `research-documentation`: リサーチレポート作成
+- `spec-to-implementation`: 仕様からタスク化
+
+#### 6. aws (v0.1.0)
+AWS開発支援とアーキテクチャレビュー：
+
+**エージェント:**
+- `aws-specialist`: AWS開発支援
+
+**スキル:**
+- `developer`: Lambda、ECS、RDS等の実装・デプロイ
+- `research-documentation`: 公式ドキュメント検索・参照
+- `review-architecture`: Well-Architected Framework準拠レビュー
+
+**MCP:** AWS Documentation MCP サーバー (`skills/aws/.mcp.json`)
+
+#### 7. cloudflare (v0.1.0)
+Cloudflare開発支援とインフラレビュー：
+
+**エージェント:**
+- `cloudflare-specialist`: Cloudflare開発支援
+
+**スキル:**
+- `developer`: Workers、Pages、R2等の実装
+- `research-resources`: MCP経由のリソース調査
+- `review-infrastructure`: パフォーマンス・セキュリティレビュー
+
+**MCP:** Cloudflare Documentation MCP サーバー (`skills/cloudflare/.mcp.json`)
 
 ### Progressive Disclosure パターン
 
@@ -110,92 +144,95 @@ Claude Code用のプラグインマーケットプレースです。5つのプ�
 # マーケットプレースを追加
 /plugin marketplace add naoto24kawa/claude-plugins
 
-# プラグインをインストール
-/plugin install review-skills@naoto24kawa-claude-plugins
-/plugin install aws-skills@naoto24kawa-claude-plugins
-/plugin install cloudflare-skills@naoto24kawa-claude-plugins
-/plugin install notion-skills@naoto24kawa-claude-plugins
-/plugin install testing-skills@naoto24kawa-claude-plugins
+# プラグインをインストール（プラグイン名は正確に指定）
+/plugin install review@naoto24kawa-claude-plugins
+/plugin install test@naoto24kawa-claude-plugins
+/plugin install git@naoto24kawa-claude-plugins
+/plugin install claude@naoto24kawa-claude-plugins
+/plugin install notion@naoto24kawa-claude-plugins
+/plugin install aws@naoto24kawa-claude-plugins
+/plugin install cloudflare@naoto24kawa-claude-plugins
 ```
 
 ### スキルの実行例
 
 ```bash
 # Review系
-/skill review-skills:ts-code-review
-/skill review-skills:ts-test-code-review
-/skill review-skills:skills-review
-/skill review-skills:subagent-review
+/skill review:ts-code-review
+/skill review:ts-test-code-review
+
+# Claude系
+/skill claude:skill-review
+/skill claude:subagent-review
+
+# Git系
+/skill git:worktree-manage
 
 # AWS系
-/skill aws-skills:developing-aws-solutions
-/skill aws-skills:reviewing-aws-architecture
-/skill aws-skills:researching-aws-documentation
+/skill aws:developer
+/skill aws:review-architecture
+/skill aws:research-documentation
 
 # Cloudflare系
-/skill cloudflare-skills:developing-cloudflare-solutions
-/skill cloudflare-skills:reviewing-cloudflare-infrastructure
-/skill cloudflare-skills:researching-cloudflare-resources
+/skill cloudflare:developer
+/skill cloudflare:review-infrastructure
+/skill cloudflare:research-resources
 
 # Notion系
-/skill notion-skills:notion-knowledge-capture
-/skill notion-skills:notion-meeting-intelligence
-/skill notion-skills:notion-research-documentation
-/skill notion-skills:notion-spec-to-implementation
+/skill notion:knowledge-capture
+/skill notion:meeting-intelligence
+/skill notion:research-documentation
+/skill notion:spec-to-implementation
 
-# Testing系
-/skill testing-skills:testing-with-playwright
+# Test系
+/skill test:test-with-playwright
 ```
 
 ### MCP サーバー連携
 
-AWS、Cloudflare、Testing プラグインは、それぞれ専用のMCPサーバーを使用して外部リソースにアクセスします：
+AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバーを使用して外部リソースにアクセスします：
 
-- **aws-skills**: `mcpServers/.mcp.aws.json` - AWS公式ドキュメントサーバー
-- **cloudflare-skills**: `mcpServers/.mcp.cloudflare.json` - Cloudflareドキュメントサーバー
-- **testing-skills**: `mcpServers/.mcp.testing.json` - Playwrightサーバー
+- **aws**: `skills/aws/.mcp.json` - AWS公式ドキュメントサーバー
+- **cloudflare**: `skills/cloudflare/.mcp.json` - Cloudflareドキュメントサーバー
+- **test**: `skills/test/test-with-playwright/.mcp.json` - Playwrightサーバー
 
 プラグインインストール時に自動的に設定されます。
 
 ## 開発ワークフロー
 
-### 新しいエージェントの追加
-
-1. `agents/<カテゴリ>/` に新しいマークダウンファイルを作成
-2. YAML frontmatterで `name` と `description` を定義
-3. エージェントの専門分野とレビュー観点を記述
-4. `.claude-plugin/marketplace.json` の `agents` 配列にパスを追加
-
 ### 新しいプラグインの追加
 
 1. `.claude-plugin/marketplace.json` の `plugins` 配列に新規エントリを追加
-2. プラグインに含めるスキル・エージェントを作成
-3. MCPサーバーが必要な場合は `mcpServers/` に設定ファイルを配置
-4. バージョン番号を設定（初回は 0.1.0 推奨）
+2. プラグイン名（`name`）はケバブケース、短く明確に
+3. プラグインに含めるスキル・エージェントを作成
+4. MCPサーバーが必要な場合は `skills/<プラグイン名>/.mcp.json` に配置
+5. バージョン番号を設定（初回は 0.1.0 推奨）
 
 ### 新しいスキルの追加
 
-1. `skills/<カテゴリ>/<スキル名>/` ディレクトリを作成
+1. `skills/<プラグイン名>/<スキル名>/` ディレクトリを作成
 2. `SKILL.md` を作成（YAML frontmatter必須）
-   - `name`: gerund形式（例: developing-aws-solutions）
+   - `name`: gerund形式またはケバブケース（例: developer, worktree-manage）
    - `description`: トリガーワード含有、1024文字以内
 3. Progressive Disclosure パターンに従い詳細情報を別ファイルに分離
    - SKILL.md は500行以下
    - 外部ファイル参照は1階層まで
 4. `.claude-plugin/marketplace.json` の該当プラグインの `skills` 配列にパスを追加
+   - パス形式: `./skills/<プラグイン名>/<スキル名>`
 
 ### 新しいエージェントの追加
 
-1. `agents/<カテゴリ>/` に新しいマークダウンファイルを作成
+1. `skills/<プラグイン名>/agents/` または `skills/<プラグイン名>/<スキル名>/agents/` にマークダウンファイルを作成
 2. YAML frontmatterで `name` と `description` を定義
 3. エージェントの専門分野とレビュー観点を記述
 4. `.claude-plugin/marketplace.json` の該当プラグインの `agents` 配列にパスを追加
+   - パス形式: `./skills/<プラグイン名>/<スキル名>/agents/<エージェント名>.md`
 
 ### 品質基準
 
 スキル・エージェントは以下の基準を満たす必要があります：
 
-- **スキル命名**: Gerund形式（例: reviewing-code, developing-solutions）
+- **スキル命名**: Gerund形式またはケバブケース（例: developer, worktree-manage）
 - **Description**: 具体的なトリガーワード含有、1024文字以内
 - **行数**: メインファイルは500行以下（Progressive Disclosure）
 - **参照深度**: 外部ファイル参照は1階層まで
@@ -210,7 +247,8 @@ AWS、Cloudflare、Testing プラグインは、それぞれ専用のMCPサー�
 ### コミット時の注意点
 - プラグイン定義（marketplace.json）の変更はバージョン番号の更新を伴う
 - スキルやエージェントの追加時は、必ず marketplace.json も更新する
-- 削除予定ファイルは次回コミット時に削除される
+- パス指定は相対パスで `./skills/` から始める形式を使用
+- プラグイン名とディレクトリ構造は一貫性を保つ
 
 ## プラグインの品質保証
 
@@ -218,16 +256,16 @@ AWS、Cloudflare、Testing プラグインは、それぞれ専用のMCPサー�
 
 ```bash
 # スキルをレビュー
-/skill review-skills:skills-review
+/skill claude:skill-review
 
 # サブエージェントをレビュー
-/skill review-skills:subagent-review
+/skill claude:subagent-review
 
 # TypeScriptコードをレビュー（該当する場合）
-/skill review-skills:ts-code-review
+/skill review:ts-code-review
 
 # TypeScriptテストコードをレビュー（該当する場合）
-/skill review-skills:ts-test-code-review
+/skill review:ts-test-code-review
 ```
 
 これにより、メタ的にスキル・エージェントの品質を継続的に改善できます。

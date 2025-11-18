@@ -1,21 +1,4 @@
 {
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "osascript -e 'display notification \"作業が完了しました！\" with title \"Claude Code\" subtitle \"claude-plugins\"'"
-          },
-          {
-            "type": "command",
-            "command": "afplay /System/Library/Sounds/Ping.aiff"
-          }
-        ]
-      }
-    ]
-  },
   "extraKnownMarketplaces": {
     "my-tools": {
       "source": {
@@ -23,5 +6,14 @@
         "repo": "naoto24kawa/claude-plugins"
       }
     }
+  },
+  "enabledPlugins": {
+    "review@naoto24kawa-claude-plugins": false,
+    "test@naoto24kawa-claude-plugins": false,
+    "git@naoto24kawa-claude-plugins": true,
+    "claude@naoto24kawa-claude-plugins": true,
+    "notion@naoto24kawa-claude-plugins": false,
+    "aws@naoto24kawa-claude-plugins": false,
+    "cloudflare@naoto24kawa-claude-plugins": false
   }
 }
