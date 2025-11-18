@@ -10,7 +10,7 @@
   "enabledPlugins": {
     "review@naoto24kawa-claude-plugins": false,
     "test@naoto24kawa-claude-plugins": false,
-    "git@naoto24kawa-claude-plugins": true,
+    "git@naoto24kawa-claude-plugins": false,
     "claude@naoto24kawa-claude-plugins": true,
     "notion@naoto24kawa-claude-plugins": false,
     "aws@naoto24kawa-claude-plugins": false,

@@ -47,10 +47,14 @@
     {
       "name": "claude",
       "description": "claude開発のためのプラグイン",
-      "version": "0.1.0",
+      "version": "1.0.0",
       "source": "./",
       "skills": [
+        "./skills/claude/hooks-review",
+        "./skills/claude/marketplace-review",
+        "./skills/claude/mcp-review",
         "./skills/claude/skill-review",
+        "./skills/claude/slash-command-review",
         "./skills/claude/subagent-review"
       ]
     },

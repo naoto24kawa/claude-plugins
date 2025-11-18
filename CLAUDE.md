@@ -21,9 +21,13 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
     ├── cloudflare/             # Cloudflare開発・レビュー・調査
     │   ├── .mcp.json          # Cloudflare MCP サーバー設定
     │   └── cloudflare-specialist.md
-    ├── claude/                 # Claude Code スキル/エージェントレビュー
+    ├── claude/                 # Claude Code スキル/エージェント/スラッシュコマンド/マーケットプレース/MCP/hooksレビュー
     │   ├── skill-review/
-    │   └── subagent-review/
+    │   ├── subagent-review/
+    │   ├── slash-command-review/
+    │   ├── marketplace-review/
+    │   ├── mcp-review/
+    │   └── hooks-review/
     ├── git/                    # Git操作
     │   └── worktree-manage/
     ├── notion/                 # Notion連携（4スキル）
@@ -85,12 +89,16 @@ Git worktree の管理：
 **スキル:**
 - `worktree-manage`: Git worktree の作成・管理・クリーンアップ
 
-#### 4. claude (v0.1.0)
-Claude Code のスキルとサブエージェントのレビュー：
+#### 4. claude (v1.0.0)
+Claude Code のスキル、サブエージェント、スラッシュコマンド、マーケットプレース、MCP、hooksのレビューと設定：
 
 **スキル:**
 - `skill-review`: Claude Codeスキルのレビュー
 - `subagent-review`: サブエージェント実装のレビュー
+- `slash-command-review`: スラッシュコマンド実装のレビュー
+- `marketplace-review`: マーケットプレース定義のレビュー
+- `mcp-review`: MCP設定のレビュー
+- `hooks-review`: Claude Code hooks の設定とレビュー
 
 #### 5. notion (v1.0.0)
 Notion連携による知識管理とドキュメント作成：
@@ -164,6 +172,10 @@ Cloudflare開発支援とインフラレビュー：
 # Claude系
 /skill claude:skill-review
 /skill claude:subagent-review
+/skill claude:slash-command-review
+/skill claude:marketplace-review
+/skill claude:mcp-review
+/skill claude:hooks-review
 
 # Git系
 /skill git:worktree-manage
@@ -261,6 +273,9 @@ AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバ�
 # サブエージェントをレビュー
 /skill claude:subagent-review
 
+# スラッシュコマンドをレビュー
+/skill claude:slash-command-review
+
 # TypeScriptコードをレビュー（該当する場合）
 /skill review:ts-code-review
 
@@ -268,4 +283,4 @@ AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバ�
 /skill review:ts-test-code-review
 ```
 
-これにより、メタ的にスキル・エージェントの品質を継続的に改善できます。
+これにより、メタ的にスキル・エージェント・スラッシュコマンドの品質を継続的に改善できます。
