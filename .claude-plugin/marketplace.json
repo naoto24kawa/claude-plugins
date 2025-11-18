@@ -68,7 +68,7 @@
     },
     {
       "name": "aws",
-      "description": "AWSに関するスキル集です",
+      "description": "AWSに関するプラグイン",
       "version": "0.1.0",
       "source": "./",
       "agents": ["./skills/aws/aws-specialist.md"],
@@ -81,7 +81,7 @@
     },
     {
       "name": "cloudflare",
-      "description": "Cloudflareに関するスキル集です",
+      "description": "Cloudflareに関するプラグイン",
       "version": "0.1.0",
       "source": "./",
       "agents": ["./skills/cloudflare/cloudflare-specialist.md"],
