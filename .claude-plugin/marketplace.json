@@ -81,7 +81,7 @@
     {
       "name": "tanstack",
       "description": "TanStack開発のためのプラグイン",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./",
       "agents": [
         "./skills/tanstack/start-specialist/agents/tanstack-start-doc-agent.md",
