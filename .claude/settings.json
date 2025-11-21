@@ -1,6 +1,6 @@
 {
   "extraKnownMarketplaces": {
-    "my-tools": {
+    "naoto24kawa": {
       "source": {
         "source": "github",
         "repo": "naoto24kawa/claude-plugins"
@@ -8,11 +8,13 @@
     }
   },
   "enabledPlugins": {
+    "spec@naoto24kawa-claude-plugins": false,
     "review@naoto24kawa-claude-plugins": false,
     "test@naoto24kawa-claude-plugins": false,
     "git@naoto24kawa-claude-plugins": false,
     "claude@naoto24kawa-claude-plugins": true,
     "notion@naoto24kawa-claude-plugins": false,
+    "tanstack@naoto24kawa-claude-plugins": false,
     "aws@naoto24kawa-claude-plugins": false,
     "cloudflare@naoto24kawa-claude-plugins": false
   }
