@@ -85,9 +85,16 @@
       "source": "./",
       "agents": [
         "./skills/tanstack/start-specialist/agents/tanstack-start-doc-agent.md",
-        "./skills/tanstack/start-specialist/agents/tanstack-start-reviewer.md"
+        "./skills/tanstack/tanstack-start-spa/agents/tanstack-spa-reviewer.md",
+        "./skills/tanstack/tanstack-start-ssg/agents/tanstack-ssg-reviewer.md",
+        "./skills/tanstack/tanstack-start-ssr/agents/tanstack-ssr-reviewer.md"
       ],
-      "skills": ["./skills/tanstack/start-specialist"]
+      "skills": [
+        "./skills/tanstack/start-specialist",
+        "./skills/tanstack/tanstack-start-spa",
+        "./skills/tanstack/tanstack-start-ssg",
+        "./skills/tanstack/tanstack-start-ssr"
+      ]
     },
     {
       "name": "aws",
