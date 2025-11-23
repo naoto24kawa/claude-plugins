@@ -90,7 +90,7 @@
         "./skills/tanstack/tanstack-start-ssr/agents/tanstack-ssr-reviewer.md"
       ],
       "skills": [
-        "./skills/tanstack/start-specialist",
+        "./skills/tanstack/tanstack-start-specialist",
         "./skills/tanstack/tanstack-start-spa",
         "./skills/tanstack/tanstack-start-ssg",
         "./skills/tanstack/tanstack-start-ssr"

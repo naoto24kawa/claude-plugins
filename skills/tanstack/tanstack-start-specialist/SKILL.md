@@ -1,5 +1,5 @@
 ---
-name: start-specialist
+name: tanstack-start-specialist
 description: Specialist for TanStack Start framework development. Use when working with file-based routing, type-safe server functions (createServerFn), authentication, data loading strategies, or deploying to Cloudflare Workers/Pages. Triggered by queries about TanStack Start architecture, SSR, or full-stack React patterns.
 ---
 
