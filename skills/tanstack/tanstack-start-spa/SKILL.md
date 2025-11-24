@@ -11,6 +11,42 @@ Provides implementation patterns, best practices, and production-ready templates
 
 **IMPORTANT**: This skill's patterns may become outdated. Always verify against the latest official TanStack Start documentation before implementing. Use WebSearch with `"TanStack Start" <feature> 2025 site:tanstack.com` to find current documentation.
 
+## Initial Setup: Version Detection
+
+**FIRST ACTION REQUIRED**: Before using this skill, detect the project's TanStack Start version:
+
+```bash
+# Check installed version in package.json
+cat package.json | grep -A 2 "@tanstack/react-start"
+```
+
+**Version-specific documentation:**
+- v1.x: `https://tanstack.com/router/v1/docs/framework/react/start`
+- Latest: `https://tanstack.com/router/latest/docs/framework/react/start`
+
+**Version-based workflow:**
+
+1. **Version found in package.json**:
+   - Use version-specific documentation URL
+   - Search pattern: `"TanStack Start" <feature> v{major}.{minor} site:tanstack.com`
+   - Example: `"TanStack Start" authentication v1.80 site:tanstack.com`
+
+2. **No package.json or version not found**:
+   - Assume latest version
+   - Use latest documentation URL
+   - Notify user that latest version patterns are being applied
+
+3. **Version older than v1.60**:
+   - Warn about potentially outdated version
+   - Recommend migration guide review
+   - Search: `"TanStack Start" migration guide v{old} to v{new} site:tanstack.com`
+
+**Version detection checklist:**
+- [ ] package.json checked for TanStack Start version
+- [ ] Version identified or latest version assumed
+- [ ] Correct documentation URL selected
+- [ ] User informed of version being used for guidance
+
 ## Core Capabilities
 
 ### 1. Routing Architecture & Implementation

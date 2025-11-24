@@ -43,6 +43,42 @@ TanStack Start は、TanStack Router を基盤とするフルスタック React 
 - セキュリティとパフォーマンスのベストプラクティスを適用する
 - プロジェクト構造を設計する
 
+## 初期セットアップ: バージョン確認
+
+**最優先事項**: このスキルを使用する前に、プロジェクトの TanStack Start バージョンを必ず確認する:
+
+```bash
+# package.json でインストール済みバージョンを確認
+cat package.json | grep -A 2 "@tanstack/react-start"
+```
+
+**バージョン別ドキュメントURL:**
+- v1.x の場合: `https://tanstack.com/router/v1/docs/framework/react/start`
+- 最新版の場合: `https://tanstack.com/router/latest/docs/framework/react/start`
+
+**バージョンに応じた対応:**
+
+1. **package.json にバージョンがある場合**:
+   - バージョン固有のドキュメントURLを使用
+   - 検索クエリ: `"TanStack Start" <機能名> v{メジャー}.{マイナー} site:tanstack.com`
+   - 例: `"TanStack Start" server functions v1.80 site:tanstack.com`
+
+2. **package.json が存在しない、またはバージョン不明の場合**:
+   - 最新版を前提とする
+   - 最新版ドキュメントURLを使用
+   - ユーザーに最新版パターンを使用していることを通知
+
+3. **v1.60 より古いバージョンの場合**:
+   - ユーザーに古いバージョンである旨を警告
+   - マイグレーションガイドの確認を推奨
+   - 検索: `"TanStack Start" migration v{旧} to v{新} site:tanstack.com`
+
+**バージョン検出の検証:**
+- [ ] package.json の存在確認と確認完了
+- [ ] TanStack Start バージョンの特定、または最新版と仮定
+- [ ] 適切なドキュメントURLの選択完了
+- [ ] ユーザーにどのバージョンのパターンを使用するか通知済み
+
 ## 実装の基本フロー
 
 ### 1. Root Route の設定

@@ -212,6 +212,41 @@ For deployment to other platforms, search: `"TanStack Start" deployment <platfor
 
 ## Usage Guidelines
 
+### Initial Setup: Version Detection
+
+**CRITICAL FIRST STEP**: When this skill is activated, immediately check the project's TanStack Start version:
+
+```bash
+# Check package.json for installed version
+cat package.json | grep -A 2 "@tanstack/react-start"
+```
+
+**Version-specific documentation URLs:**
+- For v1.x: `https://tanstack.com/router/v1/docs/framework/react/start`
+- For latest: `https://tanstack.com/router/latest/docs/framework/react/start`
+
+**Action based on version:**
+1. If version found in `package.json`:
+   - Use version-specific documentation URL
+   - Search with: `"TanStack Start" <feature> v{major}.{minor} site:tanstack.com`
+   - Example: `"TanStack Start" server functions v1.80 site:tanstack.com`
+
+2. If no `package.json` or version not found:
+   - Assume latest version
+   - Use latest documentation URL
+   - Inform user that latest version patterns are being used
+
+3. If version is older than v1.60:
+   - Warn user about potentially outdated version
+   - Recommend checking migration guides
+   - Search: `"TanStack Start" migration v{old} to v{new} site:tanstack.com`
+
+**Version detection verification:**
+- [ ] `package.json` exists and was checked
+- [ ] TanStack Start version identified or latest assumed
+- [ ] Appropriate documentation URL selected
+- [ ] User informed of which version patterns are being used
+
 ### When to Use This Skill
 
 Activate this skill when encountering:

@@ -13,6 +13,48 @@ Implement Static Site Generation (SSG) for TanStack Start projects through stati
 
 **Related Sub-agent:** This skill works in conjunction with the `tanstack-start-ssg-reviewer` sub-agent, which specializes in reviewing existing SSG configurations. Use the skill for implementation and the sub-agent for reviewing and validating your vite.config.ts prerender settings.
 
+## Initial Setup: Version Detection
+
+**MANDATORY FIRST STEP**: Detect TanStack Start version before providing SSG guidance:
+
+```bash
+# Check package.json for version
+cat package.json | grep -A 2 "@tanstack/react-start"
+```
+
+**Version-specific prerender API documentation:**
+- v1.x: `https://tanstack.com/router/v1/docs/framework/react/start/guide/static-prerendering`
+- Latest: `https://tanstack.com/router/latest/docs/framework/react/start/guide/static-prerendering`
+
+**Version-specific actions:**
+
+1. **Version detected (e.g., v1.80.3)**:
+   - Use version-specific prerender documentation
+   - Search: `"TanStack Start" prerender v{major}.{minor} site:tanstack.com`
+   - Example: `"TanStack Start" prerender v1.80 site:tanstack.com`
+   - Inform user: "Using TanStack Start v1.80 prerender patterns"
+
+2. **No package.json or version unknown**:
+   - Assume latest version
+   - Use latest prerender documentation
+   - Notify: "Using latest TanStack Start prerender patterns. Install from package.json if different version needed."
+
+3. **Version < v1.60**:
+   - **Critical warning**: Prerender API significantly changed in v1.60+
+   - Recommend upgrade or check version-specific migration guide
+   - Search: `"TanStack Start" prerender migration v{old} site:tanstack.com`
+
+4. **Version notes for SSG**:
+   - v1.121+: Use `vite.config.ts` (app.config.ts deprecated)
+   - v1.60-1.120: Either `app.config.ts` or `vite.config.ts`
+   - v1.0-1.59: Use `app.config.ts`
+
+**Version verification checklist:**
+- [ ] package.json checked for @tanstack/react-start version
+- [ ] Version-appropriate prerender documentation URL selected
+- [ ] User informed of which version's SSG patterns are being used
+- [ ] Migration warnings issued if necessary
+
 ## When to Use This Skill
 
 Activate this skill when:
