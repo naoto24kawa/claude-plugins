@@ -241,7 +241,7 @@ export const Route = createFileRoute('/_authed')({
 
 1. **実装前に必ず公式ドキュメントを検索**:
    - WebSearch を使用: `"TanStack Start" <機能名> site:tanstack.com`
-   - 例: `"TanStack Start" server functions 2025 site:tanstack.com`
+   - 例: `"TanStack Start" server functions site:tanstack.com`
 
 2. **最新のAPI仕様を確認**:
    - WebFetch で公式ドキュメントを取得: https://tanstack.com/router/latest/docs/framework/react/start
@@ -252,11 +252,11 @@ export const Route = createFileRoute('/_authed')({
 
 ### 推奨検索クエリ
 
-- ルーティング: `"TanStack Start" ファイルベースルーティング 2025 site:tanstack.com`
-- Server Functions: `"TanStack Start" createServerFn バリデーション 2025 site:tanstack.com`
-- データローディング: `"TanStack Start" loader beforeLoad 2025 site:tanstack.com`
-- 認証: `"TanStack Start" 認証 セッション 2025 site:tanstack.com`
-- デプロイ: `"TanStack Start" Cloudflare デプロイ 2025 site:tanstack.com`
+- ルーティング: `"TanStack Start" ファイルベースルーティング site:tanstack.com`
+- Server Functions: `"TanStack Start" createServerFn バリデーション site:tanstack.com`
+- データローディング: `"TanStack Start" loader beforeLoad site:tanstack.com`
+- 認証: `"TanStack Start" 認証 セッション site:tanstack.com`
+- デプロイ: `"TanStack Start" Cloudflare デプロイ site:tanstack.com`
 
 ### 参照資料の活用
 

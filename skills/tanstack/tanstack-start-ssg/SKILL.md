@@ -9,7 +9,7 @@ description: Implement Static Site Generation (SSG) in TanStack Start projects u
 
 Implement Static Site Generation (SSG) for TanStack Start projects through static prerendering. This skill provides configuration patterns, best practices, and troubleshooting guidance for generating static HTML files at build time to improve performance, SEO, and enable deployment to static hosting platforms.
 
-**CRITICAL**: Always verify SSG configuration against the latest official TanStack Start documentation. Prerendering APIs and configuration options may change between versions. Use WebSearch with `"TanStack Start" prerender vite.config 2025 site:tanstack.com` before implementing.
+**CRITICAL**: Always verify SSG configuration against the latest official TanStack Start documentation. Prerendering APIs and configuration options may change between versions. Use WebSearch with `"TanStack Start" prerender vite.config site:tanstack.com` before implementing.
 
 **Related Sub-agent:** This skill works in conjunction with the `tanstack-start-ssg-reviewer` sub-agent, which specializes in reviewing existing SSG configurations. Use the skill for implementation and the sub-agent for reviewing and validating your vite.config.ts prerender settings.
 
@@ -96,7 +96,7 @@ Determine the appropriate SSG approach based on project characteristics:
 ### Step 2: Configure vite.config.ts
 
 **Before configuring**, search for the latest prerender API:
-- WebSearch: `"TanStack Start" prerender configuration 2025 site:tanstack.com`
+- WebSearch: `"TanStack Start" prerender configuration site:tanstack.com`
 - Verify the configuration options match official documentation
 
 Apply the appropriate configuration pattern. Reference `references/implementation-patterns.md` for detailed examples of each pattern (but prioritize official docs if they differ).
@@ -128,7 +128,7 @@ export default defineConfig({
 
 **Configuration Options Reference:**
 
-**Latest official docs**: Search `"TanStack Start" prerender options API 2025 site:tanstack.com`
+**Latest official docs**: Search `"TanStack Start" prerender options API site:tanstack.com`
 
 For additional reference, consult `references/configuration-options.md`. Key options include:
 
@@ -321,84 +321,20 @@ See the [Configuration Review](#configuration-review) section for detailed infor
 
 ## Troubleshooting
 
-For detailed troubleshooting guidance, consult `references/troubleshooting-best-practices.md`.
+For detailed troubleshooting guidance including common mistakes and solutions, consult `references/troubleshooting-best-practices.md`.
 
-### Common Mistakes
-
-**❌ Bad: Including secrets in prerendered output**
-```typescript
-// DON'T: Secrets will be exposed in static HTML
-prerender: {
-  onSuccess: ({ page }) => {
-    const apiKey = process.env.SECRET_API_KEY // Exposed!
-    console.log(`Rendered with ${apiKey}`)
-  }
-}
-```
-
-**✅ Good: Use Server Functions for secrets**
-```typescript
-// DO: Keep secrets server-side only
-import { createServerFn } from '@tanstack/react-start'
-
-const fetchData = createServerFn('GET', async () => {
-  const apiKey = process.env.SECRET_API_KEY // Server-side only
-  return fetch('https://api.example.com', {
-    headers: { 'Authorization': `Bearer ${apiKey}` }
-  })
-})
-```
-
-**❌ Bad: Using client-side only code in prerender**
-```typescript
-// DON'T: Browser APIs not available during prerender
-export default function MyPage() {
-  const data = localStorage.getItem('data') // Error during build!
-  return <div>{data}</div>
-}
-```
-
-**✅ Good: Check for browser environment**
-```typescript
-// DO: Safely handle SSG environment
-export default function MyPage() {
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setData(localStorage.getItem('data'))
-    }
-  }, [])
-
-  return <div>{data || 'Loading...'}</div>
-}
-```
-
-### Common Issues
-
-1. **Dynamic routes not prerendered**
-   - Enable `crawlLinks` and create index pages with links
-   - Or explicitly specify pages in `pages` array
-
-2. **Build takes too long**
-   - Increase `concurrency`
-   - Use `filter` to exclude unnecessary pages
-   - Consider gradual adoption pattern
-
-3. **Specific page fails**
-   - Check error logs
-   - Temporarily exclude with `filter`
-   - Ensure server-only code uses Server Functions
-
-4. **Environment variables undefined**
-   - Use `VITE_` prefix for client-side variables
-   - Define defaults for missing variables
-   - Use `vite.config.ts` `define` option
+**Quick reference for common issues:**
+- Dynamic routes not prerendered → Enable `crawlLinks` or use explicit `pages` array
+- Build takes too long → Increase `concurrency` or use `filter`
+- Specific page fails → Check logs, use `filter` to exclude temporarily
+- Environment variables undefined → Use `VITE_` prefix or `vite.config.ts` `define`
+- Secrets exposed → Keep secrets server-side only via Server Functions
+- Browser API errors → Check `typeof window !== 'undefined'`
 
 ## Implementation Patterns
 
 **Before using these patterns**, verify against official documentation:
-- Search: `"TanStack Start" prerender patterns examples 2025 site:tanstack.com`
+- Search: `"TanStack Start" prerender patterns examples site:tanstack.com`
 - Official patterns should take precedence over this skill's examples
 
 The skill includes 6 core implementation patterns. Refer to `references/implementation-patterns.md` for complete examples and use cases (supplementary to official docs):
@@ -413,7 +349,7 @@ The skill includes 6 core implementation patterns. Refer to `references/implemen
 ## Best Practices
 
 **Always check official best practices first**:
-- Search: `"TanStack Start" SSG best practices 2025 site:tanstack.com`
+- Search: `"TanStack Start" SSG best practices site:tanstack.com`
 
 Core principles (verify against official docs):
 1. **Start Small**: Begin with critical pages only, expand gradually
@@ -498,38 +434,9 @@ bunx wrangler pages deploy .output/public
 
 ## Configuration Review
 
-After implementing SSG configuration, use the `tanstack-start-ssg-reviewer` sub-agent to validate your setup:
+After implementing SSG configuration, use the `tanstack-start-ssg-reviewer` sub-agent to validate your setup. The reviewer evaluates your vite.config.ts against best practices across 6 dimensions and provides actionable recommendations with grades (A-F).
 
-**Sub-agent Capabilities:**
-- Reviews vite.config.ts prerender configuration against best practices
-- Evaluates pattern appropriateness for project size and complexity
-- Validates dynamic route handling strategies
-- Assesses performance optimization settings
-- Checks deployment platform compatibility
-- Provides prioritized, actionable recommendations with grades (A-F)
-
-**How to Use:**
-```bash
-# Launch the reviewer sub-agent
-/agent tanstack-start-ssg-reviewer
-
-# The agent will:
-1. Read your vite.config.ts
-2. Analyze project structure for dynamic routes
-3. Evaluate configuration against 6 review criteria
-4. Generate detailed report with specific improvements
-5. Provide example improved configuration if needed
-```
-
-**Review Criteria:**
-1. Configuration Correctness - Syntax, required settings, TypeScript compatibility
-2. Pattern Appropriateness - Pattern selection for site size and complexity
-3. Dynamic Route Handling - crawlLinks and explicit page specification
-4. Performance Optimization - Concurrency, filters, build time
-5. Security & Best Practices - Secrets exposure, browser API usage
-6. Platform Compatibility - Target settings, output structure
-
-The sub-agent provides read-only analysis and recommendations without modifying your configuration files.
+**Usage:** `/agent tanstack-start-ssg-reviewer`
 
 ## Additional Notes
 

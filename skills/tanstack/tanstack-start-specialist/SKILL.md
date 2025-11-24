@@ -33,7 +33,7 @@ Design and implement file-based routing using TanStack Router conventions.
 - `<HeadContent />` - Manage document head (meta, title)
 - `<Scripts />` - Load client-side JavaScript
 
-For the latest routing patterns, search official documentation: `"TanStack Start" routing 2025 site:tanstack.com`
+For the latest routing patterns, search official documentation: `"TanStack Start" routing site:tanstack.com`
 
 ### 2. Server Functions Development
 
@@ -68,7 +68,7 @@ export const createUser = createServerFn({ method: 'POST' })
 - Keep sensitive operations server-side only
 - Use middleware for cross-cutting concerns
 
-For the latest server function patterns, search: `"TanStack Start" createServerFn validation 2025 site:tanstack.com`
+For the latest server function patterns, search: `"TanStack Start" createServerFn validation site:tanstack.com`
 
 ### 3. Data Loading Strategies
 
@@ -92,7 +92,7 @@ Optimize data fetching with loaders, prefetching, and caching strategies.
 - Set `defaultPreloadStaleTime: 0` for external caching libraries
 - Default preload freshness: 30 seconds
 
-For the latest data loading patterns, search: `"TanStack Start" loader prefetch TanStack Query 2025 site:tanstack.com`
+For the latest data loading patterns, search: `"TanStack Start" loader prefetch TanStack Query site:tanstack.com`
 
 ### 4. Authentication & Session Management
 
@@ -136,7 +136,7 @@ export const Route = createFileRoute('/_authed')({
 - Implement rate limiting to prevent brute-force attacks
 - Validate all inputs with Zod or similar validators
 
-For the latest authentication patterns, search: `"TanStack Start" authentication session security 2025 site:tanstack.com`
+For the latest authentication patterns, search: `"TanStack Start" authentication session security site:tanstack.com`
 
 ### 5. Environment Variables Management
 
@@ -158,7 +158,7 @@ Properly configure and secure environment variables across server and client con
 - Access secrets exclusively within server functions
 - Restart server after environment changes
 
-For the latest environment variable guidance, search: `"TanStack Start" environment variables Vite 2025 site:tanstack.com`
+For the latest environment variable guidance, search: `"TanStack Start" environment variables Vite site:tanstack.com`
 
 ### 6. Deployment to Cloudflare Workers/Pages
 
@@ -208,7 +208,7 @@ pnpm run deploy
 - Environment bindings may not be accessible in SSR pipeline
 - Workaround: Use bindings in API routes or server functions
 
-For deployment to other platforms, search: `"TanStack Start" deployment <platform> 2025 site:tanstack.com`
+For deployment to other platforms, search: `"TanStack Start" deployment <platform> site:tanstack.com`
 
 ## Usage Guidelines
 
@@ -284,7 +284,7 @@ Activate this skill when encountering:
 - For platform-specific deployment guidance
 
 **Recommended search queries:**
-- Latest routing patterns: `"TanStack Start" file-based routing 2025 site:tanstack.com`
+- Latest routing patterns: `"TanStack Start" file-based routing site:tanstack.com`
 - Server Functions: `"TanStack Start" createServerFn latest site:tanstack.com`
 - Data loading: `"TanStack Start" loader beforeLoad latest site:tanstack.com`
 - Authentication: `"TanStack Start" authentication session latest site:tanstack.com`
@@ -357,70 +357,8 @@ Regularly check these resources:
 
 ## Code Review Agent
 
-This skill also provides the **tanstack-start-reviewer** sub-agent for evaluating code compliance with TanStack Start best practices:
+Use the **tanstack-start-reviewer** sub-agent to evaluate code compliance with TanStack Start best practices. The reviewer checks routing, server functions, security, performance, type safety, and deployment configurations.
 
-### Review Capabilities
+**Usage:** Use Task tool with `subagent_type='tanstack-start-reviewer'`
 
-**File Structure & Routing**
-- Verify routes follow file-based conventions
-- Check `__root.tsx` configuration
-- Validate dynamic route syntax (`$paramName`)
-- Ensure proper use of `createFileRoute`
-
-**Server Functions**
-- Input validation presence (Zod, Valibot, etc.)
-- Error handling completeness
-- Type safety across server-client boundary
-- Secrets protection (server-side only)
-
-**Security**
-- Authentication checks on protected routes
-- Environment variable segregation
-- Session configuration (HTTP-only, SameSite, secure)
-- Input sanitization and validation
-- Rate limiting on sensitive endpoints
-
-**Performance**
-- Data loading optimization (parallel vs sequential)
-- Prefetching strategy evaluation
-- `beforeLoad` performance impact
-- Caching strategy assessment
-
-**Type Safety**
-- TypeScript strict mode compliance
-- Elimination of `any` types
-- Proper type definitions for server functions
-- Generated route types utilization
-
-**Deployment**
-- Platform configuration (Cloudflare, Netlify)
-- Build output correctness
-- Environment variable setup
-
-### How to Invoke
-
-Use the Task tool with `subagent_type='tanstack-start-reviewer'` and specify files or directories to review.
-
-**Example requests:**
-- "Review my TanStack Start implementation for best practices"
-- "Check if my server functions follow TanStack Start patterns"
-- "Review authentication implementation for security issues"
-- "Analyze my routing structure for compliance"
-
-### Review Output Format
-
-The reviewer provides:
-- ✅ **Strengths**: Good practices observed
-- ⚠️ **Warnings**: Non-critical issues with recommendations
-- 🔴 **Critical Issues**: Security, correctness, or architectural problems
-- 💡 **Recommendations**: Suggestions for improvement
-- 📝 **Specific Fixes**: Before/after code examples
-
-### Priority Levels
-
-- 🔴 **Critical**: Security vulnerabilities, broken functionality
-- 🟠 **High**: Performance issues, type safety violations
-- 🟡 **Medium**: Best practice violations, code organization
-- 🟢 **Low**: Style, minor optimizations
-
-Use the code review agent after implementing features or when preparing for production deployment to ensure TanStack Start best practices compliance.
+**Example:** "Review my TanStack Start implementation for best practices"
