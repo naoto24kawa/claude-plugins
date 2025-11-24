@@ -33,7 +33,7 @@ Design and implement file-based routing using TanStack Router conventions.
 - `<HeadContent />` - Manage document head (meta, title)
 - `<Scripts />` - Load client-side JavaScript
 
-For detailed routing patterns and advanced configurations, use the documentation agent to search official TanStack Start documentation.
+For the latest routing patterns, search official documentation: `"TanStack Start" routing 2025 site:tanstack.com`
 
 ### 2. Server Functions Development
 
@@ -68,7 +68,7 @@ export const createUser = createServerFn({ method: 'POST' })
 - Keep sensitive operations server-side only
 - Use middleware for cross-cutting concerns
 
-For input validation, error handling, and advanced server function patterns, use the documentation agent to search official TanStack Start documentation.
+For the latest server function patterns, search: `"TanStack Start" createServerFn validation 2025 site:tanstack.com`
 
 ### 3. Data Loading Strategies
 
@@ -92,7 +92,7 @@ Optimize data fetching with loaders, prefetching, and caching strategies.
 - Set `defaultPreloadStaleTime: 0` for external caching libraries
 - Default preload freshness: 30 seconds
 
-For detailed data loading patterns and TanStack Query integration, use the documentation agent to search official TanStack Start documentation.
+For the latest data loading patterns, search: `"TanStack Start" loader prefetch TanStack Query 2025 site:tanstack.com`
 
 ### 4. Authentication & Session Management
 
@@ -136,7 +136,7 @@ export const Route = createFileRoute('/_authed')({
 - Implement rate limiting to prevent brute-force attacks
 - Validate all inputs with Zod or similar validators
 
-For authentication patterns, middleware integration, and Better Auth setup, use the documentation agent to search official TanStack Start documentation.
+For the latest authentication patterns, search: `"TanStack Start" authentication session security 2025 site:tanstack.com`
 
 ### 5. Environment Variables Management
 
@@ -158,7 +158,7 @@ Properly configure and secure environment variables across server and client con
 - Access secrets exclusively within server functions
 - Restart server after environment changes
 
-For detailed environment variable configuration and security considerations, use the documentation agent to search official TanStack Start documentation.
+For the latest environment variable guidance, search: `"TanStack Start" environment variables Vite 2025 site:tanstack.com`
 
 ### 6. Deployment to Cloudflare Workers/Pages
 
@@ -208,7 +208,7 @@ pnpm run deploy
 - Environment bindings may not be accessible in SSR pipeline
 - Workaround: Use bindings in API routes or server functions
 
-For Netlify, Nitro, and other deployment targets, use the documentation agent to search official TanStack Start documentation.
+For deployment to other platforms, search: `"TanStack Start" deployment <platform> 2025 site:tanstack.com`
 
 ## Usage Guidelines
 
@@ -227,30 +227,40 @@ Activate this skill when encountering:
 
 ### Working with Official Documentation
 
-For detailed information beyond the patterns provided in Core Capabilities, use the **tanstack-start-doc-agent** sub-agent to search official TanStack Start documentation.
+**CRITICAL**: Always verify information against the latest official TanStack Start documentation before providing guidance. This skill's patterns may become outdated as TanStack Start evolves.
 
-**When to use the documentation agent:**
-- Specific API references not covered in Core Capabilities
-- Advanced implementation patterns
-- Latest features and updates
-- Troubleshooting specific issues
-- Configuration options and settings
-- Platform-specific deployment guidance
+**Documentation Reference Workflow:**
 
-**How to invoke:**
-Use the Task tool with `subagent_type='tanstack-start-doc-agent'` and provide a clear, specific question.
+1. **For ANY implementation question**, first search the official documentation using WebSearch:
+   - Search query format: `"TanStack Start" <specific feature> site:tanstack.com`
+   - Example: `"TanStack Start" server functions site:tanstack.com`
 
-**Example queries:**
-- "How do I implement streaming with Server Functions?"
-- "What are the middleware composition patterns?"
-- "How do I handle file uploads in Server Functions?"
-- "What are the latest Cloudflare Workers deployment best practices?"
+2. **For the latest API references and features**, use WebFetch to retrieve current documentation:
+   - Official docs: https://tanstack.com/router/latest/docs/framework/react/start
+   - Use the fetched content to validate/update this skill's patterns
 
-The documentation agent will:
-1. Search official TanStack Start documentation
-2. Retrieve accurate, up-to-date information
-3. Provide code examples and best practices
-4. Cite source URLs for verification
+3. **When patterns in this skill conflict with official docs**, prioritize official documentation
+
+**When to search official documentation:**
+- Before implementing any feature (verify current best practices)
+- When encountering errors or unexpected behavior
+- For API syntax and configuration options
+- When the skill's patterns seem outdated or incomplete
+- For platform-specific deployment guidance
+
+**Recommended search queries:**
+- Latest routing patterns: `"TanStack Start" file-based routing 2025 site:tanstack.com`
+- Server Functions: `"TanStack Start" createServerFn latest site:tanstack.com`
+- Data loading: `"TanStack Start" loader beforeLoad latest site:tanstack.com`
+- Authentication: `"TanStack Start" authentication session latest site:tanstack.com`
+- Deployment: `"TanStack Start" Cloudflare deployment latest site:tanstack.com`
+
+**Documentation verification checklist:**
+- [ ] Search official docs for the feature being implemented
+- [ ] Compare official patterns with this skill's guidance
+- [ ] Use the most recent API syntax from official docs
+- [ ] Verify configuration options are current
+- [ ] Check for deprecation warnings or breaking changes
 
 ## Best Practices
 
@@ -283,24 +293,32 @@ The documentation agent will:
 - Define proper TypeScript interfaces for server function I/O
 - Run `cf-typegen` for Cloudflare bindings types
 
-## Documentation Agent
+## Keeping This Skill Current
 
-This skill works in conjunction with the **tanstack-start-doc-agent** sub-agent:
+**Important**: This skill's patterns are based on TanStack Start as of the last update. Always validate against the latest official documentation.
 
-### Sub-agent Capabilities
-- Real-time search of official TanStack Start documentation
-- Access to latest features and updates
-- Retrieval of detailed API references
-- Platform-specific deployment guides (Cloudflare, Netlify, etc.)
-- Troubleshooting guidance from official sources
+### Recommended Update Process
 
-### Benefits
-- **Always up-to-date**: Fetches information directly from official documentation
-- **Accurate**: Only provides information from authoritative sources
-- **Comprehensive**: Can search across TanStack Start, TanStack Router, and platform-specific docs
-- **Cited**: All information includes source URLs for verification
+When using this skill:
+1. Search official docs for the feature you're implementing
+2. If official docs show different patterns, use the official version
+3. Report outdated patterns in this skill for future updates
 
-Invoke the documentation agent whenever detailed, current information is needed beyond the core patterns provided in this skill.
+### Common Update Areas
+
+Features that frequently change:
+- Server Functions API syntax (`createServerFn` options)
+- Deployment configurations (Cloudflare, Netlify adapters)
+- Authentication patterns (session management libraries)
+- Routing conventions (file-based routing rules)
+- Environment variable handling
+
+### Staying Current
+
+Regularly check these resources:
+- Official changelog: https://tanstack.com/router/latest/docs/framework/react/start/changelog
+- Migration guides: Search `"TanStack Start" migration guide site:tanstack.com`
+- GitHub releases: https://github.com/TanStack/router/releases
 
 ## Code Review Agent
 

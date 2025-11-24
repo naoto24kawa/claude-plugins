@@ -9,6 +9,8 @@ description: This skill provides comprehensive implementation patterns, best pra
 
 Provides implementation patterns, best practices, and production-ready templates for developing SPAs with TanStack Start. This skill offers comprehensive guidance on routing architecture, type-safe server functions, data loading strategies, authentication flows, and environment variable management.
 
+**IMPORTANT**: This skill's patterns may become outdated. Always verify against the latest official TanStack Start documentation before implementing. Use WebSearch with `"TanStack Start" <feature> 2025 site:tanstack.com` to find current documentation.
+
 ## Core Capabilities
 
 ### 1. Routing Architecture & Implementation
@@ -27,7 +29,8 @@ Design and implement file-based routing with TanStack Router.
 - Pathless layouts: `_authed.tsx` for route groups
 - Root route configuration in `__root.tsx`
 
-**Detailed implementation patterns**: See `references/implementation-patterns.md#ルーティングパターン`
+**Latest patterns**: Search `"TanStack Start" routing file-based 2025 site:tanstack.com`
+**Additional reference**: See `references/implementation-patterns.md#ルーティングパターン`
 
 **Example - Basic Route:**
 ```tsx
@@ -67,7 +70,8 @@ Implement type-safe server-side logic callable from anywhere in the application.
 - Type-safe client-server communication
 - Environment variable access (server-side only)
 
-**Detailed implementation patterns**: See `references/implementation-patterns.md#server-functionsパターン`
+**Latest patterns**: Search `"TanStack Start" createServerFn validation 2025 site:tanstack.com`
+**Additional reference**: See `references/implementation-patterns.md#server-functionsパターン`
 
 **Example - Validated Server Function:**
 ```tsx
@@ -103,7 +107,8 @@ Optimize data fetching with loaders, prefetching, and caching.
 - TanStack Query integration: `prefetchQuery` vs `ensureQueryData`
 - Preloading: Intent-based (hover) and Viewport-based
 
-**Detailed implementation patterns**: See `references/implementation-patterns.md#データローディングパターン`
+**Latest patterns**: Search `"TanStack Start" loader TanStack Query 2025 site:tanstack.com`
+**Additional reference**: See `references/implementation-patterns.md#データローディングパターン`
 
 **Example - Parallel Loading:**
 ```tsx
@@ -141,7 +146,8 @@ Implement secure authentication flows with session management.
 - `assets/templates/auth-routes/auth.ts` - Auth server functions
 - `assets/templates/auth-routes/session.ts` - Session configuration
 
-**Detailed implementation patterns**: See `references/implementation-patterns.md#認証パターン`
+**Latest patterns**: Search `"TanStack Start" authentication session 2025 site:tanstack.com`
+**Additional reference**: See `references/implementation-patterns.md#認証パターン`
 
 **Example - Session Setup:**
 ```tsx
@@ -173,7 +179,8 @@ Configure and secure environment variables across server and client contexts.
 - **Client-side**: Access via `import.meta.env` (`VITE_` prefix only)
 - **Security**: Never expose secrets to client (no `VITE_` prefix)
 
-**Detailed implementation patterns**: See `references/implementation-patterns.md#環境変数管理`
+**Latest patterns**: Search `"TanStack Start" environment variables Vite 2025 site:tanstack.com`
+**Additional reference**: See `references/implementation-patterns.md#環境変数管理`
 
 **Example - Type-Safe Environment Variables:**
 ```typescript
@@ -212,19 +219,25 @@ This skill includes comprehensive best practices covering performance, security,
 
 ### Quick Reference Workflow
 
-1. **Identify the task type** (routing, server functions, data loading, auth, etc.)
+1. **Search official documentation first**
+   - Use WebSearch: `"TanStack Start" <feature> 2025 site:tanstack.com`
+   - Validate current API syntax and best practices
+   - **Validation**: Confirm the official docs match this skill's patterns
+
+2. **Identify the task type** (routing, server functions, data loading, auth, etc.)
    - **Validation**: Confirm task type based on verified functional requirements
 
-2. **Consult implementation patterns** in `references/implementation-patterns.md`
+3. **Consult implementation patterns** in `references/implementation-patterns.md`
    - **Validation**: Verify the selected pattern matches requirements and constraints
+   - **Note**: Use as supplement, not replacement for official docs
 
-3. **Use templates** from `assets/templates/` as starting points
+4. **Use templates** from `assets/templates/` as starting points
    - **Validation**: Ensure templates are correctly copied and TODO comments are reviewed
 
-4. **Follow best practices** from `references/best-practices.md`
+5. **Follow best practices** from `references/best-practices.md`
    - **Validation**: Check security, performance, and type safety checklists are satisfied
 
-5. **Adapt examples** to match project requirements
+6. **Adapt examples** to match project requirements
    - **Validation**: Verify implementation passes type checking and tests are executable
 
 ### When to Read References

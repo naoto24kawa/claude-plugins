@@ -9,6 +9,8 @@ description: Implement Static Site Generation (SSG) in TanStack Start projects u
 
 Implement Static Site Generation (SSG) for TanStack Start projects through static prerendering. This skill provides configuration patterns, best practices, and troubleshooting guidance for generating static HTML files at build time to improve performance, SEO, and enable deployment to static hosting platforms.
 
+**CRITICAL**: Always verify SSG configuration against the latest official TanStack Start documentation. Prerendering APIs and configuration options may change between versions. Use WebSearch with `"TanStack Start" prerender vite.config 2025 site:tanstack.com` before implementing.
+
 **Related Sub-agent:** This skill works in conjunction with the `tanstack-start-ssg-reviewer` sub-agent, which specializes in reviewing existing SSG configurations. Use the skill for implementation and the sub-agent for reviewing and validating your vite.config.ts prerender settings.
 
 ## When to Use This Skill
@@ -51,7 +53,11 @@ Determine the appropriate SSG approach based on project characteristics:
 
 ### Step 2: Configure vite.config.ts
 
-Apply the appropriate configuration pattern. Reference `references/implementation-patterns.md` for detailed examples of each pattern.
+**Before configuring**, search for the latest prerender API:
+- WebSearch: `"TanStack Start" prerender configuration 2025 site:tanstack.com`
+- Verify the configuration options match official documentation
+
+Apply the appropriate configuration pattern. Reference `references/implementation-patterns.md` for detailed examples of each pattern (but prioritize official docs if they differ).
 
 **Basic Configuration Template:**
 
@@ -80,7 +86,9 @@ export default defineConfig({
 
 **Configuration Options Reference:**
 
-For detailed explanation of all configuration options, consult `references/configuration-options.md`. Key options include:
+**Latest official docs**: Search `"TanStack Start" prerender options API 2025 site:tanstack.com`
+
+For additional reference, consult `references/configuration-options.md`. Key options include:
 
 - `enabled`: Enable/disable prerendering
 - `autoStaticPathsDiscovery`: Auto-detect static routes
@@ -347,7 +355,11 @@ export default function MyPage() {
 
 ## Implementation Patterns
 
-The skill includes 6 core implementation patterns. Refer to `references/implementation-patterns.md` for complete examples and use cases:
+**Before using these patterns**, verify against official documentation:
+- Search: `"TanStack Start" prerender patterns examples 2025 site:tanstack.com`
+- Official patterns should take precedence over this skill's examples
+
+The skill includes 6 core implementation patterns. Refer to `references/implementation-patterns.md` for complete examples and use cases (supplementary to official docs):
 
 1. **Full Auto + Crawl Links** - Simple configuration for small sites
 2. **SPA + Selective Prerender** - Hybrid approach for mixed content
@@ -358,12 +370,17 @@ The skill includes 6 core implementation patterns. Refer to `references/implemen
 
 ## Best Practices
 
+**Always check official best practices first**:
+- Search: `"TanStack Start" SSG best practices 2025 site:tanstack.com`
+
+Core principles (verify against official docs):
 1. **Start Small**: Begin with critical pages only, expand gradually
 2. **Monitor Build Time**: Keep builds under 10 minutes for CI/CD efficiency
 3. **Use Filter Wisely**: Exclude dynamic/authenticated pages
 4. **Handle Errors**: Set `failOnError: true` for production builds
 5. **Test Locally**: Always verify with `bun run preview` before deploying
 6. **Version Control**: Track `.output/public` generation in CI logs
+7. **Documentation First**: Always consult latest official docs before implementing
 
 ## Resources
 

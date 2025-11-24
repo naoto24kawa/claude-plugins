@@ -197,10 +197,36 @@ export const Route = createFileRoute('/_authed')({
 - [ ] 認証済みユーザー情報をコンテキストに提供（`return { user }`）
 - [ ] 子ルートで `Route.useRouteContext()` でユーザー情報にアクセス可能
 
-## 参照資料の活用
+## 最新ドキュメントの参照
+
+**重要**: このスキルのパターンは最終更新時点のものです。実装前に必ず最新の公式ドキュメントを確認してください。
+
+### 公式ドキュメント検索ワークフロー
+
+1. **実装前に必ず公式ドキュメントを検索**:
+   - WebSearch を使用: `"TanStack Start" <機能名> site:tanstack.com`
+   - 例: `"TanStack Start" server functions 2025 site:tanstack.com`
+
+2. **最新のAPI仕様を確認**:
+   - WebFetch で公式ドキュメントを取得: https://tanstack.com/router/latest/docs/framework/react/start
+   - 取得した内容でこのスキルのパターンを検証・更新
+
+3. **公式ドキュメントとの矛盾がある場合**:
+   - 常に公式ドキュメントを優先
+
+### 推奨検索クエリ
+
+- ルーティング: `"TanStack Start" ファイルベースルーティング 2025 site:tanstack.com`
+- Server Functions: `"TanStack Start" createServerFn バリデーション 2025 site:tanstack.com`
+- データローディング: `"TanStack Start" loader beforeLoad 2025 site:tanstack.com`
+- 認証: `"TanStack Start" 認証 セッション 2025 site:tanstack.com`
+- デプロイ: `"TanStack Start" Cloudflare デプロイ 2025 site:tanstack.com`
+
+### 参照資料の活用
 
 このスキルには 3 つの包括的な参照ドキュメントが含まれている。
 実装中に詳細な情報が必要な場合は、Read ツールで該当する参照ファイルを読み込む。
+ただし、これらは補足資料であり、最新の公式ドキュメントを優先すること。
 
 ### references/ssr-patterns.md
 
