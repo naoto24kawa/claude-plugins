@@ -171,14 +171,13 @@ Cloudflare開発支援とインフラレビュー
 .
 ├── .claude-plugin/
 │   └── marketplace.json        # 7つのプラグイン定義
-└── skills/
-    ├── aws/                    # AWS開発・レビュー・調査
-    ├── cloudflare/             # Cloudflare開発・レビュー・調査
-    ├── claude/                 # Claude Code レビュー（6スキル）
-    ├── git/                    # Git操作
-    ├── notion/                 # Notion連携（4スキル）
-    ├── review/                 # コードレビュー
-    └── test/                   # 動作検証
+├── aws/                        # AWS開発・レビュー・調査
+├── cloudflare/                 # Cloudflare開発・レビュー・調査
+├── claude/                     # Claude Code レビュー（6スキル）
+├── git/                        # Git操作
+├── notion/                     # Notion連携（4スキル）
+├── review/                     # コードレビュー
+└── test/                       # 動作検証
 ```
 
 ### Progressive Disclosure パターン
@@ -197,12 +196,12 @@ Cloudflare開発支援とインフラレビュー
 1. `.claude-plugin/marketplace.json` の `plugins` 配列に新規エントリを追加
 2. プラグイン名（`name`）はケバブケース、短く明確に
 3. プラグインに含めるスキル・エージェントを作成
-4. MCPサーバーが必要な場合は `skills/<プラグイン名>/.mcp.json` に配置
+4. MCPサーバーが必要な場合は `<プラグイン名>/.mcp.json` に配置
 5. バージョン番号を設定（初回は 0.1.0 推奨）
 
 ### 新しいスキルの追加
 
-1. `skills/<プラグイン名>/<スキル名>/` ディレクトリを作成
+1. `<プラグイン名>/<スキル名>/` ディレクトリを作成
 2. `SKILL.md` を作成（YAML frontmatter必須）
    - `name`: gerund形式またはケバブケース
    - `description`: トリガーワード含有、1024文字以内

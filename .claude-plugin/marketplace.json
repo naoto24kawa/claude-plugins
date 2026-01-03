@@ -10,8 +10,8 @@
       "description": "仕様書作成のためのプラグイン",
       "version": "0.1.0",
       "source": "./",
-      "agents": ["./skills/spec/ai-spec-definition/agents/ai-spec-reviewer.md"],
-      "skills": ["./skills/spec/ai-spec-definition"]
+      "agents": ["./spec/ai-spec-definition/agents/ai-spec-reviewer.md"],
+      "skills": ["./spec/ai-spec-definition"]
     },
     {
       "name": "review",
@@ -19,21 +19,21 @@
       "version": "0.1.0",
       "source": "./",
       "agents": [
-        "./skills/review/ts-code-review/agents/review-coc-reviewer.md",
-        "./skills/review/ts-code-review/agents/review-garbage-detector.md",
-        "./skills/review/ts-code-review/agents/review-human-code-reviewer.md",
-        "./skills/review/ts-code-review/agents/review-kiss-reviewer.md",
-        "./skills/review/ts-code-review/agents/review-srp-reviewer.md",
-        "./skills/review/ts-code-review/agents/review-typescript-comprehensive.md",
-        "./skills/review/ts-test-code-review/agents/test-aaa-test-agent.md", 
-        "./skills/review/ts-test-code-review/agents/test-coordinator.md", 
-        "./skills/review/ts-test-code-review/agents/test-solid-test-agent.md", 
-        "./skills/review/ts-test-code-review/agents/test-test-builder-agent.md", 
-        "./skills/review/ts-test-code-review/agents/test-test-double-agent.md"
+        "./review/ts-code-review/agents/review-coc-reviewer.md",
+        "./review/ts-code-review/agents/review-garbage-detector.md",
+        "./review/ts-code-review/agents/review-human-code-reviewer.md",
+        "./review/ts-code-review/agents/review-kiss-reviewer.md",
+        "./review/ts-code-review/agents/review-srp-reviewer.md",
+        "./review/ts-code-review/agents/review-typescript-comprehensive.md",
+        "./review/ts-test-code-review/agents/test-aaa-test-agent.md",
+        "./review/ts-test-code-review/agents/test-coordinator.md",
+        "./review/ts-test-code-review/agents/test-solid-test-agent.md",
+        "./review/ts-test-code-review/agents/test-test-builder-agent.md",
+        "./review/ts-test-code-review/agents/test-test-double-agent.md"
       ],
       "skills": [
-        "./skills/review/ts-code-review",
-        "./skills/review/ts-test-code-review"
+        "./review/ts-code-review",
+        "./review/ts-test-code-review"
       ]
     },
     {
@@ -41,16 +41,16 @@
       "description": "動作検証のためのプラグイン",
       "version": "0.1.0",
       "source": "./",
-      "agents": ["./skills/test/test-with-playwright/agents/playwright-tester.md"],
-      "skills": ["./skills/test/test-with-playwright"],
-      "mcpServers": "./skills/test/test-with-playwright/.mcp.json"
+      "agents": ["./test/test-with-playwright/agents/playwright-tester.md"],
+      "skills": ["./test/test-with-playwright"],
+      "mcpServers": "./test/test-with-playwright/.mcp.json"
     },
     {
       "name": "git",
       "description": "Git操作のためのプラグイン",
       "version": "0.1.0",
       "source": "./",
-      "skills": ["./skills/git/worktree-manage"]
+      "skills": ["./git/worktree-manage"]
     },
     {
       "name": "claude",
@@ -58,12 +58,12 @@
       "version": "1.0.0",
       "source": "./",
       "skills": [
-        "./skills/claude/hooks-review",
-        "./skills/claude/marketplace-review",
-        "./skills/claude/mcp-review",
-        "./skills/claude/skill-review",
-        "./skills/claude/slash-command-review",
-        "./skills/claude/subagent-review"
+        "./claude/hooks-review",
+        "./claude/marketplace-review",
+        "./claude/mcp-review",
+        "./claude/skill-review",
+        "./claude/slash-command-review",
+        "./claude/subagent-review"
       ]
     },
     {
@@ -72,28 +72,27 @@
       "version": "1.0.0",
       "source": "./",
       "skills": [
-        "./skills/notion/knowledge-capture",
-        "./skills/notion/meeting-intelligence",
-        "./skills/notion/research-documentation",
-        "./skills/notion/spec-to-implementation"
+        "./notion/knowledge-capture",
+        "./notion/meeting-intelligence",
+        "./notion/research-documentation",
+        "./notion/spec-to-implementation"
       ]
     },
     {
       "name": "tanstack",
       "description": "TanStack開発のためのプラグイン",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "source": "./",
       "agents": [
-        "./skills/tanstack/start-specialist/agents/tanstack-start-doc-agent.md",
-        "./skills/tanstack/tanstack-start-spa/agents/tanstack-spa-reviewer.md",
-        "./skills/tanstack/tanstack-start-ssg/agents/tanstack-ssg-reviewer.md",
-        "./skills/tanstack/tanstack-start-ssr/agents/tanstack-ssr-reviewer.md"
+        "./tanstack/agents/tanstack-implementation-specialist.md",
+        "./tanstack/tanstack-start-specialist/agents/tanstack-start-rag-specialist.md",
+        "./tanstack/agents/tanstack-reviewer.md"
       ],
       "skills": [
-        "./skills/tanstack/tanstack-start-specialist",
-        "./skills/tanstack/tanstack-start-spa",
-        "./skills/tanstack/tanstack-start-ssg",
-        "./skills/tanstack/tanstack-start-ssr"
+        "./tanstack/tanstack-start-specialist",
+        "./tanstack/tanstack-start-spa",
+        "./tanstack/tanstack-start-ssg",
+        "./tanstack/tanstack-start-ssr"
       ]
     },
     {
@@ -101,26 +100,50 @@
       "description": "AWSに関するプラグイン",
       "version": "0.1.0",
       "source": "./",
-      "agents": ["./skills/aws/aws-specialist.md"],
-      "skills": [
-        "./skills/aws/developer",
-        "./skills/aws/research-documentation",
-        "./skills/aws/review-architecture"
+      "agents": [
+        "./aws/agents/aws-implementation-specialist.md",
+        "./aws/agents/aws-doc-specialist.md",
+        "./aws/agents/aws-reviewer.md"
       ],
-      "mcpServers": "./skills/aws/.mcp.json"
+      "skills": ["./aws/aws-specialist"],
+      "mcpServers": "./aws/.mcp.json"
     },
     {
       "name": "cloudflare",
       "description": "Cloudflareに関するプラグイン",
       "version": "0.1.0",
       "source": "./",
-      "agents": ["./skills/cloudflare/cloudflare-specialist.md"],
-      "skills": [
-        "./skills/cloudflare/developer", 
-        "./skills/cloudflare/research-resources", 
-        "./skills/cloudflare/review-infrastructure"
+      "agents": [
+        "./cloudflare/agents/cloudflare-implementation-specialist.md",
+        "./cloudflare/agents/cloudflare-rag-specialist.md",
+        "./cloudflare/agents/cloudflare-reviewer.md"
       ],
-      "mcpServers": "./skills/cloudflare/.mcp.json"
+      "skills": ["./cloudflare/cloudflare-specialist"],
+      "mcpServers": "./cloudflare/.mcp.json"
+    },
+    {
+      "name": "shadcn",
+      "description": "shadcn/ui開発のためのプラグイン",
+      "version": "0.2.0",
+      "source": "./",
+      "agents": [
+        "./shadcn/agents/shadcn-implementation-specialist.md",
+        "./shadcn/shadcn-specialist/agents/shadcn-rag-specialist.md",
+        "./shadcn/agents/shadcn-reviewer.md"
+      ],
+      "skills": ["./shadcn/shadcn-specialist"]
+    },
+    {
+      "name": "hono",
+      "description": "Hono web framework開発のためのプラグイン",
+      "version": "0.2.0",
+      "source": "./",
+      "agents": [
+        "./hono/agents/hono-implementation-specialist.md",
+        "./hono/hono-specialist/agents/hono-rag-specialist.md",
+        "./hono/agents/hono-reviewer.md"
+      ],
+      "skills": ["./hono/hono-specialist"]
     }
   ]
 }

@@ -14,36 +14,35 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
 .
 ├── .claude-plugin/
 │   └── marketplace.json        # 7つのプラグイン定義
-└── skills/
-    ├── aws/                    # AWS開発・レビュー・調査
-    │   ├── .mcp.json          # AWS MCP サーバー設定
-    │   └── aws-specialist.md  # AWS専門エージェント
-    ├── cloudflare/             # Cloudflare開発・レビュー・調査
-    │   ├── .mcp.json          # Cloudflare MCP サーバー設定
-    │   └── cloudflare-specialist.md
-    ├── claude/                 # Claude Code スキル/エージェント/スラッシュコマンド/マーケットプレース/MCP/hooksレビュー
-    │   ├── skill-review/
-    │   ├── subagent-review/
-    │   ├── slash-command-review/
-    │   ├── marketplace-review/
-    │   ├── mcp-review/
-    │   └── hooks-review/
-    ├── git/                    # Git操作
-    │   └── worktree-manage/
-    ├── notion/                 # Notion連携（4スキル）
-    │   ├── knowledge-capture/
-    │   ├── meeting-intelligence/
-    │   ├── research-documentation/
-    │   └── spec-to-implementation/
-    ├── review/                 # コードレビュー
-    │   ├── ts-code-review/
-    │   │   └── agents/        # 実装レビュー用エージェント
-    │   └── ts-test-code-review/
-    │       └── agents/        # テストレビュー用エージェント
-    └── test/                   # 動作検証
-        └── test-with-playwright/
-            ├── .mcp.json      # Playwright MCP サーバー設定
-            └── agents/
+├── aws/                        # AWS開発・レビュー・調査
+│   ├── .mcp.json              # AWS MCP サーバー設定
+│   └── aws-specialist.md      # AWS専門エージェント
+├── cloudflare/                 # Cloudflare開発・レビュー・調査
+│   ├── .mcp.json              # Cloudflare MCP サーバー設定
+│   └── cloudflare-specialist.md
+├── claude/                     # Claude Code スキル/エージェント/スラッシュコマンド/マーケットプレース/MCP/hooksレビュー
+│   ├── skill-review/
+│   ├── subagent-review/
+│   ├── slash-command-review/
+│   ├── marketplace-review/
+│   ├── mcp-review/
+│   └── hooks-review/
+├── git/                        # Git操作
+│   └── worktree-manage/
+├── notion/                     # Notion連携（4スキル）
+│   ├── knowledge-capture/
+│   ├── meeting-intelligence/
+│   ├── research-documentation/
+│   └── spec-to-implementation/
+├── review/                     # コードレビュー
+│   ├── ts-code-review/
+│   │   └── agents/            # 実装レビュー用エージェント
+│   └── ts-test-code-review/
+│       └── agents/            # テストレビュー用エージェント
+└── test/                       # 動作検証
+    └── test-with-playwright/
+        ├── .mcp.json          # Playwright MCP サーバー設定
+        └── agents/
 ```
 
 ### プラグイン構成
@@ -81,7 +80,7 @@ Playwrightを使用した動作検証：
 **スキル:**
 - `test-with-playwright`: Playwright による動作検証
 
-**MCP:** Playwright MCP サーバー (`skills/test/test-with-playwright/.mcp.json`)
+**MCP:** Playwright MCP サーバー (`test/test-with-playwright/.mcp.json`)
 
 #### 3. git (v0.1.0)
 Git worktree の管理：
@@ -120,7 +119,7 @@ AWS開発支援とアーキテクチャレビュー：
 - `research-documentation`: 公式ドキュメント検索・参照
 - `review-architecture`: Well-Architected Framework準拠レビュー
 
-**MCP:** AWS Documentation MCP サーバー (`skills/aws/.mcp.json`)
+**MCP:** AWS Documentation MCP サーバー (`aws/.mcp.json`)
 
 #### 7. cloudflare (v0.1.0)
 Cloudflare開発支援とインフラレビュー：
@@ -133,7 +132,7 @@ Cloudflare開発支援とインフラレビュー：
 - `research-resources`: MCP経由のリソース調査
 - `review-infrastructure`: パフォーマンス・セキュリティレビュー
 
-**MCP:** Cloudflare Documentation MCP サーバー (`skills/cloudflare/.mcp.json`)
+**MCP:** Cloudflare Documentation MCP サーバー (`cloudflare/.mcp.json`)
 
 ### Progressive Disclosure パターン
 
@@ -204,9 +203,9 @@ Cloudflare開発支援とインフラレビュー：
 
 AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバーを使用して外部リソースにアクセスします：
 
-- **aws**: `skills/aws/.mcp.json` - AWS公式ドキュメントサーバー
-- **cloudflare**: `skills/cloudflare/.mcp.json` - Cloudflareドキュメントサーバー
-- **test**: `skills/test/test-with-playwright/.mcp.json` - Playwrightサーバー
+- **aws**: `aws/.mcp.json` - AWS公式ドキュメントサーバー
+- **cloudflare**: `cloudflare/.mcp.json` - Cloudflareドキュメントサーバー
+- **test**: `test/test-with-playwright/.mcp.json` - Playwrightサーバー
 
 プラグインインストール時に自動的に設定されます。
 
@@ -217,12 +216,12 @@ AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバ�
 1. `.claude-plugin/marketplace.json` の `plugins` 配列に新規エントリを追加
 2. プラグイン名（`name`）はケバブケース、短く明確に
 3. プラグインに含めるスキル・エージェントを作成
-4. MCPサーバーが必要な場合は `skills/<プラグイン名>/.mcp.json` に配置
+4. MCPサーバーが必要な場合は `<プラグイン名>/.mcp.json` に配置
 5. バージョン番号を設定（初回は 0.1.0 推奨）
 
 ### 新しいスキルの追加
 
-1. `skills/<プラグイン名>/<スキル名>/` ディレクトリを作成
+1. `<プラグイン名>/<スキル名>/` ディレクトリを作成
 2. `SKILL.md` を作成（YAML frontmatter必須）
    - `name`: gerund形式またはケバブケース（例: developer, worktree-manage）
    - `description`: トリガーワード含有、1024文字以内
@@ -230,15 +229,15 @@ AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバ�
    - SKILL.md は500行以下
    - 外部ファイル参照は1階層まで
 4. `.claude-plugin/marketplace.json` の該当プラグインの `skills` 配列にパスを追加
-   - パス形式: `./skills/<プラグイン名>/<スキル名>`
+   - パス形式: `./<プラグイン名>/<スキル名>`
 
 ### 新しいエージェントの追加
 
-1. `skills/<プラグイン名>/agents/` または `skills/<プラグイン名>/<スキル名>/agents/` にマークダウンファイルを作成
+1. `<プラグイン名>/agents/` または `<プラグイン名>/<スキル名>/agents/` にマークダウンファイルを作成
 2. YAML frontmatterで `name` と `description` を定義
 3. エージェントの専門分野とレビュー観点を記述
 4. `.claude-plugin/marketplace.json` の該当プラグインの `agents` 配列にパスを追加
-   - パス形式: `./skills/<プラグイン名>/<スキル名>/agents/<エージェント名>.md`
+   - パス形式: `./<プラグイン名>/<スキル名>/agents/<エージェント名>.md`
 
 ### 品質基準
 
@@ -259,7 +258,7 @@ AWS、Cloudflare、Test プラグインは、それぞれ専用のMCPサーバ�
 ### コミット時の注意点
 - プラグイン定義（marketplace.json）の変更はバージョン番号の更新を伴う
 - スキルやエージェントの追加時は、必ず marketplace.json も更新する
-- パス指定は相対パスで `./skills/` から始める形式を使用
+- パス指定は相対パスで `./` から始める形式を使用
 - プラグイン名とディレクトリ構造は一貫性を保つ
 
 ## プラグインの品質保証
