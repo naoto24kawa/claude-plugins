@@ -6,17 +6,9 @@
   },
   "plugins": [
     {
-      "name": "spec",
-      "description": "仕様書作成のためのプラグイン",
-      "version": "0.1.0",
-      "source": "./",
-      "agents": ["./spec/ai-spec-definition/agents/ai-spec-reviewer.md"],
-      "skills": ["./spec/ai-spec-definition"]
-    },
-    {
       "name": "review",
-      "description": "コードレビューのためのプラグイン",
-      "version": "0.1.0",
+      "description": "コードレビューのためのプラグイン（TypeScript、テスト、Honoバックエンド、React、アーキテクチャパターン対応）",
+      "version": "0.4.0",
       "source": "./",
       "agents": [
         "./review/ts-code-review/agents/review-coc-reviewer.md",
@@ -26,31 +18,40 @@
         "./review/ts-code-review/agents/review-srp-reviewer.md",
         "./review/ts-code-review/agents/review-typescript-comprehensive.md",
         "./review/ts-test-code-review/agents/test-aaa-test-agent.md",
-        "./review/ts-test-code-review/agents/test-coordinator.md",
         "./review/ts-test-code-review/agents/test-solid-test-agent.md",
         "./review/ts-test-code-review/agents/test-test-builder-agent.md",
-        "./review/ts-test-code-review/agents/test-test-double-agent.md"
+        "./review/ts-test-code-review/agents/test-test-double-agent.md",
+        "./review/hono-backend-review/agents/hono-ddd-domain-reviewer.md",
+        "./review/hono-backend-review/agents/hono-ddd-context-reviewer.md",
+        "./review/hono-backend-review/agents/hono-event-driven-reviewer.md",
+        "./review/hono-backend-review/agents/hono-microservice-reviewer.md",
+        "./review/hono-backend-review/agents/hono-type-safety-reviewer.md",
+        "./review/hono-backend-review/agents/hono-edge-runtime-reviewer.md",
+        "./review/react-code-review/agents/react-component-design-reviewer.md",
+        "./review/react-code-review/agents/react-performance-reviewer.md",
+        "./review/react-code-review/agents/react-state-management-reviewer.md",
+        "./review/react-code-review/agents/react-accessibility-reviewer.md",
+        "./review/react-code-review/agents/react-testability-reviewer.md",
+        "./review/react-code-review/agents/react-shadcn-reviewer.md",
+        "./review/micro-arch-pattern-review/agents/arch-layer-structure-checker.md",
+        "./review/micro-arch-pattern-review/agents/arch-ddd-pattern-checker.md",
+        "./review/micro-arch-pattern-review/agents/arch-dependency-checker.md",
+        "./review/micro-arch-pattern-review/agents/arch-frontend-pattern-checker.md",
+        "./review/micro-arch-pattern-review/agents/arch-cloudflare-config-checker.md",
+        "./review/frontend-arch-pattern-review/agents/frontend-fsd-checker.md",
+        "./review/frontend-arch-pattern-review/agents/frontend-router-checker.md",
+        "./review/frontend-arch-pattern-review/agents/frontend-state-checker.md",
+        "./review/frontend-arch-pattern-review/agents/frontend-api-checker.md",
+        "./review/frontend-arch-pattern-review/agents/frontend-component-checker.md"
       ],
       "skills": [
         "./review/ts-code-review",
-        "./review/ts-test-code-review"
+        "./review/ts-test-code-review",
+        "./review/hono-backend-review",
+        "./review/react-code-review",
+        "./review/micro-arch-pattern-review",
+        "./review/frontend-arch-pattern-review"
       ]
-    },
-    {
-      "name": "test",
-      "description": "動作検証のためのプラグイン",
-      "version": "0.1.0",
-      "source": "./",
-      "agents": ["./test/test-with-playwright/agents/playwright-tester.md"],
-      "skills": ["./test/test-with-playwright"],
-      "mcpServers": "./test/test-with-playwright/.mcp.json"
-    },
-    {
-      "name": "git",
-      "description": "Git操作のためのプラグイン",
-      "version": "0.1.0",
-      "source": "./",
-      "skills": ["./git/worktree-manage"]
     },
     {
       "name": "claude",
@@ -77,73 +78,6 @@
         "./notion/research-documentation",
         "./notion/spec-to-implementation"
       ]
-    },
-    {
-      "name": "tanstack",
-      "description": "TanStack開発のためのプラグイン",
-      "version": "0.3.0",
-      "source": "./",
-      "agents": [
-        "./tanstack/agents/tanstack-implementation-specialist.md",
-        "./tanstack/tanstack-start-specialist/agents/tanstack-start-rag-specialist.md",
-        "./tanstack/agents/tanstack-reviewer.md"
-      ],
-      "skills": [
-        "./tanstack/tanstack-start-specialist",
-        "./tanstack/tanstack-start-spa",
-        "./tanstack/tanstack-start-ssg",
-        "./tanstack/tanstack-start-ssr"
-      ]
-    },
-    {
-      "name": "aws",
-      "description": "AWSに関するプラグイン",
-      "version": "0.1.0",
-      "source": "./",
-      "agents": [
-        "./aws/agents/aws-implementation-specialist.md",
-        "./aws/agents/aws-doc-specialist.md",
-        "./aws/agents/aws-reviewer.md"
-      ],
-      "skills": ["./aws/aws-specialist"],
-      "mcpServers": "./aws/.mcp.json"
-    },
-    {
-      "name": "cloudflare",
-      "description": "Cloudflareに関するプラグイン",
-      "version": "0.1.0",
-      "source": "./",
-      "agents": [
-        "./cloudflare/agents/cloudflare-implementation-specialist.md",
-        "./cloudflare/agents/cloudflare-rag-specialist.md",
-        "./cloudflare/agents/cloudflare-reviewer.md"
-      ],
-      "skills": ["./cloudflare/cloudflare-specialist"],
-      "mcpServers": "./cloudflare/.mcp.json"
-    },
-    {
-      "name": "shadcn",
-      "description": "shadcn/ui開発のためのプラグイン",
-      "version": "0.2.0",
-      "source": "./",
-      "agents": [
-        "./shadcn/agents/shadcn-implementation-specialist.md",
-        "./shadcn/shadcn-specialist/agents/shadcn-rag-specialist.md",
-        "./shadcn/agents/shadcn-reviewer.md"
-      ],
-      "skills": ["./shadcn/shadcn-specialist"]
-    },
-    {
-      "name": "hono",
-      "description": "Hono web framework開発のためのプラグイン",
-      "version": "0.2.0",
-      "source": "./",
-      "agents": [
-        "./hono/agents/hono-implementation-specialist.md",
-        "./hono/hono-specialist/agents/hono-rag-specialist.md",
-        "./hono/agents/hono-reviewer.md"
-      ],
-      "skills": ["./hono/hono-specialist"]
     }
   ]
 }

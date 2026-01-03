@@ -1,8 +1,8 @@
 # Claude Code Plugin Marketplace
 
-Claude Code用のプラグインマーケットプレースです。7つのプラグイン（review、test、git、claude、notion、aws、cloudflare）を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、動作検証、Git操作、インフラ管理などを自動化します。
+Claude Code用のプラグインマーケットプレースです。3つのプラグイン（review、claude、notion）を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価などを自動化します。
 
-## 🚀 クイックスタート
+## クイックスタート
 
 ### 前提条件
 
@@ -20,70 +20,43 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
 # コードレビュープラグイン
 /plugin install review@naoto24kawa-claude-plugins
 
-# 動作検証プラグイン
-/plugin install test@naoto24kawa-claude-plugins
-
-# Git操作プラグイン
-/plugin install git@naoto24kawa-claude-plugins
-
 # Claude Code設定レビュープラグイン
 /plugin install claude@naoto24kawa-claude-plugins
 
 # Notion連携プラグイン
 /plugin install notion@naoto24kawa-claude-plugins
-
-# AWS開発支援プラグイン
-/plugin install aws@naoto24kawa-claude-plugins
-
-# Cloudflare開発支援プラグイン
-/plugin install cloudflare@naoto24kawa-claude-plugins
 ```
 
-## 📦 提供プラグイン
+## 提供プラグイン
 
-### 1. review (v0.1.0)
+### 1. review (v0.4.0)
 
-TypeScript実装コードとテストコードの多角的レビュー
+TypeScript、Hono、React、アーキテクチャの多角的レビュー
 
-**スキル:**
+**スキル（6つ）:**
 - `ts-code-review`: TypeScript実装コードレビュー
 - `ts-test-code-review`: TypeScriptテストコードレビュー
+- `hono-backend-review`: Honoバックエンドレビュー
+- `react-code-review`: Reactコードレビュー
+- `micro-arch-pattern-review`: マイクロアーキテクチャパターンレビュー
+- `frontend-arch-pattern-review`: フロントエンドアーキテクチャレビュー
 
-**エージェント（実装レビュー）:**
-- Single Responsibility Principle
-- Code for Humans（可読性）
-- KISS原則
-- Convention over Configuration
-- TypeScript型安全性
-- 不要ファイル検出
+**エージェント（32）:**
 
-**エージェント（テストレビュー）:**
-- AAA Pattern
-- Test Double Pattern
-- Test Data Builder Pattern
-- SOLID Principles for Tests
+| カテゴリ | エージェント |
+|---------|------------|
+| TypeScript実装 | SRP、Code for Humans、KISS、CoC、型安全性、不要ファイル検出 |
+| テスト | AAA Pattern、Test Double、Test Data Builder、SOLID for Tests |
+| Hono | DDD Domain、DDD Context、Event Driven、Microservice、Type Safety、Edge Runtime |
+| React | Component Design、Performance、State Management、Accessibility、Testability、shadcn |
+| マイクロアーキテクチャ | Layer Structure、DDD Pattern、Dependency、Frontend Pattern、Cloudflare Config |
+| フロントエンドアーキテクチャ | FSD、Router、State、API、Component |
 
-### 2. test (v0.1.0)
-
-Playwrightによる動作検証
-
-**スキル:**
-- `test-with-playwright`: E2Eテスト・動作検証
-
-**MCP:** Playwright MCP サーバー
-
-### 3. git (v0.1.0)
-
-Git worktree の管理
-
-**スキル:**
-- `worktree-manage`: Git worktree の作成・管理・クリーンアップ
-
-### 4. claude (v1.0.0)
+### 2. claude (v1.0.0)
 
 Claude Code のスキル、エージェント、設定のレビュー
 
-**スキル:**
+**スキル（6つ）:**
 - `skill-review`: スキルのベストプラクティスレビュー（A-F評価）
 - `subagent-review`: サブエージェント実装のレビュー
 - `slash-command-review`: スラッシュコマンド実装のレビュー（6観点評価）
@@ -91,39 +64,17 @@ Claude Code のスキル、エージェント、設定のレビュー
 - `mcp-review`: MCP設定のセキュリティとベストプラクティスレビュー（7観点評価）
 - `hooks-review`: Claude Code hooks の設定とレビュー
 
-### 5. notion (v1.0.0)
+### 3. notion (v1.0.0)
 
 Notion連携による知識管理とドキュメント作成
 
-**スキル:**
+**スキル（4つ）:**
 - `knowledge-capture`: 会話をドキュメント化
 - `meeting-intelligence`: 会議準備資料作成
 - `research-documentation`: リサーチレポート作成
 - `spec-to-implementation`: 仕様からタスク化
 
-### 6. aws (v0.1.0)
-
-AWS開発支援とアーキテクチャレビュー
-
-**スキル:**
-- `developer`: Lambda、ECS、RDS等の実装・デプロイ
-- `research-documentation`: 公式ドキュメント検索・参照
-- `review-architecture`: Well-Architected Framework準拠レビュー
-
-**MCP:** AWS Documentation MCP サーバー
-
-### 7. cloudflare (v0.1.0)
-
-Cloudflare開発支援とインフラレビュー
-
-**スキル:**
-- `developer`: Workers、Pages、R2等の実装
-- `research-resources`: MCP経由のリソース調査
-- `review-infrastructure`: パフォーマンス・セキュリティレビュー
-
-**MCP:** Cloudflare Documentation MCP サーバー
-
-## 💡 使い方
+## 使い方
 
 ### スキルの実行例
 
@@ -131,6 +82,10 @@ Cloudflare開発支援とインフラレビュー
 # Review系
 /skill review:ts-code-review
 /skill review:ts-test-code-review
+/skill review:hono-backend-review
+/skill review:react-code-review
+/skill review:micro-arch-pattern-review
+/skill review:frontend-arch-pattern-review
 
 # Claude系
 /skill claude:skill-review
@@ -140,44 +95,24 @@ Cloudflare開発支援とインフラレビュー
 /skill claude:mcp-review
 /skill claude:hooks-review
 
-# Git系
-/skill git:worktree-manage
-
-# AWS系
-/skill aws:developer
-/skill aws:review-architecture
-/skill aws:research-documentation
-
-# Cloudflare系
-/skill cloudflare:developer
-/skill cloudflare:review-infrastructure
-/skill cloudflare:research-resources
-
 # Notion系
 /skill notion:knowledge-capture
 /skill notion:meeting-intelligence
 /skill notion:research-documentation
 /skill notion:spec-to-implementation
-
-# Test系
-/skill test:test-with-playwright
 ```
 
-## 🏗️ アーキテクチャ
+## アーキテクチャ
 
 ### ディレクトリ構造
 
 ```
 .
 ├── .claude-plugin/
-│   └── marketplace.json        # 7つのプラグイン定義
-├── aws/                        # AWS開発・レビュー・調査
-├── cloudflare/                 # Cloudflare開発・レビュー・調査
+│   └── marketplace.json        # 3つのプラグイン定義
+├── review/                     # コードレビュー（6スキル、32エージェント）
 ├── claude/                     # Claude Code レビュー（6スキル）
-├── git/                        # Git操作
-├── notion/                     # Notion連携（4スキル）
-├── review/                     # コードレビュー
-└── test/                       # 動作検証
+└── notion/                     # Notion連携（4スキル）
 ```
 
 ### Progressive Disclosure パターン
@@ -189,7 +124,7 @@ Cloudflare開発支援とインフラレビュー
 3. **必要時のみ参照**: Claude Codeが必要な時だけ詳細ファイルを読み込む
 4. **1階層の参照**: 参照の深さは1階層まで（SKILL.md → 詳細ファイル）
 
-## 🛠️ 開発
+## 開発
 
 ### 新しいプラグインの追加
 
@@ -217,7 +152,7 @@ Cloudflare開発支援とインフラレビュー
 - **検証**: 各ステップに検証とエラーハンドリングを含む
 - **一貫性**: 同一プラグイン内のスキル・エージェントで用語・形式を統一
 
-## 🔍 品質保証
+## 品質保証
 
 このリポジトリ自体が品質保証スキルを使用してレビュー可能です：
 
@@ -241,16 +176,16 @@ Cloudflare開発支援とインフラレビュー
 /skill claude:hooks-review
 ```
 
-## 📚 参照
+## 参照
 
 - [CLAUDE.md](./CLAUDE.md) - プロジェクト詳細とガイドライン
 - [Plugin Marketplace](https://docs.claude.com/ja/docs/claude-code/plugin-marketplaces) - 公式ドキュメント
 - [Skill authoring best practices](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices) - スキル作成ベストプラクティス
 
-## 📄 ライセンス
+## ライセンス
 
 このプロジェクトのライセンス情報については、リポジトリを参照してください。
 
-## 🤝 コントリビューション
+## コントリビューション
 
 問題や改善提案がある場合は、GitHubのIssuesまたはPull Requestsをご利用ください。
