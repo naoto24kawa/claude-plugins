@@ -8,7 +8,7 @@
     {
       "name": "review",
       "description": "コードレビューのためのプラグイン（TypeScript、テスト、Honoバックエンド、React、アーキテクチャパターン対応）",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "source": "./",
       "agents": [
         "./review/ts-code-review/agents/review-coc-reviewer.md",
@@ -56,7 +56,7 @@
     {
       "name": "claude",
       "description": "claude開発のためのプラグイン",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./",
       "skills": [
         "./claude/hooks-review",
@@ -70,7 +70,7 @@
     {
       "name": "notion",
       "description": "Notion公式が配布しているプラグイン",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./",
       "skills": [
         "./notion/knowledge-capture",
