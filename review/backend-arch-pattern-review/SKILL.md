@@ -1,6 +1,6 @@
 ---
-name: micro-arch-pattern-review
-description: アーキテクチャパターンを5つの専門エージェント（レイヤー構造、DDD Building Blocks、依存関係、フロントエンドパターン、Cloudflare設定）で分析し、トレードオフを考慮した優先度付き改善計画を策定。Use when the user mentions "architecture review", "アーキテクチャレビュー", "設計検証", "レイヤー構造", "DDD準拠", "依存関係分析", "Clean Architecture", "Onion Architecture", "bounded context", "feature-sliced design", or needs architecture evaluation.
+name: backend-arch-pattern-review
+description: バックエンドアーキテクチャパターンを5つの専門エージェント（レイヤー構造、DDD Building Blocks、依存関係、フロントエンドパターン、Cloudflare設定）で分析し、トレードオフを考慮した優先度付き改善計画を策定。Use when the user mentions "backend architecture review", "バックエンドアーキテクチャレビュー", "設計検証", "レイヤー構造", "DDD準拠", "依存関係分析", "Clean Architecture", "Onion Architecture", "API設計", or needs backend architecture evaluation.
 ---
 
 ## アーキテクチャパターンレビューシステム
@@ -8,10 +8,11 @@ description: アーキテクチャパターンを5つの専門エージェント
 ### 目次
 
 1. [使用例](#使用例)
-2. [レビュータスク](#レビュータスク)
-3. [実行手順](#実行手順検証付きワークフロー)
-4. [デフォルト設定](#デフォルト設定)
-5. [注意事項](#注意事項)
+2. [専門エージェント一覧](#専門エージェント一覧)
+3. [レビュータスク](#レビュータスク)
+4. [実行手順](#実行手順検証付きワークフロー)
+5. [デフォルト設定](#デフォルト設定)
+6. [注意事項](#注意事項)
 
 このスキルは、バックエンド/フロントエンドのアーキテクチャパターンを複数の専門エージェントで多角的にレビューし、トレードオフを考慮した現実的な改善計画を策定します。
 
@@ -23,26 +24,37 @@ description: アーキテクチャパターンを5つの専門エージェント
 
 ### 例 1: バックエンド全体のアーキテクチャレビュー
 
-```
-対象: apps/backend/src/
-状況: 新規プロジェクト開始後のアーキテクチャ検証
-期待: Clean Architecture準拠状況とDDDパターンの評価
-```
+- **対象**: `apps/backend/src/`（またはプロジェクト固有のバックエンドパス）
+- **状況**: 新規プロジェクト開始後のアーキテクチャ検証
+- **期待**: Clean Architecture準拠状況とDDDパターンの評価
 
 ### 例 2: フロントエンドパターンのレビュー
 
-```
-対象: apps/frontend/src/
-状況: Feature-Sliced Design導入後の検証
-期待: Bounded Contextとの対応確認とReact Routerパターン評価
-```
+- **対象**: `apps/frontend/src/`（またはプロジェクト固有のフロントエンドパス）
+- **状況**: Feature-Sliced Design導入後の検証
+- **期待**: Bounded Contextとの対応確認とルーティングパターン評価
 
 ### 例 3: Cloudflare設定のレビュー
 
+- **対象**: プロジェクトルート
+- **状況**: デプロイ前の設定検証
+- **期待**: wrangler.jsonc、バインディング、環境変数の整合性確認
+
+## 専門エージェント一覧
+
+このスキルは以下の5つの専門エージェントを使用します。Task ツールの `subagent_type` パラメータで各エージェントを呼び出してください。
+
+| エージェント名 | 役割 | 主な検証対象 |
+|--------------|------|------------|
+| `arch-layer-structure-checker` | レイヤー構造検証 | Domain/Application/Infrastructure/Presentation の4層構成 |
+| `arch-ddd-pattern-checker` | DDDパターン検証 | Entity, Value Object, Aggregate Root, Repository 等 |
+| `arch-dependency-checker` | 依存関係検証 | 依存方向、DIP準拠、循環依存 |
+| `arch-frontend-pattern-checker` | フロントエンド検証 | Feature-Sliced Design、ルーティング、コンポーネント設計 |
+| `arch-cloudflare-config-checker` | Cloudflare設定検証 | wrangler.jsonc、バインディング、環境変数（Cloudflare使用時のみ） |
+
+**呼び出し例**:
 ```
-対象: プロジェクトルート
-状況: デプロイ前の設定検証
-期待: wrangler.jsonc、バインディング、環境変数の整合性確認
+Task ツールで subagent_type="arch-layer-structure-checker" を指定
 ```
 
 ## レビュータスク
@@ -51,11 +63,11 @@ description: アーキテクチャパターンを5つの専門エージェント
 
 以下の専門エージェントを並行または順次実行してレビューを収集：
 
-- @agent-arch-layer-structure-checker によるレイヤー構造（Domain/Application/Infrastructure/Presentation）の検証
-- @agent-arch-ddd-pattern-checker によるDDD Building Blocks（Entity、Value Object、Aggregate Root、Repository、Domain Service、Domain Event）の検証
-- @agent-arch-dependency-checker による依存関係の方向性とDIP準拠の検証
-- @agent-arch-frontend-pattern-checker によるFeature-Sliced Design、React Router、コンポーネント設計の検証
-- @agent-arch-cloudflare-config-checker によるCloudflare設定（Workers、D1、R2、Queues）の検証
+- **arch-layer-structure-checker**: レイヤー構造（Domain/Application/Infrastructure/Presentation）の検証
+- **arch-ddd-pattern-checker**: DDD Building Blocks（Entity、Value Object、Aggregate Root、Repository、Domain Service、Domain Event）の検証
+- **arch-dependency-checker**: 依存関係の方向性とDIP準拠の検証
+- **arch-frontend-pattern-checker**: Feature-Sliced Design、ルーティング、コンポーネント設計の検証
+- **arch-cloudflare-config-checker**: Cloudflare設定（Workers、D1、R2、Queues）の検証（Cloudflare使用プロジェクトのみ）
 
 ### 2. レビュー結果の統合と分析
 
@@ -97,6 +109,31 @@ description: アーキテクチャパターンを5つの専門エージェント
 
 ## 実行手順（検証付きワークフロー）
 
+### ステップ 0: プロジェクト規模の判定（必須）
+
+レビュー対象の規模を判定し、以降のエージェントに期待値を伝達：
+
+1. **ファイル数のカウント**
+   - バックエンド: `apps/backend/src/**/*.ts` のファイル数
+   - フロントエンド: `apps/frontend/src/**/*.tsx` のファイル数
+
+2. **規模判定基準**
+
+   | 規模 | ファイル数 | 期待するレイヤー構造 | DDDパターン適用 |
+   |------|-----------|---------------------|----------------|
+   | 小規模 | 〜20 | 柔軟（api/domain/db程度） | 最小限（Branded Types程度） |
+   | 中規模 | 21〜100 | 基本的な分離（3層程度） | 必要な部分のみ |
+   | 大規模 | 100超 | 厳格な4層分離 | フル適用を検討 |
+
+3. **判定結果の伝達**
+   - 各エージェント実行時に規模判定結果を明示
+   - **小規模の場合**: 「シンプルさ優先」を指示
+   - **中規模の場合**: 「バランス重視」を指示
+   - **大規模の場合**: 「厳格な準拠」を指示
+
+- **検証**: 規模判定が完了したことを確認
+- **エラー時**: ファイル数不明の場合は「中規模」として進行
+
 ### ステップ 1: 対象の指定と準備
 
 - レビュー対象のプロジェクト/ディレクトリを明確に指定
@@ -105,12 +142,12 @@ description: アーキテクチャパターンを5つの専門エージェント
 
 ### ステップ 2: エージェント実行
 
-- 各専門エージェントを並行または順次実行
-  - @agent-arch-layer-structure-checker
-  - @agent-arch-ddd-pattern-checker
-  - @agent-arch-dependency-checker
-  - @agent-arch-frontend-pattern-checker
-  - @agent-arch-cloudflare-config-checker
+- 各専門エージェントを並行または順次実行（Task ツールで `subagent_type` を指定）
+  - `arch-layer-structure-checker`
+  - `arch-ddd-pattern-checker`
+  - `arch-dependency-checker`
+  - `arch-frontend-pattern-checker`
+  - `arch-cloudflare-config-checker`（Cloudflare使用プロジェクトのみ）
 - **検証**: すべてのエージェントが正常に完了したか確認
 - **エラー時**: 失敗したエージェントのみ再実行、または部分的な結果で続行
 

@@ -1,6 +1,6 @@
 ---
 name: arch-cloudflare-config-checker
-description: Cloudflare設定（Workers, D1, R2, Queues, Pages）の検証を行う専門エージェント。wrangler.jsonc、環境変数、バインディング設定の整合性をチェックし、改善提案を行います。「Cloudflare設定」「wrangler」「バインディング」などの依頼時に使用。
+description: Cloudflare Workers使用プロジェクト専用。wrangler.jsonc、D1/R2/Queuesバインディング、環境変数の整合性を検証。「Cloudflare設定」「wrangler」で使用。
 ---
 
 Cloudflare インフラ設定（Workers, D1, R2, Queues）の整合性を検証する専門エージェントです。
@@ -130,12 +130,16 @@ export interface Env {
 
 ### 5. ポート設定
 
-| サービス | 期待されるポート |
-|---------|----------------|
-| Frontend | 5173 |
-| Admin | 5174 |
-| Backend | 8787 |
-| Images | 8788 |
+プロジェクト固有の設定に合わせて確認してください。以下は一般的な例です：
+
+| サービス | 一般的なポート | 備考 |
+|---------|--------------|------|
+| Frontend (Vite) | 5173 | Viteデフォルト |
+| Admin | 5174 | カスタム設定 |
+| Backend (Workers) | 8787 | Wrangler devデフォルト |
+| Images Service | 8788 | カスタム設定 |
+
+**注意**: 実際のポート番号はプロジェクトの設定ファイル（`package.json`、`wrangler.jsonc`）で確認してください。
 
 ## チェック手順
 

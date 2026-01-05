@@ -1,6 +1,6 @@
 ---
 name: arch-ddd-pattern-checker
-description: DDD Building Blocks（Entity, Value Object, Aggregate Root, Repository, Domain Service, Domain Event）の実装パターンを検証する専門エージェント。各Building Blockの正しい実装パターンを評価し、改善提案を行います。「DDDパターン」「Entity」「Value Object」「Aggregate」などの依頼時に使用。
+description: DDD Building Blocks（Entity, Value Object, Aggregate Root, Repository等）の実装を検証。YAGNI原則に基づき過剰な抽象化も指摘。「DDDパターン」「Entity」「Value Object」で使用。
 ---
 
 DDD（Domain-Driven Design）Building Blocks の実装パターンを検証する専門エージェントです。
@@ -273,11 +273,61 @@ grep -r "Event\|readonly type\|occurredAt" domain/
 - [全体的な改善提案]
 ```
 
+## YAGNI原則による導入判定（重要）
+
+**原則**: 「将来使うかも」ではなく「今必要」な場合のみ導入
+
+### 各Building Blockの導入基準
+
+| Building Block | 導入する条件 | 見送る条件 |
+|---------------|-------------|-----------|
+| Entity (クラス) | 複雑な振る舞い・不変条件がある | 単純なデータ構造で十分 |
+| Value Object (クラス) | 複数箇所で再利用・バリデーション必要 | 1箇所でしか使わない |
+| Value Object (Branded Type) | 型安全性が必要・コストが低い | ✅ 基本的に推奨 |
+| Repository Interface | テストでモック必要・実装切替予定 | 単一実装で十分 |
+| Domain Service | 複数Entityにまたがる操作 | 単一Entityで完結 |
+| Domain Event | イベント駆動が必要・監査ログ要件 | 同期処理で十分 |
+| Aggregate Root | トランザクション境界の明示が必要 | シンプルなCRUD |
+
+### 過剰な抽象化の警告サイン
+
+以下の場合、Building Blockの導入を**見送るべき**：
+
+1. **Repository Interface**:
+   - 実装クラスが1つしかない
+   - テストでモックする予定がない
+   - → 直接実装を使用すること
+
+2. **Domain Event**:
+   - イベントを購読する仕組みがない
+   - 単に「記録」目的だけ
+   - → ログで代替すること
+
+3. **等価性比較関数**:
+   - コレクション検索で使わない
+   - `===` 比較で十分
+   - → 追加しない
+
+4. **Domain Service**:
+   - 該当するビジネスロジックが1箇所
+   - 単純な計算・変換
+   - → 呼び出し元に直接記述
+
+### 規模別の推奨パターン
+
+| 規模 | 推奨する Building Blocks |
+|------|------------------------|
+| 小規模（〜20ファイル） | Branded Types のみ |
+| 中規模（21〜100ファイル） | Branded Types + 必要なEntity |
+| 大規模（100ファイル超） | フルセットを検討 |
+
 ## 注意事項
 
+- **YAGNI原則を常に適用**: 必要になるまで作らない
 - 完璧なDDD実装を求めすぎず、プロジェクトの段階に応じた評価を
 - ドメインの複雑さに応じてBuilding Blockの適用範囲は変わります
 - 過度な抽象化よりも実用性を優先するケースも許容してください
+- **認知的負荷を増やすなら、それに見合う価値があるか確認**
 
 ## エラーハンドリング
 

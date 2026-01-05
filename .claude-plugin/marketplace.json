@@ -7,8 +7,8 @@
   "plugins": [
     {
       "name": "review",
-      "description": "コードレビューのためのプラグイン（TypeScript、テスト、Honoバックエンド、React、アーキテクチャパターン対応）",
-      "version": "0.4.1",
+      "description": "コードレビューのためのプラグイン。Skills: ts-code-review, ts-test-code-review, hono-backend-review, react-code-review, backend-arch-pattern-review, frontend-arch-pattern-review",
+      "version": "0.4.2",
       "source": "./",
       "agents": [
         "./review/ts-code-review/agents/review-coc-reviewer.md",
@@ -33,11 +33,11 @@
         "./review/react-code-review/agents/react-accessibility-reviewer.md",
         "./review/react-code-review/agents/react-testability-reviewer.md",
         "./review/react-code-review/agents/react-shadcn-reviewer.md",
-        "./review/micro-arch-pattern-review/agents/arch-layer-structure-checker.md",
-        "./review/micro-arch-pattern-review/agents/arch-ddd-pattern-checker.md",
-        "./review/micro-arch-pattern-review/agents/arch-dependency-checker.md",
-        "./review/micro-arch-pattern-review/agents/arch-frontend-pattern-checker.md",
-        "./review/micro-arch-pattern-review/agents/arch-cloudflare-config-checker.md",
+        "./review/backend-arch-pattern-review/agents/arch-layer-structure-checker.md",
+        "./review/backend-arch-pattern-review/agents/arch-ddd-pattern-checker.md",
+        "./review/backend-arch-pattern-review/agents/arch-dependency-checker.md",
+        "./review/backend-arch-pattern-review/agents/arch-frontend-pattern-checker.md",
+        "./review/backend-arch-pattern-review/agents/arch-cloudflare-config-checker.md",
         "./review/frontend-arch-pattern-review/agents/frontend-fsd-checker.md",
         "./review/frontend-arch-pattern-review/agents/frontend-router-checker.md",
         "./review/frontend-arch-pattern-review/agents/frontend-state-checker.md",
@@ -49,13 +49,13 @@
         "./review/ts-test-code-review",
         "./review/hono-backend-review",
         "./review/react-code-review",
-        "./review/micro-arch-pattern-review",
+        "./review/backend-arch-pattern-review",
         "./review/frontend-arch-pattern-review"
       ]
     },
     {
       "name": "claude",
-      "description": "claude開発のためのプラグイン",
+      "description": "Claude Code開発のためのプラグイン。Skills: hooks-review, marketplace-review, mcp-review, skill-review, slash-command-review, subagent-review",
       "version": "1.0.1",
       "source": "./",
       "skills": [
@@ -69,7 +69,7 @@
     },
     {
       "name": "notion",
-      "description": "Notion公式が配布しているプラグイン",
+      "description": "Notion連携のためのプラグイン。Skills: knowledge-capture, meeting-intelligence, research-documentation, spec-to-implementation",
       "version": "1.0.1",
       "source": "./",
       "skills": [

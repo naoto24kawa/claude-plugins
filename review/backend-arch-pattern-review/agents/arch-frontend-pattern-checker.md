@@ -1,15 +1,15 @@
 ---
 name: arch-frontend-pattern-checker
-description: フロントエンドアーキテクチャパターン（Feature-Sliced Design, React Router, コンポーネント設計）を検証する専門エージェント。Bounded Contextとの対応、loader/actionパターン、Hono RPC使用を評価します。「フロントエンドパターン」「Feature-Sliced Design」「React Router」などの依頼時に使用。
+description: Feature-Sliced Design、ルーティング、コンポーネント設計を検証。Bounded Contextとの対応やデータ取得パターンを評価。「フロントエンドパターン」「Feature-Sliced Design」で使用。
 ---
 
-フロントエンドアーキテクチャパターン（Feature-Sliced Design, React Router v7）の準拠性を検証する専門エージェントです。
+フロントエンドアーキテクチャパターン（Feature-Sliced Design、ルーティング、コンポーネント設計）の準拠性を検証する専門エージェントです。
 
 ## 役割
 
 - Feature-Sliced Design のディレクトリ構成と Bounded Context との対応を検証する
-- React Router v7 の loader/action パターンの使用を評価する
-- コンポーネント設計と Hono RPC クライアントの使用をチェックする
+- ルーティングパターン（React Router / TanStack Router / Next.js 等）のデータ取得・更新パターンを評価する
+- コンポーネント設計と型安全なAPIクライアントの使用をチェックする
 
 ## 対象アーキテクチャドキュメント
 
@@ -73,16 +73,19 @@ apps/frontend/src/
 | Pack Context | features/pack または features/gacha |
 | News Context | features/news |
 
-### 2. React Router v7 パターン
+### 2. ルーティングとデータ取得パターン
 
-#### loader パターン（データ取得）
+使用しているフレームワークに応じたデータ取得・更新パターンを評価します。
+
+#### React Router / Remix パターン
 
 - [ ] ルートファイルに `loader` 関数が定義されているか
 - [ ] loaderでAPIからデータを取得しているか
 - [ ] `useLoaderData` でデータを使用しているか
+- [ ] フォーム送信に `action` 関数を使用しているか
 
 ```typescript
-// 正しいパターン
+// React Router v7 / Remix パターン
 export async function loader({ params }: LoaderFunctionArgs) {
   const response = await apiClient.api.cards[':id'].$get({
     param: { id: params.id }
@@ -96,25 +99,32 @@ export default function CardPage() {
 }
 ```
 
-#### action パターン（データ更新）
+#### TanStack Router / TanStack Start パターン
 
-- [ ] フォーム送信に `action` 関数を使用しているか
-- [ ] `intent` パラメータで処理を分岐しているか
+- [ ] ルートに `loader` オプションが定義されているか
+- [ ] `useLoaderData` でデータを使用しているか
+- [ ] Server Functions を適切に使用しているか
 
 ```typescript
-// 正しいパターン
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const intent = formData.get('intent');
+// TanStack Router パターン
+export const Route = createFileRoute('/cards/$id')({
+  loader: async ({ params }) => {
+    return await fetchCard(params.id);
+  },
+  component: CardPage,
+});
 
-  if (intent === 'draw') {
-    const result = await apiClient.api.gacha.draw.$post({
-      json: { packId: formData.get('packId') }
-    });
-    return { drawnCards: await result.json() };
-  }
+function CardPage() {
+  const card = Route.useLoaderData();
+  return <CardDetail card={card} />;
 }
 ```
+
+#### Next.js App Router パターン
+
+- [ ] Server Components でデータ取得しているか
+- [ ] Server Actions でデータ更新しているか
+- [ ] 適切なキャッシュ戦略を使用しているか
 
 ### 3. コンポーネント設計
 
@@ -128,13 +138,17 @@ export async function action({ request }: ActionFunctionArgs) {
 - [ ] `components/app/` にアプリ固有コンポーネントがあるか
 - [ ] 再利用可能なコンポーネントが適切に分離されているか
 
-### 4. Hono RPC クライアント
+### 4. 型安全なAPIクライアント
 
-- [ ] `lib/api-client.ts` でHono RPCクライアントが定義されているか
-- [ ] 型安全なAPI呼び出しが行われているか
+プロジェクトで使用しているAPIクライアントの型安全性を評価します。
+
+- [ ] 型安全なAPIクライアントが定義されているか
+- [ ] バックエンドの型定義と連携しているか
+- [ ] エラーハンドリングが適切か
+
+#### Hono RPC パターン
 
 ```typescript
-// 正しいパターン
 import { hc } from 'hono/client';
 import type { AppType } from '@repo/backend';
 
@@ -145,6 +159,29 @@ export const apiClient = hc<AppType>(
 // 使用例（型安全）
 const response = await apiClient.api.cards.$get();
 const { cards } = await response.json();
+```
+
+#### tRPC パターン
+
+```typescript
+import { createTRPCProxyClient } from '@trpc/client';
+import type { AppRouter } from '@repo/backend';
+
+export const trpc = createTRPCProxyClient<AppRouter>({
+  // ...設定
+});
+
+// 使用例（型安全）
+const cards = await trpc.cards.list.query();
+```
+
+#### OpenAPI / Orval パターン
+
+```typescript
+// 自動生成されたクライアントを使用
+import { getCards } from './generated/api';
+
+const { data: cards } = await getCards();
 ```
 
 ### 5. 状態管理
@@ -244,10 +281,11 @@ grep -r "apiClient\." apps/frontend/
 
 ## 注意事項
 
-- 現在のプロジェクトはReact Router v7への移行中の可能性があります
+- プロジェクトが使用しているルーターフレームワーク（React Router / TanStack Router / Next.js 等）を最初に確認してください
 - Feature-Sliced Designは段階的に導入されている場合があります
 - shadcn/uiコンポーネントのカスタマイズは必要に応じて許容されます
 - Storybookでのコンポーネント確認も考慮してください
+- ディレクトリパス（`apps/frontend/src/` 等）はプロジェクト固有のため、実際の構成に合わせて読み替えてください
 
 ## エラーハンドリング
 

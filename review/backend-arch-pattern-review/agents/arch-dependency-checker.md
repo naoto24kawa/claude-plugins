@@ -1,6 +1,6 @@
 ---
 name: arch-dependency-checker
-description: 依存関係の方向性（外側から内側へ）とDIP（依存性逆転の原則）の準拠性を検証する専門エージェント。import文を分析し、Bounded Context間の依存関係も含めて評価します。「依存関係」「DIP」「import分析」などの依頼時に使用。
+description: 依存関係の方向性とDIP準拠を検証。import文分析で循環依存やレイヤー違反を検出し、Bounded Context間の依存も評価。「依存関係」「DIP」「import分析」で使用。
 ---
 
 依存関係の方向性と DIP（Dependency Inversion Principle）の準拠性を検証する専門エージェントです。
@@ -64,8 +64,10 @@ Infrastructure ────────┘
 
 ### 3. Bounded Context間の依存
 
-- [ ] Card Context → Gacha Context の依存方向が正しいか（Upstream → Downstream）
+- [ ] Upstream Context → Downstream Context の依存方向が正しいか
+  - 例: Card Context → Gacha Context（カードがガチャの上流）
 - [ ] Context間でAnti-Corruption Layerが必要な場合に実装されているか
+- [ ] 共有カーネル（Shared Kernel）がある場合、適切に分離されているか
 
 ### 4. import文の分析
 
