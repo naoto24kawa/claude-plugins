@@ -22,7 +22,7 @@
     {
       "name": "claude",
       "description": "Reviews Claude Code configuration files against official documentation with A-F graded reports and actionable recommendations",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"

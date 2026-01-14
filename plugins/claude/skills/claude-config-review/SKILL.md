@@ -1,6 +1,6 @@
 ---
 name: claude-config-review
-description: Reviews Claude Code configuration files against official documentation. Supports 6 target types (Skills, Sub-agents, MCP, Hooks, Slash commands, Plugins). Fetches latest best practices via WebFetch and generates A-F graded reports with actionable recommendations. Use when users mention "設定レビュー", "skill review", "agent review", "MCP check", "hooks validation", "command review", "plugin validation", "config review", or Claude Code configuration quality assessment.
+description: Reviews Claude Code configuration files against official documentation. Supports 6 target types (Skills, Sub-agents, MCP, Hooks, Slash commands, Plugins) plus Project Audit mode for comprehensive project-wide review. Fetches latest best practices via WebFetch and generates A-F graded reports with actionable recommendations. Use when users mention "設定レビュー", "project audit", "プロジェクト監査", "全設定レビュー", "skill review", "agent review", "MCP check", "hooks validation", "command review", "plugin validation", "config review", or Claude Code configuration quality assessment.
 allowed-tools: [Read, Glob, Grep, WebFetch, WebSearch, TodoWrite]
 ---
 
@@ -31,6 +31,7 @@ Claude Code設定ファイルを公式ドキュメントに基づいてレビュ
 | **Hooks** | フック設定 | `*/.claude/settings*.json` |
 | **Slash commands** | スラッシュコマンド | `.claude/commands/*.md` |
 | **Plugins** | プラグイン定義 | `.claude-plugin/marketplace.json` |
+| **Project Audit** | 全設定一括監査 | 上記全て + `CLAUDE.md` |
 
 ## Review Process
 
@@ -49,6 +50,7 @@ Claude Code設定ファイルを公式ドキュメントに基づいてレビュ
 5. Slash commands - .claude/commands/*.md
 6. Plugins - marketplace.json
 7. All - 全て一括レビュー
+8. Project Audit - プロジェクト全体監査 & 改善計画
 ```
 
 **Verification**: ユーザーの選択を確認
@@ -175,6 +177,91 @@ WebSearchクエリ: "Claude Code {対象} specification best practices site:docs
 
 **Verification**: レポートに全セクションが含まれていることを確認
 
+### Step 6: Project Audit Mode (Optional)
+
+「Project Audit」が選択された場合、プロジェクト全体の Claude 設定を一括監査する。
+
+**Project Audit プロセス**:
+
+1. **自動検出**: プロジェクト内の全 Claude 設定ファイルを自動検出
+   ```
+   検出対象:
+   - CLAUDE.md (プロジェクト/ユーザー)
+   - .claude/settings*.json
+   - .mcp.json
+   - .claude/commands/*.md
+   - **/SKILL.md
+   - **/agents/*.md
+   - .claude-plugin/marketplace.json
+   ```
+
+2. **一括レビュー**: 各設定ファイルを順次レビュー (Step 2-5 を適用)
+
+3. **統合サマリー生成**: `common/project-audit-template.md` に従って統合レポート生成
+
+**Project Audit レポート構造**:
+```markdown
+# Project Audit Report
+
+**プロジェクト**: {project_name}
+**監査日時**: {datetime}
+**総合スコア**: {score}/100 ({grade})
+
+---
+
+## 検出された設定ファイル
+
+| カテゴリ | ファイル数 | 平均スコア |
+|---------|----------|-----------|
+| Skills | X | XX |
+| Agents | X | XX |
+| ... | ... | ... |
+
+## 全体サマリー
+
+### 強み
+- {strength_1}
+- {strength_2}
+
+### 改善が必要な領域
+- {area_1}: {issue_summary}
+- {area_2}: {issue_summary}
+
+## 問題リスト (優先度順)
+
+### 🔴 Critical
+| ファイル | 問題 | 推奨対応 |
+|---------|------|---------|
+| {file} | {issue} | {recommendation} |
+
+### 🟠 High
+...
+
+### 🟡 Medium
+...
+
+### 🟢 Low
+...
+
+## 改善提案
+
+### 即時対応 (Critical/High)
+1. {task_1}
+2. {task_2}
+
+### 推奨改善 (Medium)
+1. {task_1}
+
+### 将来検討 (Low)
+1. {task_1}
+
+---
+
+**詳細**: 各ファイルの詳細レポートは個別に生成されています
+```
+
+**Verification**: 全設定ファイルがレビューされ、統合レポートが生成されていることを確認
+
 ## Grading Criteria
 
 詳細は `common/grading-criteria.md` を参照。
@@ -262,6 +349,17 @@ Unless otherwise specified by the user, use the following defaults:
 2. 指定ファイルを読み込み
 3. WebFetchで公式ドキュメント取得
 4. 評価実行、レポート生成
+
+### Example 4: Project Audit
+
+**User**: "プロジェクト全体のClaude設定をレビューして改善計画を立てて"
+
+**Process**:
+1. Project Audit モードを選択
+2. プロジェクト内の全 Claude 設定ファイルを自動検出
+3. 各ファイルを順次レビュー (Skills → Agents → MCP → Hooks → Commands → Plugins → CLAUDE.md)
+4. 統合サマリーレポートを生成
+5. 優先度付き改善提案リストを提示
 
 ### Example Output: Good vs Bad
 
