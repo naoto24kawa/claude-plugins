@@ -1,5 +1,8 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
+  "version": "3.0.0",
+  "description": "Code review, Claude Code configuration review, and Notion integration plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
@@ -7,77 +10,36 @@
   "plugins": [
     {
       "name": "review",
-      "description": "コードレビューのためのプラグイン。Skills: ts-code-review, ts-test-code-review, hono-backend-review, react-code-review, backend-arch-pattern-review, frontend-arch-pattern-review",
-      "version": "0.4.2",
-      "source": "./",
-      "agents": [
-        "./review/ts-code-review/agents/review-coc-reviewer.md",
-        "./review/ts-code-review/agents/review-garbage-detector.md",
-        "./review/ts-code-review/agents/review-human-code-reviewer.md",
-        "./review/ts-code-review/agents/review-kiss-reviewer.md",
-        "./review/ts-code-review/agents/review-srp-reviewer.md",
-        "./review/ts-code-review/agents/review-typescript-comprehensive.md",
-        "./review/ts-test-code-review/agents/test-aaa-test-agent.md",
-        "./review/ts-test-code-review/agents/test-solid-test-agent.md",
-        "./review/ts-test-code-review/agents/test-test-builder-agent.md",
-        "./review/ts-test-code-review/agents/test-test-double-agent.md",
-        "./review/hono-backend-review/agents/hono-ddd-domain-reviewer.md",
-        "./review/hono-backend-review/agents/hono-ddd-context-reviewer.md",
-        "./review/hono-backend-review/agents/hono-event-driven-reviewer.md",
-        "./review/hono-backend-review/agents/hono-microservice-reviewer.md",
-        "./review/hono-backend-review/agents/hono-type-safety-reviewer.md",
-        "./review/hono-backend-review/agents/hono-edge-runtime-reviewer.md",
-        "./review/react-code-review/agents/react-component-design-reviewer.md",
-        "./review/react-code-review/agents/react-performance-reviewer.md",
-        "./review/react-code-review/agents/react-state-management-reviewer.md",
-        "./review/react-code-review/agents/react-accessibility-reviewer.md",
-        "./review/react-code-review/agents/react-testability-reviewer.md",
-        "./review/react-code-review/agents/react-shadcn-reviewer.md",
-        "./review/backend-arch-pattern-review/agents/arch-layer-structure-checker.md",
-        "./review/backend-arch-pattern-review/agents/arch-ddd-pattern-checker.md",
-        "./review/backend-arch-pattern-review/agents/arch-dependency-checker.md",
-        "./review/backend-arch-pattern-review/agents/arch-frontend-pattern-checker.md",
-        "./review/backend-arch-pattern-review/agents/arch-cloudflare-config-checker.md",
-        "./review/frontend-arch-pattern-review/agents/frontend-fsd-checker.md",
-        "./review/frontend-arch-pattern-review/agents/frontend-router-checker.md",
-        "./review/frontend-arch-pattern-review/agents/frontend-state-checker.md",
-        "./review/frontend-arch-pattern-review/agents/frontend-api-checker.md",
-        "./review/frontend-arch-pattern-review/agents/frontend-component-checker.md"
-      ],
-      "skills": [
-        "./review/ts-code-review",
-        "./review/ts-test-code-review",
-        "./review/hono-backend-review",
-        "./review/react-code-review",
-        "./review/backend-arch-pattern-review",
-        "./review/frontend-arch-pattern-review"
-      ]
+      "description": "Comprehensive code review toolkit for TypeScript, Hono backend, React frontend, and architecture patterns with specialized review agents",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/review",
+      "category": "productivity"
     },
     {
       "name": "claude",
-      "description": "Claude Code開発のためのプラグイン。Skills: hooks-review, marketplace-review, mcp-review, skill-review, slash-command-review, subagent-review",
-      "version": "1.0.1",
-      "source": "./",
-      "skills": [
-        "./claude/hooks-review",
-        "./claude/marketplace-review",
-        "./claude/mcp-review",
-        "./claude/skill-review",
-        "./claude/slash-command-review",
-        "./claude/subagent-review"
-      ]
+      "description": "Reviews Claude Code configuration files against official documentation with A-F graded reports and actionable recommendations",
+      "version": "2.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/claude",
+      "category": "development"
     },
     {
       "name": "notion",
-      "description": "Notion連携のためのプラグイン。Skills: knowledge-capture, meeting-intelligence, research-documentation, spec-to-implementation",
-      "version": "1.0.1",
-      "source": "./",
-      "skills": [
-        "./notion/knowledge-capture",
-        "./notion/meeting-intelligence",
-        "./notion/research-documentation",
-        "./notion/spec-to-implementation"
-      ]
+      "description": "Notion integration skills for knowledge capture, meeting intelligence, research documentation, and spec-to-implementation workflows",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/notion",
+      "category": "productivity"
     }
   ]
 }
