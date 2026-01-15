@@ -1,6 +1,13 @@
 ---
 name: backend-arch-pattern-review
 description: Analyzes backend architecture patterns with 5 specialized agents (layer structure, DDD Building Blocks, dependencies, frontend patterns, Cloudflare config) and creates prioritized improvement plans considering trade-offs. Use when the user mentions "backend architecture review", "バックエンドアーキテクチャレビュー", "設計検証", "レイヤー構造", "DDD準拠", "依存関係分析", "Clean Architecture", "Onion Architecture", "API設計", or needs backend architecture evaluation.
+context: fork
+agents:
+  - arch-layer-structure-checker
+  - arch-ddd-pattern-checker
+  - arch-dependency-checker
+  - arch-frontend-pattern-checker
+  - arch-cloudflare-config-checker
 ---
 
 ## アーキテクチャパターンレビューシステム

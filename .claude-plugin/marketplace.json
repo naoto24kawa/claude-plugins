@@ -11,7 +11,7 @@
     {
       "name": "review",
       "description": "Comprehensive code review toolkit for TypeScript, Hono backend, React frontend, and architecture patterns with specialized review agents",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"

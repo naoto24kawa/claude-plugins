@@ -1,6 +1,13 @@
 ---
 name: ts-test-code-review
 description: Reviews test implementation code with 5 specialized agents (AAA structure, Test Double, Test Builder, SOLID principles, TypeScript type safety) and creates prioritized test quality improvement plans considering trade-offs. Use when the user mentions "test review", "テストレビュー", "テスト品質", "テストリファクタリング", "テストカバレッジ", "モック適切性", "AAA構造", or needs test quality verification.
+context: fork
+agents:
+  - test-aaa-test-agent
+  - test-test-double-agent
+  - test-test-builder-agent
+  - test-solid-test-agent
+  - review-typescript-comprehensive
 ---
 
 ## テスト実装レビューシステム

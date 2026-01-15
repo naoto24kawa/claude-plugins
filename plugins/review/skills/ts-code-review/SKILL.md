@@ -1,6 +1,14 @@
 ---
 name: ts-code-review
 description: Reviews implementation code with 6 specialized agents (SRP, readability, KISS, conventions, TypeScript, garbage detection) and creates prioritized improvement plans considering trade-offs. Use when the user mentions "code review", "レビュー", "コード品質", "改善提案", "リファクタリング", "設計評価", "型チェック", or needs quality verification after implementation.
+context: fork
+agents:
+  - review-srp-reviewer
+  - review-human-code-reviewer
+  - review-kiss-reviewer
+  - review-coc-reviewer
+  - review-typescript-comprehensive
+  - review-garbage-detector
 ---
 
 ## コード実装レビューシステム

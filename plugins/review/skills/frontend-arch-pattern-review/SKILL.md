@@ -1,6 +1,13 @@
 ---
 name: frontend-arch-pattern-review
 description: Analyzes frontend architecture with 5 specialized agents (Feature-Sliced Design, React Router, state management, Hono RPC integration, component design) and creates prioritized improvement plans considering trade-offs. Use when the user mentions "frontend architecture", "フロントエンドアーキテクチャ", "Feature-Sliced", "FSD", "loader/action", "状態管理設計", "API連携", "React Router", or needs frontend architecture evaluation.
+context: fork
+agents:
+  - frontend-fsd-checker
+  - frontend-router-checker
+  - frontend-state-checker
+  - frontend-api-checker
+  - frontend-component-checker
 ---
 
 ## フロントエンドアーキテクチャレビューシステム
@@ -125,17 +132,28 @@ description: Analyzes frontend architecture with 5 specialized agents (Feature-S
 ### ステップ 3: 結果収集と検証
 
 - 各エージェントのレビュー結果を収集
-- **検証**: 各エージェントの出力が有効な形式であることを確認
+- **検証**:
+  - 各エージェントの出力が有効な形式であることを確認
+  - 空の結果や不完全な出力がないか確認
+- **エラー時**: 不完全な結果は除外し、取得できた結果のみで分析
 
 ### ステップ 4: 統合分析
 
 - トレードオフを考慮した統合分析を実施
 - 相反する提案の調整と優先度付け
+- **検証**:
+  - 相反する提案がリストアップされているか確認
+  - 各優先度レベル (Critical/High/Medium/Low) にタスクが分類されているか確認
+- **エラー時**: 手動で優先度を調整
 
 ### ステップ 5: レポート作成
 
 - 優先度付きタスクリストと実装計画を作成
 - REPORT_TEMPLATE.md の形式に従って出力
+- **検証**:
+  - レポートに必須セクション (優先度別タスク、実装計画、リスク評価) が含まれているか確認
+  - 各タスクに工数見積もり (XS/S/M/L/XL) が付与されているか確認
+- **出力**: 統合レポートを Markdown 形式で提供
 
 ---
 

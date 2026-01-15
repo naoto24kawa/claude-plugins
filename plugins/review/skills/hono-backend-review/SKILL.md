@@ -1,6 +1,14 @@
 ---
 name: hono-backend-review
 description: Reviews Hono backend implementations from DDD, event-driven, microservices, type safety, and Cloudflare optimization perspectives with 6 specialized agents. Creates prioritized improvement plans considering trade-offs. Use when the user mentions "backend review", "バックエンドレビュー", "DDD評価", "アーキテクチャ分析", "Hono品質チェック", "Cloudflare Workers", or needs Hono backend quality verification.
+context: fork
+agents:
+  - hono-ddd-domain-reviewer
+  - hono-ddd-context-reviewer
+  - hono-event-driven-reviewer
+  - hono-microservice-reviewer
+  - hono-type-safety-reviewer
+  - hono-edge-runtime-reviewer
 ---
 
 ## Hono バックエンドレビューシステム
@@ -93,15 +101,26 @@ description: Reviews Hono backend implementations from DDD, event-driven, micros
 
 ### ステップ 3: 結果収集と検証
 - 各エージェントのレビュー結果を収集
-- **検証**: 各エージェントの出力が有効な形式か確認
+- **検証**:
+  - 各エージェントの出力が有効な形式であることを確認
+  - 空の結果や不完全な出力がないか確認
+- **エラー時**: 不完全な結果は除外し、取得できた結果のみで分析
 
 ### ステップ 4: 統合分析
 - トレードオフを考慮した統合分析を実施
 - 相反する提案の調整と優先度付け
+- **検証**:
+  - 相反する提案がリストアップされているか確認
+  - 各優先度レベル (Critical/High/Medium/Low) にタスクが分類されているか確認
+- **エラー時**: 手動で優先度を調整
 
 ### ステップ 5: レポート作成
 - 優先度付きタスクリストと実装計画を作成
 - `REPORT_TEMPLATE.md` の形式に従って出力
+- **検証**:
+  - レポートに必須セクション (優先度別タスク、実装計画、リスク評価) が含まれているか確認
+  - 各タスクに工数見積もり (XS/S/M/L/XL) が付与されているか確認
+- **出力**: 統合レポートを Markdown 形式で提供
 
 ---
 
