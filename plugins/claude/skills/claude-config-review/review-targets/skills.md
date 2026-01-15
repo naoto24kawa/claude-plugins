@@ -4,13 +4,12 @@
 
 | 種類 | URL |
 |------|-----|
-| 仕様 | https://code.claude.com/docs/en/skills |
-| ベストプラクティス | https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices |
+| 仕様 & ベストプラクティス | https://docs.anthropic.com/en/docs/claude-code/skills |
 
 ## WebSearch Keywords
 
 ```
-Claude Code skills specification best practices site:docs.claude.com OR site:code.claude.com
+Claude Code skills specification best practices site:docs.anthropic.com OR site:code.claude.com
 ```
 
 ## File Search Patterns

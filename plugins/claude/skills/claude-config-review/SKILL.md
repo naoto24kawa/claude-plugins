@@ -69,16 +69,16 @@ Claude Code設定ファイルを公式ドキュメントに基づいてレビュ
 
 | 対象 | 仕様URL | ベストプラクティスURL |
 |------|---------|---------------------|
-| Skills | https://code.claude.com/docs/en/skills | https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices |
-| Sub-agents | https://code.claude.com/docs/en/sub-agents | (同一ページ内) |
-| MCP | https://code.claude.com/docs/en/mcp | (同一ページ内) |
-| Hooks | https://code.claude.com/docs/en/hooks | (同一ページ内) |
-| Slash commands | https://code.claude.com/docs/en/slash-commands | (同一ページ内) |
-| Plugins | https://code.claude.com/docs/en/plugins | (同一ページ内) |
+| Skills | https://docs.anthropic.com/en/docs/claude-code/skills | (同一ページ内) |
+| Sub-agents | https://docs.anthropic.com/en/docs/claude-code/sub-agents | (同一ページ内) |
+| MCP | https://docs.anthropic.com/en/docs/claude-code/mcp | (同一ページ内) |
+| Hooks | https://docs.anthropic.com/en/docs/claude-code/hooks | (同一ページ内) |
+| Slash commands | https://docs.anthropic.com/en/docs/claude-code/slash-commands | (同一ページ内) |
+| Plugins | https://docs.anthropic.com/en/docs/claude-code/plugins | (同一ページ内) |
 
 **WebFetch失敗時のフォールバック**:
 ```
-WebSearchクエリ: "Claude Code {対象} specification best practices site:docs.claude.com OR site:code.claude.com"
+WebSearchクエリ: "Claude Code {対象} specification best practices site:docs.anthropic.com OR site:code.claude.com"
 ```
 
 **Verification**: ドキュメントの主要セクションが取得できたことを確認

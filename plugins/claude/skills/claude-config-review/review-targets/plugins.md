@@ -4,14 +4,14 @@
 
 | 種類 | URL |
 |------|-----|
-| 仕様 & ベストプラクティス | https://code.claude.com/docs/en/plugins |
-| マーケットプレース作成 | https://code.claude.com/docs/en/plugin-marketplaces |
-| プラグインリファレンス | https://code.claude.com/docs/en/plugins-reference |
+| 仕様 & ベストプラクティス | https://docs.anthropic.com/en/docs/claude-code/plugins |
+| マーケットプレース作成 | https://docs.anthropic.com/en/docs/claude-code/plugin-marketplaces |
+| プラグインリファレンス | https://docs.anthropic.com/en/docs/claude-code/plugins-reference |
 
 ## WebSearch Keywords
 
 ```
-Claude Code plugins marketplace configuration best practices site:docs.claude.com OR site:code.claude.com
+Claude Code plugins marketplace configuration best practices site:docs.anthropic.com OR site:code.claude.com
 ```
 
 ## File Search Patterns

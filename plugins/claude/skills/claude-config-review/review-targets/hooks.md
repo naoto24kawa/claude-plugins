@@ -4,12 +4,12 @@
 
 | 種類 | URL |
 |------|-----|
-| 仕様 & ベストプラクティス | https://code.claude.com/docs/en/hooks |
+| 仕様 & ベストプラクティス | https://docs.anthropic.com/en/docs/claude-code/hooks |
 
 ## WebSearch Keywords
 
 ```
-Claude Code hooks configuration best practices site:docs.claude.com OR site:code.claude.com
+Claude Code hooks configuration best practices site:docs.anthropic.com OR site:code.claude.com
 ```
 
 ## File Search Patterns

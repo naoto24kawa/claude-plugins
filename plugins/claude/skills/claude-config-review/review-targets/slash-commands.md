@@ -4,12 +4,12 @@
 
 | 種類 | URL |
 |------|-----|
-| 仕様 & ベストプラクティス | https://code.claude.com/docs/en/slash-commands |
+| 仕様 & ベストプラクティス | https://docs.anthropic.com/en/docs/claude-code/slash-commands |
 
 ## WebSearch Keywords
 
 ```
-Claude Code slash commands configuration best practices site:docs.claude.com OR site:code.claude.com
+Claude Code slash commands configuration best practices site:docs.anthropic.com OR site:code.claude.com
 ```
 
 ## File Search Patterns
