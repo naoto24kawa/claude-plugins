@@ -98,6 +98,71 @@ Claude Code skills specification best practices site:docs.claude.com OR site:cod
 - [ ] MCP ツール参照は完全修飾名 (`ServerName:tool_name`)
 - [ ] 必要なパッケージがリスト化
 
+### 7. Advanced Features
+
+**評価観点**:
+- `context: fork` によるコンテキスト分離
+- `agents` フィールドによるサブエージェント委譲
+- `AskUserQuestion` ツールによるユーザー対話
+
+**チェックリスト**:
+- [ ] 長時間/複雑なタスクに `context: fork` を検討
+- [ ] 専門的なタスクに適切な `agents` を指定
+- [ ] ユーザー確認が必要な場面で `AskUserQuestion` を `allowed-tools` に含める
+- [ ] `allowed-tools` でツールアクセスを適切に制限
+
+**推奨パターン**:
+
+#### context: fork の活用
+
+長いタスクや独立した処理に使用:
+```yaml
+---
+name: complex-analysis
+description: Performs complex analysis...
+context: fork
+---
+```
+
+**使用場面**:
+- 長時間実行されるタスク
+- メインコンテキストを汚染したくない処理
+- 独立した分析やレビュー作業
+
+#### agents の指定
+
+専門的なサブエージェントに委譲:
+```yaml
+---
+name: code-review
+description: Reviews code quality...
+agents:
+  - security-reviewer
+  - performance-analyzer
+---
+```
+
+**使用場面**:
+- 複数の専門的な視点が必要なタスク
+- 特定のドメイン知識を持つエージェントへの委譲
+- 並列処理による効率化
+
+#### AskUserQuestion の活用
+
+ユーザーとの対話を組み込む:
+```yaml
+---
+name: interactive-setup
+description: Helps configure settings interactively...
+allowed-tools: [Read, Glob, Grep, AskUserQuestion]
+---
+```
+
+**使用場面**:
+- 設定やオプションの選択が必要
+- ユーザー確認が重要なワークフロー
+- 曖昧な要件の明確化
+
 ## Scoring
 
 ```
@@ -127,6 +192,10 @@ F: 0-29点
 - 500行超のSKILL.md
 - 時間依存情報の存在
 - テンプレートの欠如
+- `allowed-tools` が未設定 (ツールアクセス無制限)
+- `context: fork` の未活用 (長いタスクの場合)
+- `agents` の未活用 (専門的タスクの場合)
+- `AskUserQuestion` の未活用 (対話的スキルの場合)
 
 ### Low
 - 例の不足
