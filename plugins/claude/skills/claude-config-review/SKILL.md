@@ -1,7 +1,8 @@
 ---
 name: claude-config-review
-description: Reviews Claude Code configuration files against official documentation. Supports 6 target types (Skills, Sub-agents, MCP, Hooks, Slash commands, Plugins) plus Project Audit mode for comprehensive project-wide review. Fetches latest best practices via WebFetch and generates A-F graded reports with actionable recommendations. Use when users mention "設定レビュー", "project audit", "プロジェクト監査", "全設定レビュー", "skill review", "agent review", "MCP check", "hooks validation", "command review", "plugin validation", "config review", or Claude Code configuration quality assessment.
-allowed-tools: [Read, Glob, Grep, WebFetch, WebSearch, TodoWrite]
+description: Reviews Claude Code configuration files (Skills, Sub-agents, MCP, Hooks, Commands, Plugins) against official documentation. Generates A-F graded reports with actionable recommendations. Use when users mention "設定レビュー", "config review", "project audit", "skill review", "MCP check", or any Claude Code configuration validation.
+allowed-tools: [Read, Glob, Grep, WebFetch, WebSearch, TodoWrite, AskUserQuestion]
+context: fork
 ---
 
 # Claude Code Configuration Reviewer
