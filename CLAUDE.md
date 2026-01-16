@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Claude Code用のプラグインマーケットプレースです。3つのプラグイン (review、claude、notion) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価などを自動化します。
+Claude Code用のプラグインマーケットプレースです。4つのプラグイン (review、claude、notion、github) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフローなどを自動化します。
 
 ## アーキテクチャ
 
@@ -15,6 +15,7 @@ Claude Code用のプラグインマーケットプレースです。3つのプ�
 | review | 1.0.0 | 6 | 32 | productivity | TypeScript/Hono/React/アーキテクチャレビュー |
 | claude | 2.0.0 | 1 | 0 | development | Claude Code設定レビュー (6種類の対象を統合) |
 | notion | 1.0.0 | 4 | 0 | productivity | Notion連携 |
+| github | 1.0.0 | 2 | 0 | productivity | GitHubワークフロー (Issue/PR作成) |
 
 ### ディレクトリ構造
 
@@ -35,12 +36,17 @@ Claude Code用のプラグインマーケットプレースです。3つのプ�
     ├── claude/                 # Claude Code設定レビュープラグイン
     │   └── skills/
     │       └── claude-config-review/  # 統合スキル (6種類対応)
-    └── notion/                 # Notion連携プラグイン
-        └── skills/
-            ├── knowledge-capture/
-            ├── meeting-intelligence/
-            ├── research-documentation/
-            └── spec-to-implementation/
+    ├── notion/                 # Notion連携プラグイン
+    │   └── skills/
+    │       ├── knowledge-capture/
+    │       ├── meeting-intelligence/
+    │       ├── research-documentation/
+    │       └── spec-to-implementation/
+    └── github/                 # GitHubワークフロープラグイン
+        ├── skills/
+        │   ├── create-issue/   # Issue作成 (仕様書)
+        │   └── create-pr/      # PR作成 (技術記録)
+        └── templates/          # Issue/PRテンプレート
 ```
 
 ### Progressive Disclosure パターン
@@ -64,6 +70,7 @@ Claude Code用のプラグインマーケットプレースです。3つのプ�
 /plugin install review@naoto24kawa-claude-plugins
 /plugin install claude@naoto24kawa-claude-plugins
 /plugin install notion@naoto24kawa-claude-plugins
+/plugin install github@naoto24kawa-claude-plugins
 ```
 
 ### スキルの実行例
@@ -86,6 +93,10 @@ Claude Code用のプラグインマーケットプレースです。3つのプ�
 /skill notion:meeting-intelligence
 /skill notion:research-documentation
 /skill notion:spec-to-implementation
+
+# GitHub系 (2スキル)
+/skill github:create-issue
+/skill github:create-pr
 ```
 
 ## 開発ワークフロー

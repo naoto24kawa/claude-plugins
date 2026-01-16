@@ -1,6 +1,6 @@
 # Claude Code Plugin Marketplace
 
-Claude Code用のプラグインマーケットプレースです。3つのプラグイン (review、claude、notion) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価などを自動化します。
+Claude Code用のプラグインマーケットプレースです。4つのプラグイン (review、claude、notion、github) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフローなどを自動化します。
 
 ## クイックスタート
 
@@ -25,6 +25,9 @@ Claude Code用のプラグインマーケットプレースです。3つのプ�
 
 # Notion連携プラグイン
 /plugin install notion@naoto24kawa-claude-plugins
+
+# GitHubワークフロープラグイン
+/plugin install github@naoto24kawa-claude-plugins
 ```
 
 ## 提供プラグイン
@@ -72,6 +75,14 @@ Notion連携による知識管理とドキュメント作成
 - `research-documentation`: リサーチレポート作成
 - `spec-to-implementation`: 仕様からタスク化
 
+### 4. github (v1.0.0)
+
+GitHubワークフローの自動化 (Issue/PR作成)
+
+**スキル (2つ):**
+- `create-issue`: Issue を仕様書として作成 (As-Is/To-Be形式、判断経緯記録)
+- `create-pr`: Pull Request を技術記録として作成 (技術的決定事項、アーキテクチャ影響)
+
 ## 使い方
 
 ### スキルの実行例
@@ -94,6 +105,10 @@ Notion連携による知識管理とドキュメント作成
 /skill notion:meeting-intelligence
 /skill notion:research-documentation
 /skill notion:spec-to-implementation
+
+# GitHub系 (2スキル)
+/skill github:create-issue
+/skill github:create-pr
 ```
 
 ## アーキテクチャ
@@ -110,8 +125,11 @@ Notion連携による知識管理とドキュメント作成
     │   └── agents/
     ├── claude/                 # Claude Code設定レビュー (1統合スキル)
     │   └── skills/
-    └── notion/                 # Notion連携 (4スキル)
-        └── skills/
+    ├── notion/                 # Notion連携 (4スキル)
+    │   └── skills/
+    └── github/                 # GitHubワークフロー (2スキル)
+        ├── skills/
+        └── templates/
 ```
 
 ### Progressive Disclosure パターン
