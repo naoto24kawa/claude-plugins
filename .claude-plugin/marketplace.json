@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.0.0",
-  "description": "Code review, Claude Code configuration review, and Notion integration plugins for development workflows",
+  "version": "3.1.0",
+  "description": "Code review, Claude Code configuration review, Notion integration, and GitHub workflow automation plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
@@ -39,6 +39,17 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/notion",
+      "category": "productivity"
+    },
+    {
+      "name": "github",
+      "description": "GitHub workflow automation for creating structured Issues as specifications and Pull Requests as technical records with As-Is/To-Be documentation",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/github",
       "category": "productivity"
     }
   ]
