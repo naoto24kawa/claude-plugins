@@ -1,15 +1,15 @@
 ---
 name: spec-to-implementation
-description: Turns product or tech specs into concrete Notion tasks that Claude code can implement. Breaks down spec pages into detailed implementation plans with clear tasks, acceptance criteria, and progress tracking to guide development from requirements to completion.
+description: This skill should be used when the user asks to "implement this spec", "仕様書からタスクを作って", "specを実装計画に変換して", "spec to implementation", "実装計画を立てて", "PRDからタスク分解して", "仕様を実装に落とし込んで", or needs to turn product/tech specs into concrete Notion tasks with implementation plans, acceptance criteria, and progress tracking.
 ---
 
 # Spec to Implementation
 
-Transforms specifications into actionable implementation plans with progress tracking. Fetches spec documents, extracts requirements, breaks down into tasks, and manages implementation workflow.
+Transform specifications into actionable implementation plans with progress tracking. Fetch spec documents, extract requirements, break down into tasks, and manage implementation workflow.
 
 ## Quick Start
 
-When asked to implement a specification:
+To implement a specification:
 
 1. **Find spec**: Use `Notion:notion-search` to locate specification page
 2. **Fetch spec**: Use `Notion:notion-fetch` to read specification content

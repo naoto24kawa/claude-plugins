@@ -1,15 +1,15 @@
 ---
 name: meeting-intelligence
-description: Prepares meeting materials by gathering context from Notion, enriching with Claude research, and creating both an internal pre-read and external agenda saved to Notion. Helps you arrive prepared with comprehensive background and structured meeting docs.
+description: This skill should be used when the user asks to "meeting prep", "ミーティング準備して", "会議資料を作って", "meeting intelligence", "pre-read作成", "agenda作成", "会議のアジェンダ", "meeting materials", "会議準備", or needs to prepare meeting materials from Notion context. Gathers context from Notion, enriches with research, and creates both an internal pre-read and external agenda saved to Notion.
 ---
 
 # Meeting Intelligence
 
-Prepares you for meetings by gathering context from Notion, enriching it with Claude research, and creating comprehensive meeting materials. Generates both an internal pre-read for attendees and an external-facing agenda for the meeting itself.
+Prepare for meetings by gathering context from Notion, enriching it with research, and creating comprehensive meeting materials. Generate both an internal pre-read for attendees and an external-facing agenda for the meeting itself.
 
 ## Quick Start
 
-When asked to prep for a meeting:
+To prep for a meeting:
 
 1. **Gather Notion context**: Use `Notion:notion-search` to find related pages
 2. **Fetch details**: Use `Notion:notion-fetch` to read relevant content

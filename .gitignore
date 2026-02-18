@@ -43,6 +43,10 @@ node_modules/
 .env.local
 .env.*.local
 
+# Plugin settings (per-project, user-local)
+.claude/*.local.md
+.claude/*.local.json
+
 # Testing
 coverage/
 .nyc_output/

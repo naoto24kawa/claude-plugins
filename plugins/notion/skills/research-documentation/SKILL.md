@@ -1,15 +1,15 @@
 ---
 name: research-documentation
-description: Searches across your Notion workspace, synthesizes findings from multiple pages, and creates comprehensive research documentation saved as new Notion pages. Turns scattered information into structured reports with proper citations and actionable insights.
+description: This skill should be used when the user asks to "research this topic in Notion", "Notionでリサーチして", "情報を調査してまとめて", "research documentation", "リサーチドキュメント作成", "Notionから情報収集して", "調査レポート作って", or needs to search across Notion, synthesize findings, and create structured research documentation. Turns scattered information into reports with proper citations and actionable insights.
 ---
 
 # Research & Documentation
 
-Enables comprehensive research workflows: search for information across your Notion workspace, fetch and analyze relevant pages, synthesize findings, and create well-structured documentation.
+Enable comprehensive research workflows: search for information across the Notion workspace, fetch and analyze relevant pages, synthesize findings, and create well-structured documentation.
 
 ## Quick Start
 
-When asked to research and document a topic:
+To research and document a topic:
 
 1. **Search for relevant content**: Use `Notion:notion-search` to find pages
 2. **Fetch detailed information**: Use `Notion:notion-fetch` to read full page content

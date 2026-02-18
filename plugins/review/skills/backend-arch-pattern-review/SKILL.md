@@ -1,6 +1,6 @@
 ---
 name: backend-arch-pattern-review
-description: Analyzes backend architecture patterns with 5 specialized agents (layer structure, DDD Building Blocks, dependencies, frontend patterns, Cloudflare config) and creates prioritized improvement plans considering trade-offs. Use when the user mentions "backend architecture review", "バックエンドアーキテクチャレビュー", "設計検証", "レイヤー構造", "DDD準拠", "依存関係分析", "Clean Architecture", "Onion Architecture", "API設計", or needs backend architecture evaluation.
+description: This skill should be used when the user asks to "backend architecture review", "バックエンドアーキテクチャレビューして", "設計検証して", "レイヤー構造を確認", "DDD準拠をチェック", "依存関係を分析して", "Clean Architecture評価", "Onion Architecture確認", "API設計レビュー", or needs backend architecture evaluation. Analyzes backend architecture patterns with 5 specialized agents (layer structure, DDD Building Blocks, dependencies, frontend patterns, Cloudflare config) and creates prioritized improvement plans considering trade-offs.
 context: fork
 agents:
   - arch-layer-structure-checker
@@ -184,25 +184,47 @@ Task ツールで subagent_type="arch-layer-structure-checker" を指定
   - 各タスクに工数見積もり（XS/S/M/L/XL）が付与されているか確認
 - **出力**: 統合レポートを Markdown 形式で提供
 
+## プロジェクト設定 (オプション)
+
+`.claude/review.local.md` でプロジェクト固有のレビュー設定をカスタマイズできる。設定ファイルが存在しない場合はデフォルト設定で実行する。
+
+```markdown
+---
+strictness: standard
+exclude_paths: ["node_modules", "dist"]
+skip_agents: []
+tradeoff_priority: ["security", "maintainability", "consistency", "implementation_speed"]
+---
+```
+
+| 設定 | デフォルト | 説明 |
+|------|-----------|------|
+| `strictness` | `standard` | 厳格度 (`strict` / `standard` / `lenient`) |
+| `exclude_paths` | `[]` | レビュー対象から除外するパスパターン |
+| `skip_agents` | `[]` | スキップするエージェント名のリスト |
+| `tradeoff_priority` | スキル固有 | トレードオフ判断の優先順位 |
+
+**ステップ 1 の前に**: `.claude/review.local.md` が存在する場合は Read ツールで読み込み、YAML frontmatter を解析して設定を適用する。
+
 ## デフォルト設定
 
-ユーザーから特別な指示がない限り、以下のデフォルト設定で実行：
+ユーザーから特別な指示がない限り、以下のデフォルト設定で実行 (`.claude/review.local.md` で上書き可能):
 
 ### 実行方式
 
-- **エージェント実行**: 5つすべてのエージェントを並行実行
+- **エージェント実行**: 5つすべてのエージェントを並行実行 (`skip_agents` で除外可能)
 - **失敗時の処理**: エラーが発生した場合、その旨を報告し、取得できた結果のみでレポート生成
-- **対象範囲**: ユーザーが指定したディレクトリのみ
+- **対象範囲**: ユーザーが指定したディレクトリのみ (`exclude_paths` で追加除外可能)
 
 ### 出力形式
 
 - **レポート形式**: Markdown 形式の統合レポート
 - **優先度基準**: Critical > High > Medium > Low の 4 段階で評価
-- **工数表記**: XS（1時間未満）/ S（1-4時間）/ M（1-2日）/ L（3-5日）/ XL（1週間以上）
+- **工数表記**: XS(1時間未満) / S(1-4時間) / M(1-2日) / L(3-5日) / XL(1週間以上)
 
 ### 分析基準
 
-- **トレードオフ判断**: セキュリティ > 保守性 > 一貫性 > 実装速度 の優先順位
+- **トレードオフ判断**: セキュリティ > 保守性 > 一貫性 > 実装速度 の優先順位 (`tradeoff_priority` で変更可能)
 - **実用性重視**: 理想的な設計より、現実的で実装可能な提案を優先
 - **段階的改善**: 一度にすべてを修正するのではなく、Phase分けで段階的な改善計画を提示
 

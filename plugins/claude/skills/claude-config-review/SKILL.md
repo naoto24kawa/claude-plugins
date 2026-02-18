@@ -1,7 +1,7 @@
 ---
 name: claude-config-review
-description: Reviews Claude Code configuration files (Skills, Sub-agents, MCP, Hooks, Commands, Plugins) against official documentation. Generates A-F graded reports with actionable recommendations. Use when users mention "設定レビュー", "config review", "project audit", "skill review", "MCP check", or any Claude Code configuration validation.
-allowed-tools: [Read, Glob, Grep, WebFetch, WebSearch, TodoWrite, AskUserQuestion]
+description: This skill should be used when the user asks to "設定レビューして", "config review", "project audit", "skill review", "MCPをチェックして", "Claude Code設定を確認して", "プラグインレビュー", "hooks設定を検証して", "コマンドレビュー", or needs Claude Code configuration validation. Reviews Skills, Sub-agents, MCP, Hooks, Commands, and Plugins against official documentation with A-F graded reports and actionable recommendations.
+allowed-tools: [Read, Glob, Grep, WebFetch, WebSearch, AskUserQuestion]
 context: fork
 ---
 

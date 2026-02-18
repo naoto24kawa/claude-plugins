@@ -1,6 +1,6 @@
 ---
 name: create-issue
-description: GitHub Issue を仕様書として作成する。仕様の追加/変更/削除/バグ修正を As-Is/To-Be 形式で構造化し、判断経緯(検討した選択肢、選択理由、トレードオフ)も記録する。ユーザーが「Issue作成」「仕様書作成」「機能追加したい」「バグを報告」などと言ったときに使用する。
+description: This skill should be used when the user asks to "Issue作成して", "仕様書を作りたい", "機能追加したい", "バグを報告したい", "create issue", "Issueを書いて", "仕様変更を記録して", "As-Is/To-Beで整理して", or needs to create a GitHub Issue as a specification document. Structures requirements in As-Is/To-Be format with decision rationale, trade-offs, and acceptance criteria.
 allowed-tools: [Bash, Read, Write, Glob, AskUserQuestion]
 ---
 
@@ -143,7 +143,29 @@ EOF
 
 **Verification**: ユーザーに URL を共有した
 
+## プロジェクト設定 (オプション)
+
+`.claude/github.local.md` でプロジェクト固有のGitHub設定をカスタマイズできる。設定ファイルが存在しない場合はデフォルト設定で実行する。
+
+```markdown
+---
+default_labels: ["specification"]
+title_format: "<type>: <summary>"
+affected_areas: ["frontend", "backend", "packages/types"]
+---
+```
+
+| 設定 | デフォルト | 説明 |
+|------|-----------|------|
+| `default_labels` | `["specification"]` | Issueに付与するデフォルトラベル |
+| `title_format` | `<type>: <summary>` | タイトルの形式 |
+| `affected_areas` | `[]` | プロジェクトの影響範囲候補リスト |
+
+**ワークフロー開始前に**: `.claude/github.local.md` が存在する場合は Read ツールで読み込み、YAML frontmatter を解析して設定を適用する。
+
 ## デフォルト設定
+
+以下はデフォルト値 (`.claude/github.local.md` で上書き可能):
 
 | 項目 | デフォルト値 |
 |------|-------------|

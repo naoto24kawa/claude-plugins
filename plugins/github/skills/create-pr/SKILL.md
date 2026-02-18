@@ -1,6 +1,6 @@
 ---
 name: create-pr
-description: GitHub Pull Request を技術記録として作成する。実装の技術的な決定事項、アーキテクチャへの影響、変更ファイルを記録する。ユーザーが「PR作成」「プルリクエスト作成」「マージしたい」などと言ったとき、または実装完了後に使用する。
+description: This skill should be used when the user asks to "PR作成して", "プルリクエスト作成", "マージしたい", "create PR", "pull request作って", "実装完了したからPRにして", or needs to create a GitHub Pull Request as a technical record after implementation. Records technical decisions, architecture impact, and changed files.
 allowed-tools: [Bash, Read, Write, Glob, AskUserQuestion]
 ---
 
@@ -167,7 +167,31 @@ EOF
 
 **Verification**: ユーザーに URL を共有した
 
+## プロジェクト設定 (オプション)
+
+`.claude/github.local.md` でプロジェクト固有のGitHub設定をカスタマイズできる。設定ファイルが存在しない場合はデフォルト設定で実行する。
+
+```markdown
+---
+base_branch: main
+title_format: "<type>: <summary>"
+default_reviewers: []
+affected_areas: ["apps/frontend", "apps/backend", "packages/types"]
+---
+```
+
+| 設定 | デフォルト | 説明 |
+|------|-----------|------|
+| `base_branch` | `main` | PRのベースブランチ |
+| `title_format` | `<type>: <summary>` | タイトルの形式 |
+| `default_reviewers` | `[]` | デフォルトのレビュアー |
+| `affected_areas` | `[]` | プロジェクトの影響範囲候補リスト |
+
+**ワークフロー開始前に**: `.claude/github.local.md` が存在する場合は Read ツールで読み込み、YAML frontmatter を解析して設定を適用する。
+
 ## デフォルト設定
+
+以下はデフォルト値 (`.claude/github.local.md` で上書き可能):
 
 | 項目 | デフォルト値 |
 |------|-------------|

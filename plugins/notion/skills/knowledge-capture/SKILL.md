@@ -1,15 +1,15 @@
 ---
 name: knowledge-capture
-description: Transforms conversations and discussions into structured documentation pages in Notion. Captures insights, decisions, and knowledge from chat context, formats appropriately, and saves to wikis or databases with proper organization and linking for easy discovery.
+description: This skill should be used when the user asks to "save this to Notion", "Notionにナレッジを保存して", "会話をドキュメント化して", "knowledge capture", "ナレッジキャプチャ", "capture this discussion", "FAQにまとめて", "decision record", "意思決定を記録して", or needs to transform conversations into structured Notion documentation. Captures insights, decisions, and knowledge from chat context and saves to wikis or databases with proper organization and linking.
 ---
 
 # Knowledge Capture
 
-Transforms conversations, discussions, and insights into structured documentation in your Notion workspace. Captures knowledge from chat context, formats it appropriately, and saves it to the right location with proper organization and linking.
+Transform conversations, discussions, and insights into structured documentation in Notion. Capture knowledge from chat context, format it appropriately, and save it to the right location with proper organization and linking.
 
 ## Quick Start
 
-When asked to save information to Notion:
+To save information to Notion:
 
 1. **Extract content**: Identify key information from conversation context
 2. **Structure information**: Organize into appropriate documentation format
@@ -107,7 +107,7 @@ selection_with_ellipsis: "## How-To Guides..."
 new_str: "- <mention-page url='...'>How to Deploy to Production</mention-page>"
 ```
 
-This step ensures the knowledge doesn't become "orphaned" - it's properly connected to your workspace's navigation structure.
+This step ensures the knowledge does not become "orphaned" - it stays properly connected to the workspace's navigation structure.
 
 ## Content Types
 

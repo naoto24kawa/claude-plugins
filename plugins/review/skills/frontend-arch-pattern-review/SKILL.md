@@ -1,6 +1,6 @@
 ---
 name: frontend-arch-pattern-review
-description: Analyzes frontend architecture with 5 specialized agents (Feature-Sliced Design, React Router, state management, Hono RPC integration, component design) and creates prioritized improvement plans considering trade-offs. Use when the user mentions "frontend architecture", "フロントエンドアーキテクチャ", "Feature-Sliced", "FSD", "loader/action", "状態管理設計", "API連携", "React Router", or needs frontend architecture evaluation.
+description: This skill should be used when the user asks to "frontend architecture review", "フロントエンドアーキテクチャレビューして", "Feature-Sliced Designを確認", "FSDチェック", "loader/actionパターン評価", "状態管理設計レビュー", "API連携を確認", "React Router設計レビュー", or needs frontend architecture evaluation. Analyzes frontend architecture with 5 specialized agents (Feature-Sliced Design, React Router, state management, Hono RPC integration, component design) and creates prioritized improvement plans considering trade-offs.
 context: fork
 agents:
   - frontend-fsd-checker
@@ -157,23 +157,47 @@ agents:
 
 ---
 
+## プロジェクト設定 (オプション)
+
+`.claude/review.local.md` でプロジェクト固有のレビュー設定をカスタマイズできる。設定ファイルが存在しない場合はデフォルト設定で実行する。
+
+```markdown
+---
+strictness: standard
+exclude_paths: ["node_modules", "dist"]
+skip_agents: []
+tradeoff_priority: ["type_safety", "maintainability", "performance", "development_speed"]
+---
+```
+
+| 設定 | デフォルト | 説明 |
+|------|-----------|------|
+| `strictness` | `standard` | 厳格度 (`strict` / `standard` / `lenient`) |
+| `exclude_paths` | `[]` | レビュー対象から除外するパスパターン |
+| `skip_agents` | `[]` | スキップするエージェント名のリスト |
+| `tradeoff_priority` | スキル固有 | トレードオフ判断の優先順位 |
+
+**ステップ 1 の前に**: `.claude/review.local.md` が存在する場合は Read ツールで読み込み、YAML frontmatter を解析して設定を適用する。
+
 ## デフォルト設定
+
+以下はデフォルト設定 (`.claude/review.local.md` で上書き可能):
 
 ### 実行方式
 
-- **エージェント実行**: 5つすべてを並行実行
+- **エージェント実行**: 5つすべてを並行実行 (`skip_agents` で除外可能)
 - **失敗時の処理**: 取得できた結果のみでレポート生成
-- **対象範囲**: 指定されたディレクトリのみ
+- **対象範囲**: 指定されたディレクトリのみ (`exclude_paths` で追加除外可能)
 
 ### 出力形式
 
 - **レポート形式**: Markdown形式の統合レポート
 - **優先度基準**: Critical > High > Medium > Low
-- **工数表記**: XS（1時間未満）/ S（1-4時間）/ M（1-2日）/ L（3-5日）/ XL（1週間以上）
+- **工数表記**: XS(1時間未満) / S(1-4時間) / M(1-2日) / L(3-5日) / XL(1週間以上)
 
 ### 分析基準
 
-- **トレードオフ判断**: 型安全性 > 保守性 > パフォーマンス > 開発速度
+- **トレードオフ判断**: 型安全性 > 保守性 > パフォーマンス > 開発速度 (`tradeoff_priority` で変更可能)
 - **実用性重視**: 現実的で実装可能な提案を優先
 - **段階的改善**: Phase分けで段階的な改善計画を提示
 

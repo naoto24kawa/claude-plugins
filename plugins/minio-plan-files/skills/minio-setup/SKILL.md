@@ -1,6 +1,6 @@
 ---
 name: minio-setup
-description: This skill should be used when the user asks to "MinIOのセットアップをしたい", "MINIO_SHARED_PLAN_FILES_PROJECTを設定したい", "プロジェクトのMinIO設定をしたい", "plan-submit/plan-fetchなどを使う前に設定したい", "minio-setupを実行したい", "接続先URLを設定したい", "MINIO_SHARED_PLAN_FILES_HOSTを設定したい". プロジェクトの MINIO_SHARED_PLAN_FILES_PROJECT と MINIO_SHARED_PLAN_FILES_HOST を .claude/settings.json に書き込む初回セットアップスキル。
+description: This skill should be used when the user asks to "MinIOのセットアップをしたい", "MINIO_SHARED_PLAN_FILES_PROJECTを設定したい", "プロジェクトのMinIO設定をしたい", "plan-submit/plan-fetchなどを使う前に設定したい", "minio-setupを実行したい", "接続先URLを設定したい", "MINIO_SHARED_PLAN_FILES_HOSTを設定したい", "MCPサーバーを設定したい", "mcp-serverをセットアップしたい". プロジェクトの MINIO_SHARED_PLAN_FILES_PROJECT と MINIO_SHARED_PLAN_FILES_HOST を .claude/settings.json に書き込み、オプションで MCP サーバーの設定も案内する初回セットアップスキル。
 user-invocable: true
 ---
 
@@ -70,6 +70,56 @@ basename $(pwd)
 cat .claude/settings.json
 ```
 
+## MCP サーバーのセットアップ (オプション)
+
+シェルスクリプト (plan-fetch.sh 等) の代わりに MCP ツールとして使う場合は、追加でセットアップが必要。
+
+### 1. 依存パッケージのインストール
+
+プラグインの `mcp-server/` ディレクトリで実行する (初回のみ):
+
+```bash
+cd $(claude plugin path minio-plan-files)/mcp-server
+npm install
+```
+
+### 2. プラグインの `.mcp.json` を有効化
+
+プラグインには `${CLAUDE_PLUGIN_ROOT}` を使った `.mcp.json` が同梱されているため、プラグインをインストールすれば MCP サーバーが自動的に登録される。
+
+環境変数はシェル (`.zshrc` / `.bashrc`) または `.claude/settings.json` の `env` セクションに設定する:
+
+```json
+{
+  "env": {
+    "MINIO_SHARED_PLAN_FILES_HOST": "<IP>",
+    "MINIO_SHARED_PLAN_FILES_PROJECT": "<PROJECT>",
+    "PLAN_BUCKET": "shared"
+  }
+}
+```
+
+### 3. 接続確認
+
+```
+/mcp
+```
+
+`minio-plan-files` が一覧に表示されていれば成功。
+
+### MCP ツール一覧 (フルネーム)
+
+MCP ツールのフルネームは `mcp__plugin_<plugin>_<server>__<tool>` 形式:
+
+| フルネーム | 説明 |
+|-----------|------|
+| `mcp__plugin_minio-plan-files_minio-plan-files__plan_status` | 各プレフィックスの件数とキュー状態を確認 |
+| `mcp__plugin_minio-plan-files_minio-plan-files__plan_submit` | planをアップロードしてキューに投入 |
+| `mcp__plugin_minio-plan-files_minio-plan-files__plan_fetch` | planを取得してコンテンツを直接返す |
+| `mcp__plugin_minio-plan-files_minio-plan-files__plan_done` | 処理完了 (processing/→done/) |
+| `mcp__plugin_minio-plan-files_minio-plan-files__plan_fail` | 処理失敗 (processing/→failed/) |
+| `mcp__plugin_minio-plan-files_minio-plan-files__plan_retry` | failed/のplanを再投入 |
+
 ---
 
 出力に以下を含めること:
@@ -77,3 +127,4 @@ cat .claude/settings.json
 - 設定したホストIP
 - 設定ファイルのパス (`.claude/settings.json`)
 - 「この設定は plan-submit / plan-fetch / plan-done / plan-fail / plan-status で自動的に使用される。引数で上書きも可能。」
+- MCP サーバーを使う場合は npm install と .mcp.json の設定が必要であることを案内する。

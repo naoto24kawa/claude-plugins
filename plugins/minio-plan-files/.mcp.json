@@ -1,0 +1,11 @@
+{
+  "minio-plan-files": {
+    "command": "node",
+    "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/index.js"],
+    "env": {
+      "MINIO_SHARED_PLAN_FILES_HOST": "${MINIO_SHARED_PLAN_FILES_HOST}",
+      "MINIO_SHARED_PLAN_FILES_PROJECT": "${MINIO_SHARED_PLAN_FILES_PROJECT}",
+      "PLAN_BUCKET": "${PLAN_BUCKET}"
+    }
+  }
+}

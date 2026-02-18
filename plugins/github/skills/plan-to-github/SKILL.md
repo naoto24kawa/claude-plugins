@@ -1,7 +1,7 @@
 ---
 name: plan-to-github
-description: Converts Claude plan results into GitHub workflow. Analyzes plan content and executes Issue creation for spec changes or PR creation for completed implementations at appropriate timing. Use when users mention "planをIssueにして", "実装計画からPR作成", "開発ワークフロー", "plan to issue", "create PR from plan", or "dev workflow".
-allowed-tools: [Bash, Read, Write, Glob, Grep, AskUserQuestion, TodoWrite]
+description: This skill should be used when the user asks to "planをIssueにして", "実装計画からPR作成して", "開発ワークフロー", "plan to issue", "create PR from plan", "dev workflow", "planをGitHubに反映して", or needs to convert Claude plan results into GitHub Issues or Pull Requests. Analyzes plan content and executes Issue creation for spec changes or PR creation for completed implementations.
+allowed-tools: [Bash, Read, Write, Glob, Grep, AskUserQuestion]
 context: fork
 ---
 
@@ -132,8 +132,8 @@ Issue 作成後、実装フェーズをサポートする。
 3. テストの実行サポート
 4. 実装完了の確認
 
-**TodoWrite 連携**:
-Issue のタスクリストを TodoWrite に反映して進捗管理。
+**TaskCreate 連携**:
+Issue のタスクリストを TaskCreate に反映して進捗管理。
 
 **Verification**: 全タスクが完了し、テストがパスした
 
@@ -257,4 +257,4 @@ gh pr create --title "<type>: <概要>" --body "..."
 - plan の内容を正確に反映する
 - Issue と PR の役割分担を維持 (Issue = 仕様、PR = 技術)
 - 自動判断に迷う場合はユーザーに確認
-- フルワークフローでは進捗を TodoWrite で管理
+- フルワークフローでは進捗を TaskCreate で管理

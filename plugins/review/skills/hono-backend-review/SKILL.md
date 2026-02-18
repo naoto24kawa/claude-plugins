@@ -1,6 +1,6 @@
 ---
 name: hono-backend-review
-description: Reviews Hono backend implementations from DDD, event-driven, microservices, type safety, and Cloudflare optimization perspectives with 6 specialized agents. Creates prioritized improvement plans considering trade-offs. Use when the user mentions "backend review", "バックエンドレビュー", "DDD評価", "アーキテクチャ分析", "Hono品質チェック", "Cloudflare Workers", or needs Hono backend quality verification.
+description: This skill should be used when the user asks to "backend review", "バックエンドレビューして", "DDD評価して", "アーキテクチャを分析して", "Hono品質チェック", "Cloudflare Workers最適化", "Honoバックエンドレビュー", or needs Hono backend quality verification. Reviews Hono backend implementations from DDD, event-driven, microservices, type safety, and Cloudflare optimization perspectives with 6 specialized agents and creates prioritized improvement plans considering trade-offs.
 context: fork
 agents:
   - hono-ddd-domain-reviewer
@@ -124,12 +124,36 @@ agents:
 
 ---
 
+## プロジェクト設定 (オプション)
+
+`.claude/review.local.md` でプロジェクト固有のレビュー設定をカスタマイズできる。設定ファイルが存在しない場合はデフォルト設定で実行する。
+
+```markdown
+---
+strictness: standard
+exclude_paths: ["node_modules", "dist"]
+skip_agents: []
+tradeoff_priority: ["security", "reliability", "maintainability", "performance"]
+---
+```
+
+| 設定 | デフォルト | 説明 |
+|------|-----------|------|
+| `strictness` | `standard` | 厳格度 (`strict` / `standard` / `lenient`) |
+| `exclude_paths` | `[]` | レビュー対象から除外するパスパターン |
+| `skip_agents` | `[]` | スキップするエージェント名のリスト |
+| `tradeoff_priority` | スキル固有 | トレードオフ判断の優先順位 |
+
+**ステップ 1 の前に**: `.claude/review.local.md` が存在する場合は Read ツールで読み込み、YAML frontmatter を解析して設定を適用する。
+
 ## デフォルト設定
 
+以下はデフォルト設定 (`.claude/review.local.md` で上書き可能):
+
 ### 実行方式
-- **エージェント実行**: 6つすべてを並行実行
+- **エージェント実行**: 6つすべてを並行実行 (`skip_agents` で除外可能)
 - **失敗時の処理**: 取得できた結果のみでレポート生成
-- **対象範囲**: 指定されたファイル/ディレクトリのみ
+- **対象範囲**: 指定されたファイル/ディレクトリのみ (`exclude_paths` で追加除外可能)
 
 ### 出力形式
 - **レポート形式**: Markdown形式の統合レポート
@@ -137,7 +161,7 @@ agents:
 - **工数表記**: XS / S / M / L / XL
 
 ### 分析基準
-- **トレードオフ判断**: セキュリティ > 信頼性 > 保守性 > パフォーマンス
+- **トレードオフ判断**: セキュリティ > 信頼性 > 保守性 > パフォーマンス (`tradeoff_priority` で変更可能)
 - **実用性重視**: 現実的で実装可能な提案を優先
 - **段階的改善**: Phase分けで段階的な改善計画を提示
 
