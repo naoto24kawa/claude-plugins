@@ -28,6 +28,9 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
 
 # GitHubワークフロープラグイン
 /plugin install github@naoto24kawa-claude-plugins
+
+# MinIO+ElasticMQ プラン共有プラグイン
+/plugin install minio-plan-files@naoto24kawa-claude-plugins
 ```
 
 ## 提供プラグイン
@@ -74,6 +77,18 @@ Notion連携による知識管理とドキュメント作成
 - `meeting-intelligence`: 会議準備資料作成
 - `research-documentation`: リサーチレポート作成
 - `spec-to-implementation`: 仕様からタスク化
+
+### 5. minio-plan-files (v1.0.0)
+
+MinIO + ElasticMQ を使った AIエージェント向けプラン共有 & タスクキュー
+
+**スキル (6つ):**
+- `minio-setup`: 初回セットアップ (プロジェクト名 / ホストIP を設定)
+- `plan-submit`: Dispatcher: planファイルを MinIO にアップロードしてキューに投入
+- `plan-fetch`: Agent: SQSキューから plan を取得してダウンロード
+- `plan-done`: Agent: plan 処理完了 (processing/ → done/)
+- `plan-fail`: Agent: plan 処理失敗 (processing/ → failed/)
+- `plan-status`: ステータス確認 & failed plan の再投入 (retry)
 
 ### 4. github (v1.0.0)
 

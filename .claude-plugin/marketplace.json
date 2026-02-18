@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Code review, Claude Code configuration review, Notion integration, and GitHub workflow automation plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
@@ -39,6 +39,17 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/notion",
+      "category": "productivity"
+    },
+    {
+      "name": "minio-plan-files",
+      "description": "MinIO (S3-compatible) + ElasticMQ (SQS-compatible) based plan file sharing and task queue for AI agents. Provides skills for plan submission (Dispatcher), fetching, completion, failure handling, and status monitoring (Agent workflow).",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/minio-plan-files",
       "category": "productivity"
     },
     {

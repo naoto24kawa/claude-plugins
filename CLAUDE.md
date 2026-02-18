@@ -16,6 +16,7 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
 | claude | 2.0.0 | 1 | 0 | development | Claude Code設定レビュー (6種類の対象を統合) |
 | notion | 1.0.0 | 4 | 0 | productivity | Notion連携 |
 | github | 1.0.0 | 2 | 0 | productivity | GitHubワークフロー (Issue/PR作成) |
+| minio-plan-files | 1.0.0 | 6 | 0 | productivity | MinIO+ElasticMQ AIエージェント向けプラン共有キュー |
 
 ### ディレクトリ構造
 
@@ -42,11 +43,19 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
     │       ├── meeting-intelligence/
     │       ├── research-documentation/
     │       └── spec-to-implementation/
-    └── github/                 # GitHubワークフロープラグイン
-        ├── skills/
-        │   ├── create-issue/   # Issue作成 (仕様書)
-        │   └── create-pr/      # PR作成 (技術記録)
-        └── templates/          # Issue/PRテンプレート
+    ├── github/                 # GitHubワークフロープラグイン
+    │   ├── skills/
+    │   │   ├── create-issue/   # Issue作成 (仕様書)
+    │   │   └── create-pr/      # PR作成 (技術記録)
+    │   └── templates/          # Issue/PRテンプレート
+    └── minio-plan-files/       # MinIO+ElasticMQ プラン共有プラグイン
+        └── skills/
+            ├── minio-setup/    # 初回セットアップ
+            ├── plan-submit/    # Dispatcher: planをキューに投入
+            ├── plan-fetch/     # Agent: planを取得
+            ├── plan-done/      # Agent: plan完了
+            ├── plan-fail/      # Agent: plan失敗
+            └── plan-status/    # ステータス確認 & retry
 ```
 
 ### Progressive Disclosure パターン
