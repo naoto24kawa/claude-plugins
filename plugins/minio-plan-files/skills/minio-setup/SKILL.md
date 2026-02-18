@@ -6,6 +6,32 @@ user-invocable: true
 
 プロジェクトの `MINIO_SHARED_PLAN_FILES_PROJECT` (プロジェクト名) と `MINIO_SHARED_PLAN_FILES_HOST` (接続先IP) を `.claude/settings.local.json` に設定するスキル。`plan-submit` / `plan-fetch` / `plan-done` / `plan-fail` / `plan-status` を使う前にプロジェクトごとに1回実行する。
 
+## AWS CLI プロファイルの作成
+
+`share` プロファイルが存在するか確認し、なければ作成する。
+
+```bash
+aws configure get aws_access_key_id --profile share 2>/dev/null
+```
+
+- 値が返ればプロファイルは存在する → スキップ
+- エラーまたは空なら以下で作成:
+
+```bash
+aws configure set aws_access_key_id fileshare --profile share
+aws configure set aws_secret_access_key fileshare123 --profile share
+aws configure set region us-east-1 --profile share
+aws configure set output json --profile share
+```
+
+作成後、結果を表示する:
+
+```bash
+aws configure list --profile share
+```
+
+credentials は固定値 (`fileshare` / `fileshare123`)。MinIO の `docker-compose.yml` で定義されている `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD` と一致させる必要がある。
+
 ## ホストIPの取得
 
 ```bash
@@ -136,6 +162,7 @@ MCP ツールのフルネームは `mcp__plugin_<plugin>_<server>__<tool>` 形�
 ---
 
 出力に以下を含めること:
+- AWS CLI プロファイル `share` の状態 (作成済み or 新規作成)
 - 設定したプロジェクト名と決定方法
 - 設定したホストIP
 - 設定ファイルのパス (`.claude/settings.local.json`)
