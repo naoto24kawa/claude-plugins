@@ -1,7 +1,7 @@
 {
   "minio-plan-files": {
-    "command": "node",
-    "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/index.js"],
+    "command": "bash",
+    "args": ["-c", "cd \"${CLAUDE_PLUGIN_ROOT}/mcp-server\" && [ -d node_modules ] || npm install --silent 2>&1 && exec node index.js"],
     "env": {
       "MINIO_SHARED_PLAN_FILES_HOST": "${MINIO_SHARED_PLAN_FILES_HOST}",
       "MINIO_SHARED_PLAN_FILES_PROJECT": "${MINIO_SHARED_PLAN_FILES_PROJECT}",

@@ -109,36 +109,13 @@ basename $(pwd)
 cat .claude/settings.local.json
 ```
 
-## MCP サーバーのセットアップ (オプション)
+## MCP サーバー (オプション)
 
-シェルスクリプト (plan-fetch.sh 等) の代わりに MCP ツールとして使う場合は、追加でセットアップが必要。
+プラグインをインストールすれば MCP サーバーが自動的に登録される。依存パッケージ (`npm install`) は初回起動時に自動実行されるため、手動操作は不要。
 
-### 1. 依存パッケージのインストール
+環境変数は `.claude/settings.local.json` の `env` セクション (上記で設定済み) が自動的に使われる。
 
-プラグインの `mcp-server/` ディレクトリで実行する (初回のみ):
-
-```bash
-cd $(claude plugin path minio-plan-files)/mcp-server
-npm install
-```
-
-### 2. プラグインの `.mcp.json` を有効化
-
-プラグインには `${CLAUDE_PLUGIN_ROOT}` を使った `.mcp.json` が同梱されているため、プラグインをインストールすれば MCP サーバーが自動的に登録される。
-
-環境変数はシェル (`.zshrc` / `.bashrc`) または `.claude/settings.local.json` の `env` セクションに設定する:
-
-```json
-{
-  "env": {
-    "MINIO_SHARED_PLAN_FILES_HOST": "<IP>",
-    "MINIO_SHARED_PLAN_FILES_PROJECT": "<PROJECT>",
-    "PLAN_BUCKET": "shared"
-  }
-}
-```
-
-### 3. 接続確認
+### 接続確認
 
 ```
 /mcp
@@ -167,4 +144,4 @@ MCP ツールのフルネームは `mcp__plugin_<plugin>_<server>__<tool>` 形�
 - 設定したホストIP
 - 設定ファイルのパス (`.claude/settings.local.json`)
 - 「この設定は plan-submit / plan-fetch / plan-done / plan-fail / plan-status で自動的に使用される。引数で上書きも可能。」
-- MCP サーバーを使う場合は npm install と .mcp.json の設定が必要であることを案内する。
+- MCP サーバーはプラグインインストール済みなら追加設定不要 (npm install は初回起動時に自動実行) であることを案内する。
