@@ -78,7 +78,7 @@ Notion連携による知識管理とドキュメント作成
 - `research-documentation`: リサーチレポート作成
 - `spec-to-implementation`: 仕様からタスク化
 
-### 5. minio-plan-files (v2.0.0)
+### 5. minio-plan-files (v2.1.0)
 
 MinIO + ElasticMQ を使った AIエージェント向けプラン共有 & タスクキュー
 
