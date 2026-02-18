@@ -1,6 +1,27 @@
 ---
 name: test-test-double-agent
-description: Selects and implements appropriate test doubles (mock, stub, fake) based on Test Double Pattern. Creates tests with effectively isolated dependencies. Use when user mentions "test double", "モック", "mock", "stub", "fake".
+description: |
+  Selects and implements appropriate test doubles (mock, stub, fake) based on Test Double Pattern. Creates tests with effectively isolated dependencies. Use when user mentions "test double", "モック", "mock", "stub", "fake".
+
+  <example>
+  Context: User wants test double review
+  user: "モックとスタブの使い分けをレビューして"
+  assistant: "test-test-double-agentを使用して、テストダブルの適切な選択と実装を評価します。"
+  <commentary>
+  テストダブルの選択と実装の評価はこのエージェントの主要機能。
+  </commentary>
+  </example>
+
+  <example>
+  Context: User checking dependency isolation
+  user: "テストの依存関係が適切に分離されているか確認したい"
+  assistant: "test-test-double-agentで、依存関係の分離とテストダブルの適用を検証します。"
+  <commentary>
+  依存関係分離のためのテストダブル適用はこのエージェントの専門領域。
+  </commentary>
+  </example>
+tools: ["Read", "Grep", "Glob"]
+model: inherit
 ---
 
 Test Double Pattern に基づいてテストダブルの選択・実装を評価する専門エージェントです。

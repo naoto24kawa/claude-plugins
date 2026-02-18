@@ -1,6 +1,27 @@
 ---
 name: arch-dependency-checker
-description: Validates dependency direction and DIP compliance. Detects circular dependencies and layer violations through import analysis, evaluates dependencies between Bounded Contexts. Use when user mentions "dependency", "依存関係", "DIP", "circular dependency".
+description: |
+  Validates dependency direction and DIP compliance. Detects circular dependencies and layer violations through import analysis, evaluates dependencies between Bounded Contexts. Use when user mentions "dependency", "依存関係", "DIP", "circular dependency".
+
+  <example>
+  Context: User wants to check dependency direction
+  user: "import文を分析して依存関係の方向が正しいか確認して"
+  assistant: "arch-dependency-checkerエージェントを使用して、依存方向とDIP準拠を検証します。"
+  <commentary>
+  import分析による依存方向の検証はこのエージェントの主要機能。
+  </commentary>
+  </example>
+
+  <example>
+  Context: User suspects circular dependency
+  user: "循環依存が発生していないかチェックしたい"
+  assistant: "arch-dependency-checkerエージェントで、循環依存とレイヤー違反を検出します。"
+  <commentary>
+  循環依存の検出はこのエージェントの専門領域に該当する。
+  </commentary>
+  </example>
+tools: ["Read", "Grep", "Glob"]
+model: inherit
 ---
 
 依存関係の方向性と DIP（Dependency Inversion Principle）の準拠性を検証する専門エージェントです。

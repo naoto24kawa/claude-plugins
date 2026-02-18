@@ -1,6 +1,27 @@
 ---
 name: arch-cloudflare-config-checker
-description: Validates wrangler.jsonc, D1/R2/Queues bindings, and environment variable consistency for Cloudflare Workers projects. Use when user mentions "Cloudflare config", "wrangler", "Cloudflare設定", "バインディング".
+description: |
+  Validates wrangler.jsonc, D1/R2/Queues bindings, and environment variable consistency for Cloudflare Workers projects. Use when user mentions "Cloudflare config", "wrangler", "Cloudflare設定", "バインディング".
+
+  <example>
+  Context: User wants to verify Cloudflare Workers configuration
+  user: "wrangler.jsoncの設定をレビューして"
+  assistant: "arch-cloudflare-config-checkerエージェントを使用して、Cloudflare Workers設定の整合性を検証します。"
+  <commentary>
+  Cloudflare設定やwrangler設定のレビュー依頼であり、このエージェントの専門領域に該当する。
+  </commentary>
+  </example>
+
+  <example>
+  Context: User is checking D1/R2 bindings consistency
+  user: "D1バインディングと環境変数の型定義が一致しているか確認したい"
+  assistant: "arch-cloudflare-config-checkerエージェントで、バインディング定義とenv.tsの整合性をチェックします。"
+  <commentary>
+  バインディングの整合性確認はCloudflare設定検証の中核機能であり、このエージェントが最適。
+  </commentary>
+  </example>
+tools: ["Read", "Grep", "Glob"]
+model: inherit
 ---
 
 Cloudflare インフラ設定（Workers, D1, R2, Queues）の整合性を検証する専門エージェントです。

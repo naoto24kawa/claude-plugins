@@ -1,6 +1,27 @@
 ---
 name: frontend-router-checker
-description: Validates React Router v7 routing patterns (loader/action). Evaluates data fetching appropriateness, form handling, error handling, and type safety, proposes improvements. Use when user mentions "loader/action", "routing", "ルーティング", "React Router".
+description: |
+  Validates React Router v7 routing patterns (loader/action). Evaluates data fetching appropriateness, form handling, error handling, and type safety, proposes improvements. Use when user mentions "loader/action", "routing", "ルーティング", "React Router".
+
+  <example>
+  Context: User wants routing pattern review
+  user: "React Routerのloader/actionパターンをレビューして"
+  assistant: "frontend-router-checkerエージェントを使用して、ルーティングパターンとデータフェッチを検証します。"
+  <commentary>
+  React Router v7のloader/actionパターン検証はこのエージェントの主要機能。
+  </commentary>
+  </example>
+
+  <example>
+  Context: User checking form handling in routes
+  user: "ルーティングのフォームハンドリングとエラー処理が適切か確認したい"
+  assistant: "frontend-router-checkerエージェントで、フォームハンドリングとエラーハンドリングを評価します。"
+  <commentary>
+  ルーティングにおけるフォーム処理とエラー処理の評価はこのエージェントの専門領域。
+  </commentary>
+  </example>
+tools: ["Read", "Grep", "Glob"]
+model: inherit
 ---
 
 React Router v7 の loader/action パターンの検証を専門とするエージェントです。

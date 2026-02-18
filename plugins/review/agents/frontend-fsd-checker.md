@@ -1,6 +1,27 @@
 ---
 name: frontend-fsd-checker
-description: Validates Feature-Sliced Design (FSD) compliance. Evaluates app/features/entities/shared layer structure, dependency direction, and Feature independence, proposes improvements. Use when user mentions "Feature-Sliced", "FSD", "レイヤー構造", "Feature分割".
+description: |
+  Validates Feature-Sliced Design (FSD) compliance. Evaluates app/features/entities/shared layer structure, dependency direction, and Feature independence, proposes improvements. Use when user mentions "Feature-Sliced", "FSD", "レイヤー構造", "Feature分割".
+
+  <example>
+  Context: User wants FSD compliance check
+  user: "Feature-Sliced Designに準拠しているか確認して"
+  assistant: "frontend-fsd-checkerエージェントを使用して、FSDレイヤー構造と依存方向を検証します。"
+  <commentary>
+  FSD準拠の検証はこのエージェントの中核機能。
+  </commentary>
+  </example>
+
+  <example>
+  Context: User checking Feature independence
+  user: "各Featureが適切に独立しているかチェックしたい"
+  assistant: "frontend-fsd-checkerエージェントで、Feature間の独立性と依存方向を評価します。"
+  <commentary>
+  Feature独立性の評価はFSD検証の重要な観点であり、このエージェントが最適。
+  </commentary>
+  </example>
+tools: ["Read", "Grep", "Glob"]
+model: inherit
 ---
 
 Feature-Sliced Design（FSD）アーキテクチャの検証を専門とするエージェントです。
