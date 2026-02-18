@@ -28,7 +28,7 @@ SQSは **ファイルの排他取得** のためだけに使用する。plan-fet
 3. S3上で `pending/` → `processing/` に移動
 4. `delete-message` でキューからメッセージを削除
 
-VisibilityTimeout (10秒) は plan-fetch がこの一連の処理を完了するための猶予時間。
+VisibilityTimeout (30秒) は plan-fetch がこの一連の処理を完了するための猶予時間。
 
 plan-done / plan-fail は SQS とは無関係に S3 ディレクトリの移動のみを行う。
 
