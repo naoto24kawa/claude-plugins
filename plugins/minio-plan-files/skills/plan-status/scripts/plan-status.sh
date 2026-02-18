@@ -23,8 +23,6 @@ QUEUE_URL="${PLAN_QUEUE_URL:-${SQS_ENDPOINT}/000000000000/plans}"
 BUCKET="${PLAN_BUCKET:-shared}"
 PROFILE="${PLAN_AWS_PROFILE:-share}"
 REGION="${PLAN_AWS_REGION:-us-east-1}"
-WORK_DIR="${PLAN_WORK_DIR:-.}"
-STATE_FILE="${WORK_DIR}/.current-plan"
 
 # プロジェクト名: 環境変数 → git origin → ディレクトリ名
 if [[ -n "${MINIO_SHARED_PLAN_FILES_PROJECT:-}" ]]; then
@@ -51,17 +49,6 @@ cmd_status() {
     printf "  %-12s %s 件\n" "${dir}/" "$count"
   done
   echo ""
-
-  # ローカルのステートファイル確認
-  if [[ -f "$STATE_FILE" ]]; then
-    # shellcheck source=/dev/null
-    source "$STATE_FILE"
-    echo "=== Current Plan (このエージェントが処理中) ==="
-    echo "  S3 Key:    ${PLAN_S3_KEY}"
-    echo "  Started:   ${PLAN_STARTED_AT}"
-    echo "  Local:     ${PLAN_LOCAL_PATH:-n/a}"
-    echo ""
-  fi
 
   # キュー状態
   attrs=$(sqs get-queue-attributes \

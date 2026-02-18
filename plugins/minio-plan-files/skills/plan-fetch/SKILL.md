@@ -1,10 +1,10 @@
 ---
 name: plan-fetch
-description: This skill should be used when the user asks to "planを取得したい", "キューからplanを受け取りたい", "Agentとして最初のステップを実行したい", "plan-fetchを実行したい", "SQSからメッセージを取得してダウンロードしたい", "planの処理を始めたい". SQSキューから1件のplanを取得し、pending/→processing/に移動してローカルにダウンロードするAgent側ワークフローの第1ステップ。
+description: This skill should be used when the user asks to "planを取得したい", "キューからplanを受け取りたい", "Agentとして最初のステップを実行したい", "plan-fetchを実行したい", "SQSからメッセージを取得してダウンロードしたい", "planの処理を始めたい". SQSキューから1件のplanを取得し、ダウンロード + pending/→processing/移動 + SQSメッセージ削除を一括で行うAgent側ワークフローの第1ステップ。
 user-invocable: true
 ---
 
-SQSキューからplanを1件取得し、S3上で `pending/` → `processing/` に移動してローカルにダウンロードするワークフローの第1ステップ。
+SQSキューからplanを1件取得し、ダウンロード + S3上で `pending/` → `processing/` に移動 + SQSメッセージ削除を一括で行うワークフローの第1ステップ。
 
 ## ワークフロー内の位置
 
@@ -13,21 +13,31 @@ SQSキューからplanを1件取得し、S3上で `pending/` → `processing/` �
   plan-submit → pending/ → SQS queue
 
 【Agent】
-  plan-fetch ← ここ (SQS受信 + pending/ → processing/ + ダウンロード)
+  plan-fetch ← ここ (SQS受信 + ダウンロード + pending/→processing/ + delete-message)
       ↓ 処理実行
-  plan-done → done/      (成功時)
-  plan-fail → failed/    (失敗時)
+  plan-done → done/      (成功時: S3移動のみ)
+  plan-fail → failed/    (失敗時: S3移動のみ)
 ```
 
-取得後 **300秒以内** に `plan-done` または `plan-fail` を実行すること。
-タイムアウトするとキューに戻り、他の Agent が再取得する。
+## SQSの役割
+
+SQSは **ファイルの排他取得** のためだけに使用する。plan-fetch が以下を一括で行い、SQSの責務はここで完結する:
+
+1. `receive-message` でメッセージを取得 (他のAgentには見えなくなる)
+2. S3からplanファイルをダウンロード
+3. S3上で `pending/` → `processing/` に移動
+4. `delete-message` でキューからメッセージを削除
+
+VisibilityTimeout (10秒) は plan-fetch がこの一連の処理を完了するための猶予時間。
+
+plan-done / plan-fail は SQS とは無関係に S3 ディレクトリの移動のみを行う。
 
 ## スクリプトを使う場合
 
 このスキルの `scripts/plan-fetch.sh` を使うと自動化される:
 
 ```bash
-# planを1件取得 (pending/ → processing/ に移動 + ダウンロード)
+# planを1件取得 (ダウンロード + pending/→processing/ + delete-message)
 ./plan-fetch.sh
 
 # 環境変数でホストを指定
@@ -63,19 +73,25 @@ MSG=$(sqssl receive-message \
 S3_KEY=$(echo $MSG | jq -r '.Messages[0].Body | fromjson | .s3_key')
 PROJECT=$(echo $MSG | jq -r '.Messages[0].Body | fromjson | .project')
 RECEIPT=$(echo $MSG | jq -r '.Messages[0].ReceiptHandle')
+FILENAME=$(basename $S3_KEY)
 
-# 2. pending/ → processing/ に移動
-PROCESSING_KEY="${PROJECT}/processing/$(basename $S3_KEY)"
+# 2. ダウンロード (先にダウンロードしてファイルロストを防ぐ)
+s3sl cp s3://shared/$S3_KEY ./$FILENAME
+
+# 3. pending/ → processing/ に移動
+PROCESSING_KEY="${PROJECT}/processing/${FILENAME}"
 s3sl mv s3://shared/$S3_KEY s3://shared/$PROCESSING_KEY
 
-# 3. ローカルにダウンロード
-s3sl cp s3://shared/$PROCESSING_KEY ./current-plan.json
+# 4. SQS メッセージを削除
+sqssl delete-message \
+  --queue-url http://<IP>:9324/000000000000/plans \
+  --receipt-handle "$RECEIPT"
 ```
 
 ## 次のステップ
 
-- 処理成功 → `plan-done` スキル (processing/ → done/ + SQS delete)
-- 処理失敗 → `plan-fail` スキル (processing/ → failed/ + SQS delete)
+- 処理成功 → `plan-done` スキル (processing/ → done/ のS3移動のみ)
+- 処理失敗 → `plan-fail` スキル (processing/ → failed/ のS3移動のみ)
 - 状態確認 → `plan-status` スキル
 
 ---

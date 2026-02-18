@@ -63,7 +63,7 @@ for file in "$@"; do
   # キューに投入
   sqs send-message \
     --queue-url "$QUEUE_URL" \
-    --message-body "{\"s3_key\": \"${s3_key}\", \"filename\": \"${filename}\", \"project\": \"${PROJECT}\", \"dispatched_at\": \"$(date -u '+%Y-%m-%dT%H:%M:%SZ')\"}" \
+    --message-body "{\"s3_key\": \"${s3_key}\", \"project\": \"${PROJECT}\"}" \
     >/dev/null
 
   log "キューに投入: ${filename}"

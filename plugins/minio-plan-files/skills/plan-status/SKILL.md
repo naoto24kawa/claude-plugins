@@ -40,10 +40,6 @@ MINIO_SHARED_PLAN_FILES_HOST=192.168.1.3 ./plan-status.sh
   done/        12 件
   failed/      0 件
 
-=== Current Plan (このエージェントが処理中) ===
-  S3 Key:    my-project/processing/plan-001.json
-  Started:   2024-01-15T10:30:00Z
-
 === Queue ===
   待機中 (visible):   3 件
   処理中 (invisible): 1 件

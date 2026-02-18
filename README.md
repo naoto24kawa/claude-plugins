@@ -78,16 +78,16 @@ Notion連携による知識管理とドキュメント作成
 - `research-documentation`: リサーチレポート作成
 - `spec-to-implementation`: 仕様からタスク化
 
-### 5. minio-plan-files (v1.0.0)
+### 5. minio-plan-files (v2.0.0)
 
 MinIO + ElasticMQ を使った AIエージェント向けプラン共有 & タスクキュー
 
 **スキル (6つ):**
 - `minio-setup`: 初回セットアップ (プロジェクト名 / ホストIP を設定)
 - `plan-submit`: Dispatcher: planファイルを MinIO にアップロードしてキューに投入
-- `plan-fetch`: Agent: SQSキューから plan を取得してダウンロード
-- `plan-done`: Agent: plan 処理完了 (processing/ → done/)
-- `plan-fail`: Agent: plan 処理失敗 (processing/ → failed/)
+- `plan-fetch`: Agent: SQSから取得 + ダウンロード + pending/→processing/ + SQS削除を一括実行
+- `plan-done`: Agent: plan 処理完了 (processing/ → done/) S3移動のみ
+- `plan-fail`: Agent: plan 処理失敗 (processing/ → failed/) S3移動のみ
 - `plan-status`: ステータス確認 & failed plan の再投入 (retry)
 
 ### 4. github (v1.0.0)
