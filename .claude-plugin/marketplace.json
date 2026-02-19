@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.9.0",
-  "description": "Code review, Claude Code configuration review, Notion integration, and GitHub workflow automation plugins for development workflows",
+  "version": "3.10.0",
+  "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, and remote Chrome control plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
@@ -61,6 +61,17 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/github",
+      "category": "productivity"
+    },
+    {
+      "name": "remote-chrome",
+      "description": "Remote Chrome control via SSH and tmux MCP. Control Google Chrome on remote macOS machines using AppleScript for app verification, browser automation, and E2E testing.",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/remote-chrome",
       "category": "productivity"
     }
   ]
