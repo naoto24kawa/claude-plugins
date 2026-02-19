@@ -17,8 +17,8 @@ planファイルをMinIOにアップロードし、SQSキューへ投入するDi
   plans queue
 
 【Agent】
-  plan-fetch → processing/ → (処理) → plan-done → done/
-                                      → plan-fail → failed/
+  plan-fetch → processing/ → (処理) → plan-done → done/   + 通知送信
+                                      → plan-fail → failed/ + 通知送信
 ```
 
 ## 事前セットアップ
@@ -87,6 +87,25 @@ sqssl send-message \
 ```
 
 ## 結果の確認
+
+### リアルタイム待機 (推奨)
+
+`plan-wait` スキルで完了/失敗をリアルタイムに検知する:
+
+```bash
+# plan-submitが返すFilenameを指定して待機
+./plan-wait.sh plan-001.json
+
+# 複数のplanを同時に待機
+./plan-wait.sh plan-001.json plan-002.json plan-003.json
+```
+
+MCP ツールの場合:
+```
+plan_wait({ filenames: ["plan-001.json"] })
+```
+
+### S3ポーリング (フォールバック)
 
 Agentが処理を完了すると `done/` にファイルが移動する:
 
