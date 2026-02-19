@@ -1,6 +1,6 @@
 ---
 name: remote-chrome-e2e
-description: This skill should be used when the user asks to "E2Eテスト", "操作してスクショ", "動作検証してキャプチャ", "フォーム入力して確認", "クリックしてスクショ", "リモートで操作検証", "操作後の画面を撮影", "remote E2E test", "interact then screenshot", "browser automation with capture", or needs to perform browser interactions (click, fill, navigate) followed by verification and screenshot capture on a remote macOS machine via SSH. Claude generates custom Playwright-core scripts for each scenario.
+description: This skill should be used when the user asks to "E2Eテスト", "操作してスクショ", "スクリーンショット", "画面確認", "動作検証してキャプチャ", "フォーム入力して確認", "クリックしてスクショ", "リモートで操作検証", "操作後の画面を撮影", "リモートChromeのキャプチャ", "remote screenshot", "remote E2E test", "interact then screenshot", "browser automation with capture", or needs to take screenshots or perform browser interactions (click, fill, navigate) followed by verification and screenshot capture on a remote macOS machine via SSH. Claude generates custom Playwright-core scripts for each scenario.
 ---
 
 # Remote Chrome E2E
@@ -9,17 +9,13 @@ tmux MCP + SSH + Playwright-core を用いて、リモート macOS マシン上�
 
 Claude がユーザーの要望に基づいて Playwright スクリプトを都度生成し、操作後の状態をキャプチャする。
 
-## 既存スキルとの使い分け
+## 対応範囲
 
-| スキル | 用途 | ブラウザ |
-|--------|------|---------|
-| `remote-chrome-control` | osascript で GUI Chrome を操作 | 既存 GUI Chrome |
-| `remote-chrome-screenshot` | 単純なスクショ(URL + 待機 + キャプチャ) | 新規 headless Chrome |
-| **`remote-chrome-e2e`** | **操作 + 検証 + スクショ** | **新規 headless Chrome** |
+- 単純なスクショ(URL を開いて待機してキャプチャ)
+- 操作後のスクショ(クリック、フォーム入力、ページ遷移など)
+- コンテンツ検証(タイトル、テキスト、要素の存在確認)
 
-**判断基準**:
-- URL を開いてスクショだけ -> `remote-chrome-screenshot`
-- クリック、フォーム入力、ページ遷移などの操作後にスクショ -> **`remote-chrome-e2e`**
+全て Playwright-core のヘッドレス Chrome で実行する。
 
 ## 前提条件
 
@@ -144,4 +140,4 @@ rm /tmp/pw_e2e.mjs /tmp/pw_e2e.png
 
 ## スクリーンショット制約
 
-リモート macOS での制約事項は `../remote-chrome-screenshot/references/constraints.md` を参照。 **Playwright-core** が唯一の信頼できるスクリーンショット方法。
+リモート macOS での制約事項は `references/constraints.md` を参照。 **Playwright-core** が唯一の信頼できるスクリーンショット方法。
