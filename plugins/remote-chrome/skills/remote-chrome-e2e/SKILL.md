@@ -1,6 +1,6 @@
 ---
 name: remote-chrome-e2e
-description: This skill should be used when the user asks to "E2Eテスト", "操作してスクショ", "動作検証してキャプチャ", "フォーム入力してスクショ", "クリックしてスクショ", "Playwright で E2E", "remote E2E test", "リモートで操作検証", "ブラウザ操作してスクリーンショット", "操作後の画面を撮影", "インタラクション付きスクショ", or needs to perform browser interactions (click, fill, navigate) followed by screenshot capture on a remote macOS machine via SSH. Claude generates custom Playwright scripts for each scenario.
+description: This skill should be used when the user asks to "E2Eテスト", "操作してスクショ", "動作検証してキャプチャ", "フォーム入力して確認", "クリックしてスクショ", "リモートで操作検証", "操作後の画面を撮影", "remote E2E test", "interact then screenshot", "browser automation with capture", or needs to perform browser interactions (click, fill, navigate) followed by verification and screenshot capture on a remote macOS machine via SSH. Claude generates custom Playwright-core scripts for each scenario.
 ---
 
 # Remote Chrome E2E
@@ -136,20 +136,7 @@ rm /tmp/pw_e2e.mjs /tmp/pw_e2e.png
 
 ## トラブルシューティング
 
-### スクリプトの構文エラー
-
-base64 転送後に `node --check /tmp/pw_e2e.mjs` で構文チェックを行う。エラーがあればスクリプトを修正して再転送する。
-
-### セレクタが見つからない
-
-- `page.waitForSelector()` のタイムアウトを増やす
-- `page.content()` でページの HTML を確認する
-- セレクタが正しいか `page.locator().count()` で確認する
-
-### スクリーンショットが真っ白
-
-- `page.waitForTimeout()` で非同期コンテンツの読み込みを待つ
-- `page.waitForLoadState('networkidle')` でネットワーク活動の完了を待つ
+`references/troubleshooting.md` を参照。構文エラー、セレクタ未検出、真っ白スクショ、ハング時の対処法を収録。
 
 ## Playwright API リファレンス
 
