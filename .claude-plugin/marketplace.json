@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, and remote Chrome control plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
@@ -65,8 +65,8 @@
     },
     {
       "name": "remote-chrome",
-      "description": "Remote Chrome control, screenshot capture, and E2E testing via SSH and tmux MCP. Control Google Chrome on remote macOS machines using AppleScript, take reliable screenshots, and run custom Playwright E2E scripts for interaction + verification + capture workflows.",
-      "version": "1.2.0",
+      "description": "Remote Chrome E2E testing via SSH and tmux MCP. Run custom Playwright-core scripts on remote macOS for browser interaction, verification, and screenshot capture workflows.",
+      "version": "2.0.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"
