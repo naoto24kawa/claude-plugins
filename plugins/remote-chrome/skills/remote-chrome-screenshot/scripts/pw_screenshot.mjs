@@ -1,3 +1,8 @@
+#!/usr/bin/env node
+// pw_screenshot.mjs - Take a screenshot of a web page using Playwright-core
+// Usage: node pw_screenshot.mjs [URL] [OUTPUT_PATH] [WAIT_SECONDS]
+// Requires: playwright-core (`npm install playwright-core`), Google Chrome
+
 import { chromium } from 'playwright-core';
 
 const url = process.argv[2] || 'http://localhost:23000/';
@@ -32,6 +37,7 @@ try {
   console.log(`Saved: ${output} (${stat.size} bytes)`);
 } catch (e) {
   console.error('ERROR:', e.message);
+  process.exitCode = 1;
 } finally {
   await browser.close();
   console.log('Done.');

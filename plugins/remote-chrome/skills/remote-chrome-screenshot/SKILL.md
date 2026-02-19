@@ -1,6 +1,6 @@
 ---
 name: remote-chrome-screenshot
-description: This skill should be used when the user asks to "リモートマシンのスクリーンショットを取りたい", "SSHでスクリーンショット", "リモートChromeのキャプチャ", "アプリの画面を撮影", "remote screenshot", "capture remote browser", "Playwrightでスクリーンショット", or needs to take screenshots of web applications running on or accessible from a remote macOS machine via SSH. Uses Playwright-core for reliable async content capture.
+description: This skill should be used when the user asks to "リモートマシンのスクリーンショットを取りたい", "SSHでスクリーンショット", "リモートChromeのキャプチャ", "アプリの画面を撮影", "画面確認", "UIを確認", "リモートでブラウザ表示を確認", "remote screenshot", "capture remote browser", "take a screenshot via SSH", "Playwrightでスクリーンショット", or needs to take screenshots of web applications running on or accessible from a remote macOS machine via SSH. Uses Playwright-core to launch headless Chrome, wait for async content, and capture reliable screenshots.
 ---
 
 # Remote Chrome Screenshot
@@ -23,7 +23,7 @@ tmux MCP + SSH + Playwright-core を用いて、リモート macOS マシン上�
 - `screencapture`: SSH セッションから動作不可
 - VNC: ロック画面がキャプチャされる
 
-**Playwright-core が唯一の信頼できる方法。**
+**Playwright-core** が唯一の信頼できる方法。
 
 ## ワークフロー
 
@@ -57,7 +57,7 @@ ssh -R <REMOTE_PORT>:localhost:<LOCAL_PORT> -N <user>@<host>
 例: ローカルの `:23000` をリモートから `localhost:23000` でアクセス可能にする:
 
 ```bash
-ssh -R 23000:localhost:23000 -N nishikawa@192.168.1.9
+ssh -R 23000:localhost:23000 -N <user>@<host>
 ```
 
 3. `capture-pane` でトンネル確立を確認する(エラーが出ていないこと)
@@ -123,7 +123,7 @@ Done.
 
 リモートマシンからローカルにスクリーンショットを転送する。
 
-1. リモートマシン上で一時 HTTP サーバーを起動する:
+1. リモートマシン上で一時 HTTP サーバーを起動する(ポート 28080 は 8080 + 20000 のポート規約に基づく):
 
 ```bash
 cd /tmp && python3 -m http.server 28080 &
