@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.14.0",
+  "version": "3.15.0",
   "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, and notification plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
@@ -77,7 +77,7 @@
     {
       "name": "notify",
       "description": "Notification setup skill for simple-notify-tools. Bundles notify.sh and configures Claude Code Stop hooks to send task completion notifications with dynamic messages from last_assistant_message.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"

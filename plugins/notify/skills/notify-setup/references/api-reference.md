@@ -163,6 +163,21 @@ Server-Sent Events (SSE) stream for real-time notification updates.
 curl -N http://localhost:23000/api/events
 ```
 
+### Example SSE Stream
+
+```
+event: created
+data: {"id":"...","title":"Task","message":"Done","category":"info","metadata":{},"read":false,"createdAt":"..."}
+id: 1708300000000
+
+event: ping
+data:
+
+event: read
+data: {"id":"...","title":"Task","message":"Done","category":"info","metadata":{},"read":true,"createdAt":"..."}
+id: 1708300030000
+```
+
 ## GET /api/health
 
 Health check endpoint.
@@ -193,9 +208,27 @@ Health check endpoint.
 | Category | No | "info" | Category: info, error, deploy, etc. |
 | Metadata | No | `{}` | Arbitrary JSON object |
 
+Note: The `category` default "info" is set by notify.sh. When using curl directly, `category` is optional with no server-side default.
+
 ### Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NOTIFY_HOST` | localhost | Server hostname or IP |
 | `NOTIFY_PORT` | 23000 | Server port |
+
+### Examples
+
+```bash
+# Basic notification
+./scripts/notify.sh "Build" "Build finished"
+
+# With category
+./scripts/notify.sh "Error" "Test failed" "error"
+
+# With metadata
+./scripts/notify.sh "Deploy" "Deployed to prod" "deploy" '{"env":"prod"}'
+
+# LAN access
+NOTIFY_HOST=192.168.1.100 ./scripts/notify.sh "Task" "Done" "info"
+```

@@ -33,9 +33,9 @@ curl -sf http://<HOST>:23000/api/health
 The script is bundled at `<SKILL_BASE_DIR>/scripts/notify.sh`.
 Use the absolute path provided by "Base directory for this skill" context.
 
-Example: If base directory is `/home/user/.claude/plugins/notify/skills/notify-setup`, then:
+Example: If base directory is `/home/user/simple-notify-tools/.claude/skills/notify-setup`, then:
 ```
-/home/user/.claude/plugins/notify/skills/notify-setup/scripts/notify.sh
+/home/user/simple-notify-tools/.claude/skills/notify-setup/scripts/notify.sh
 ```
 
 Verify the script exists and is executable:
@@ -51,7 +51,7 @@ The hook reads `last_assistant_message` from stdin and sends it as the notificat
 
 **Hook command template:**
 ```
-INPUT=$(cat -) && LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // "Task completed"' | head -c 200) && <NOTIFY_SH_PATH> "$(basename "$CLAUDE_PROJECT_DIR")" "$LAST_MSG"
+INPUT=$(cat -) && LAST_MSG=$(printf '%s' "$INPUT" | jq -r '.last_assistant_message // "Task completed"' 2>/dev/null | tr -d '\\000-\\037' | head -c 200) && <NOTIFY_SH_PATH> "$(basename "$CLAUDE_PROJECT_DIR")" "${LAST_MSG:-Task completed}"
 ```
 
 **Full settings.json snippet:**
@@ -64,7 +64,7 @@ INPUT=$(cat -) && LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // "
         "hooks": [
           {
             "type": "command",
-            "command": "INPUT=$(cat -) && LAST_MSG=$(echo \"$INPUT\" | jq -r '.last_assistant_message // \"Task completed\"' | head -c 200) && <NOTIFY_SH_PATH> \"$(basename \"$CLAUDE_PROJECT_DIR\")\" \"$LAST_MSG\""
+            "command": "INPUT=$(cat -) && LAST_MSG=$(printf '%s' \"$INPUT\" | jq -r '.last_assistant_message // \"Task completed\"' 2>/dev/null | tr -d '\\000-\\037' | head -c 200) && <NOTIFY_SH_PATH> \"$(basename \"$CLAUDE_PROJECT_DIR\")\" \"${LAST_MSG:-Task completed}\""
           }
         ]
       }
@@ -91,7 +91,7 @@ Confirm the notification appears on the dashboard at `http://<HOST>:23000`.
 For notifications across machines, prepend `NOTIFY_HOST=<IP>` to the hook command:
 
 ```
-INPUT=$(cat -) && LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // "Task completed"' | head -c 200) && NOTIFY_HOST=192.168.1.100 <NOTIFY_SH_PATH> "$(basename "$CLAUDE_PROJECT_DIR")" "$LAST_MSG"
+INPUT=$(cat -) && LAST_MSG=$(printf '%s' "$INPUT" | jq -r '.last_assistant_message // "Task completed"' 2>/dev/null | tr -d '\\000-\\037' | head -c 200) && NOTIFY_HOST=192.168.1.100 <NOTIFY_SH_PATH> "$(basename "$CLAUDE_PROJECT_DIR")" "${LAST_MSG:-Task completed}"
 ```
 
 ### notify.sh Environment Variables

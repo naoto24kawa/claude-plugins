@@ -52,11 +52,14 @@ Fired when Claude generates an internal notification (permission prompts, idle a
 | `title` | string (optional) | Notification title |
 | `notification_type` | string | One of: `permission_prompt`, `idle_prompt`, `auth_success`, `elicitation_dialog` |
 
+**Important**: stdin can only be read once. Store in a variable first:
+
 ```bash
-# Correct: read stdin once
+# Correct: read stdin once, then extract fields
 INPUT=$(cat -)
-MSG=$(echo "$INPUT" | jq -r '.message // empty')
-TITLE=$(echo "$INPUT" | jq -r '.title // empty')
+MSG=$(printf '%s' "$INPUT" | jq -r '.message // empty')
+TITLE=$(printf '%s' "$INPUT" | jq -r '.title // empty')
+TYPE=$(printf '%s' "$INPUT" | jq -r '.notification_type // empty')
 ```
 
 ### PreToolUse
@@ -69,6 +72,11 @@ Fired before a tool is executed. Can block tool execution.
 | `tool_input` | object | Tool input parameters |
 | `tool_use_id` | string | Unique tool use ID |
 
+```bash
+# Check which tool is being used
+TOOL=$(cat - | jq -r '.tool_name // empty')
+```
+
 ### PostToolUse
 
 Fired after a tool finishes execution.
@@ -80,16 +88,23 @@ Fired after a tool finishes execution.
 | `tool_response` | string | Tool execution result |
 | `tool_use_id` | string | Unique tool use ID |
 
+```bash
+# Get tool result
+RESULT=$(cat - | jq -r '.tool_response // empty')
+```
+
 ## Patterns for Notification Integration
 
-### Stop Hook with Dynamic Message (Recommended)
+### Stop Hook (Most Common)
+
+Send a notification when Claude finishes a task. No stdin parsing needed for basic use:
 
 ```bash
-INPUT=$(cat -)
-LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // "Task completed"' | head -c 200)
-<NOTIFY_SH_PATH>/scripts/notify.sh \
+<NOTIFY_TOOLS_DIR>/scripts/notify.sh \
   "$(basename "$CLAUDE_PROJECT_DIR")" \
-  "$LAST_MSG"
+  "Task completed" \
+  "info" \
+  "{\"project\":\"$CLAUDE_PROJECT_DIR\"}"
 ```
 
 ### Notification Hook with stdin Parsing
@@ -99,7 +114,23 @@ Forward Claude's internal notifications to the notification server:
 ```bash
 MSG=$(cat - | jq -r '.message // empty') && \
   [ -n "$MSG" ] && \
-  <NOTIFY_SH_PATH> \
+  <NOTIFY_TOOLS_DIR>/scripts/notify.sh \
     "$(basename "$CLAUDE_PROJECT_DIR")" \
-    "$MSG"
+    "$MSG" \
+    "info" \
+    "{\"project\":\"$CLAUDE_PROJECT_DIR\"}"
+```
+
+### Stop Hook with Last Message
+
+Include Claude's last response summary in the notification:
+
+```bash
+INPUT=$(cat -)
+LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // "Task completed"' | head -c 200)
+<NOTIFY_TOOLS_DIR>/scripts/notify.sh \
+  "$(basename "$CLAUDE_PROJECT_DIR")" \
+  "$LAST_MSG" \
+  "info" \
+  "{\"project\":\"$CLAUDE_PROJECT_DIR\"}"
 ```
