@@ -1,0 +1,5 @@
+{
+  "name": "spec",
+  "version": "1.0.0",
+  "description": "Automated specification document generation from codebases. Orchestrates 9 specialized sub-agents to produce system overview, architecture, data model, API specification, use cases, business rules, and non-functional requirements documents."
+}
