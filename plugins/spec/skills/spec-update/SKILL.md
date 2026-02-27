@@ -37,14 +37,24 @@ Use the same output directory as spec-coordinator:
 
 ## Input Resolution
 
+### Default Branch Detection
+
+Before resolving input, detect the repository's default branch:
+
+```bash
+git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||'
+```
+
+Fall back to `main` if detection fails. Use the detected branch as `{DEFAULT_BRANCH}` in all subsequent commands.
+
 Determine the diff source from user input. Support the following formats:
 
 | Input Format | Example | Resolution |
 |-------------|---------|------------|
 | PR number | `#51`, `51` | `gh pr diff 51` |
 | PR URL | `https://github.com/org/repo/pull/51` | Extract PR number, then `gh pr diff 51` |
-| Branch name | `feat/my-feature` | `git diff main...feat/my-feature` |
-| No input (default) | (none) | `git diff main...HEAD` |
+| Branch name | `feat/my-feature` | `git diff {DEFAULT_BRANCH}...feat/my-feature` |
+| No input (default) | (none) | `git diff {DEFAULT_BRANCH}...HEAD` |
 
 ## Execution Flow
 
@@ -53,10 +63,10 @@ Determine the diff source from user input. Support the following formats:
 1. **Get the diff** based on input resolution:
    - For PR: `gh pr diff {PR_NUMBER}`
    - For branch/default: `git diff {BASE}...{TARGET}`
-   - If the primary command fails, try the alternative (e.g., `git diff origin/main...HEAD`)
+   - If the primary command fails, try the alternative (e.g., `git diff origin/{DEFAULT_BRANCH}...HEAD`)
 
 2. **Get changed file list**:
-   - For PR: `gh pr diff {PR_NUMBER} --name-only`
+   - For PR: `gh pr view {PR_NUMBER} --json files --jq '.files[].path'`
    - For branch/default: `git diff {BASE}...{TARGET} --name-only`
 
 3. Report to user: "差分を取得しました。変更ファイル数: N 件"
@@ -78,6 +88,8 @@ Apply the following mapping rules to each changed file path. A phase is affected
 | `*.env*`, `docker*`, `Dockerfile*` | Phase 7 (non-functional) |
 | `tests/**` | Phase 7 (non-functional) |
 
+**For files not matching any pattern above:** Analyze the diff content to determine the most relevant phases. If the changes are documentation-only (e.g., README.md, .docs/), they can be skipped as they don't affect specification phases.
+
 ### Step 3: Determine Final Phase Set
 
 1. **Always include**: Phase 0 (context) and Phase 8 (index)
@@ -93,6 +105,8 @@ Apply the following mapping rules to each changed file path. A phase is affected
 ### Step 4: Execute Affected Phase Agents
 
 Execute phases in order (0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8). Skip phases not in the affected set.
+
+**Note:** When a prerequisite phase is not in the affected set, the existing file from a previous generation is used as-is. This is by design — only affected documents are regenerated.
 
 For each affected phase, spawn the corresponding agent via the Task tool:
 
@@ -171,6 +185,6 @@ After all phases complete, present a summary:
 - If an agent returns an error, report the error content to the user and ask for instructions
 - If Phase 4 (API) reports no API exists, acknowledge the skip and continue to the next phase
 - If the diff command fails, try the alternative approach:
-  - `gh pr diff` failure → try `git diff origin/main...HEAD`
+  - `gh pr diff` failure → try `git diff origin/{DEFAULT_BRANCH}...HEAD`
   - `git diff` failure → try `gh pr list --head {BRANCH} --json number` to find a PR number, then `gh pr diff`
 - If no changed files are found, inform the user: "差分が見つかりませんでした。ブランチやPR番号を確認してください。"
