@@ -1,6 +1,6 @@
 ---
 name: spec-update
-description: This skill should be used when the user asks to "PRの差分を仕様書に反映して", "spec-updateを実行して", "仕様書を差分更新して", "update specs from PR", "#51 の変更を仕様書に反映", "仕様書をPRに合わせて更新", "specを差分更新". Analyzes PR or branch diffs to determine which specification phases are affected, then re-executes only those phase agents for incremental spec updates.
+description: This skill should be used when the user asks to "PRの差分を仕様書に反映して", "spec-updateを実行して", "仕様書を差分更新して", "update specs from PR", "#51 の変更を仕様書に反映", "仕様書をPRに合わせて更新", "specを差分更新", "ブランチの差分から仕様書を更新", "仕様書を部分更新して", "incremental spec update". Analyzes PR or branch diffs to determine which specification phases are affected, then re-executes only those phase agents for incremental spec updates.
 allowed-tools: ["Task", "Bash", "Read", "Write"]
 ---
 
@@ -45,7 +45,7 @@ Before resolving input, detect the repository's default branch:
 git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||'
 ```
 
-Fall back to `main` if detection fails. Use the detected branch as `{DEFAULT_BRANCH}` in all subsequent commands.
+Fall back to `main` (or `master` if `main` does not exist). Use the detected branch as `{DEFAULT_BRANCH}` in all subsequent commands.
 
 Determine the diff source from user input. Support the following formats:
 
@@ -73,22 +73,16 @@ Determine the diff source from user input. Support the following formats:
 
 ### Step 2: Map Changed Files to Affected Phases
 
-Apply the following mapping rules to each changed file path. A phase is affected if any changed file matches its pattern.
+Apply the mapping rules from **`references/file-phase-mapping.md`** to each changed file path. A phase is affected if any changed file matches its pattern. Read the reference file at the start of execution to load the mapping rules.
 
-| File Path Pattern | Affected Phases |
-|------------------|----------------|
-| `src/db/**`, `drizzle/**` | Phase 3 (data-model) |
-| `src/graph/**` | Phase 2 (architecture), Phase 5 (usecases), Phase 6 (rules) |
-| `src/llm/**` | Phase 2 (architecture), Phase 6 (rules) |
-| `src/slack/**` | Phase 4 (api), Phase 5 (usecases) |
-| `src/notion/**` | Phase 4 (api), Phase 5 (usecases) |
-| `src/monitor/**` | Phase 2 (architecture), Phase 5 (usecases) |
-| `src/index.ts` | Phase 2 (architecture) |
-| `package.json`, `tsconfig.json`, `bun.lockb` | Phase 1 (overview) |
-| `*.env*`, `docker*`, `Dockerfile*` | Phase 7 (non-functional) |
-| `tests/**` | Phase 7 (non-functional) |
+The general mapping principle:
+- Data layer changes (DB, ORM, migrations) → Phase 3
+- Core business logic changes → Phase 2, 5, 6
+- API/handler changes → Phase 4, 5
+- Infrastructure/config changes → Phase 7
+- Package/dependency changes → Phase 1
 
-**For files not matching any pattern above:** Analyze the diff content to determine the most relevant phases. If the changes are documentation-only (e.g., README.md, .docs/), they can be skipped as they don't affect specification phases.
+**For files not matching any pattern:** Apply the general mapping principle above based on the file's role in the codebase. If the changes are documentation-only (e.g., README.md, CHANGELOG.md), skip them as they do not affect specification phases. If the role is truly ambiguous, ask the user which phases should be updated.
 
 ### Step 3: Determine Final Phase Set
 
@@ -106,7 +100,7 @@ Apply the following mapping rules to each changed file path. A phase is affected
 
 Execute phases in order (0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8). Skip phases not in the affected set.
 
-**Note:** When a prerequisite phase is not in the affected set, the existing file from a previous generation is used as-is. This is by design — only affected documents are regenerated.
+**Note:** Use the existing file as-is when a prerequisite phase is not in the affected set. Only affected documents are regenerated.
 
 For each affected phase, spawn the corresponding agent via the Task tool:
 
@@ -168,17 +162,18 @@ After all phases complete, present a summary:
 
 ## Phase Mapping Reference
 
-| Phase | Agent | Prerequisites | Output |
-|-------|-------|---------------|--------|
-| 0 | spec-phase0-context | (none) | _context.md |
-| 1 | spec-phase1-overview | _context.md | 00-overview.md |
-| 2 | spec-phase2-architecture | _context.md, 00-overview.md | 01-architecture.md |
-| 3 | spec-phase3-datamodel | _context.md, 00-overview.md | 02-data-model.md |
-| 4 | spec-phase4-api | _context.md, 00-overview.md | 03-api-specification.md |
-| 5 | spec-phase5-usecases | 00-overview.md, 01-architecture.md | 04-usecases/ |
-| 6 | spec-phase6-rules | 00-overview.md, 01-architecture.md | 05-business-rules.md |
-| 7 | spec-phase7-nonfunctional | _context.md, 00-overview.md | 06-non-functional.md |
-| 8 | spec-phase8-index | All above files | _index.md |
+Consult **`../../references/phase-mapping.md`** for the full phase agent table (prerequisites, outputs, prompt format). This reference is shared with spec-coordinator.
+
+## Additional Resources
+
+### Reference Files
+
+- **`references/file-phase-mapping.md`** - File path to phase mapping rules (default patterns + customization guide)
+- **`../../references/phase-mapping.md`** - Phase agent table with prerequisites and outputs (shared with spec-coordinator)
+
+### Examples
+
+- **`examples/example-pr-update.md`** - Complete execution example for PR #51 showing diff retrieval, phase mapping, and summary report
 
 ## Error Handling
 
