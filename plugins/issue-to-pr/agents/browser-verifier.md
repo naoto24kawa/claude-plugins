@@ -31,8 +31,6 @@ Coordinator から prompt で以下の情報が渡される:
 - `test_user.email` / `test_user.password` - テストユーザー認証情報
 - `graphql_endpoint` - GraphQL エンドポイント
 
-設定ファイルが存在しない場合は CLAUDE.md から従来通り読み取る (後方互換)。
-
 ### CLAUDE.md の読み込み
 
 CLAUDE.md を Read tool で読み、以下の情報を特定して記憶する:
@@ -67,7 +65,7 @@ gh pr checkout <pr_number>
 
 ### バックエンド接続確認
 
-設定ファイルの `graphql_endpoint` (または CLAUDE.md に記載の GraphQL エンドポイント) に curl でリクエストを送る。
+設定ファイルの `graphql_endpoint` に curl でリクエストを送る。
 最低2回はリトライし、いずれも失敗した場合のみ「未接続」と判断する。
 
 ```bash
@@ -91,7 +89,7 @@ Coordinator から渡された verify_targets と issue_body から確認すべ�
 
 ### ログイン (認証が必要な場合)
 
-設定ファイルの `test_user` (または CLAUDE.md から特定した認証情報) を使用する。
+設定ファイルの `test_user` を使用する。
 
 - `browser_navigate` でログインページに遷移
 - `browser_snapshot` でページの ref を取得

@@ -34,8 +34,6 @@ Coordinator から prompt で以下の情報が渡される:
 - `slack_channel` - Slack 通知先チャンネル ID
 - `test_command` - テスト実行コマンド
 
-設定ファイルが存在しない場合は CLAUDE.md から従来通り読み取る (後方互換)。
-
 ### CLAUDE.md の読み込み
 
 CLAUDE.md を Read tool で読み、以下の情報を特定して記憶する:
@@ -82,7 +80,7 @@ slug は Issue タイトルから英語の短縮形を生成する。日本語�
 
 ### 検証
 
-- 設定ファイルの `test_command` (または CLAUDE.md に記載のテストコマンド) でテストを実行し、全テストが pass することを確認する。superpowers プラグインがインストールされている場合は superpowers:verification-before-completion スキルに従う
+- 設定ファイルの `test_command` でテストを実行し、全テストが pass することを確認する。superpowers プラグインがインストールされている場合は superpowers:verification-before-completion スキルに従う
 - 関連リポジトリ: 各リポジトリの CLAUDE.md に記載のテストコマンドも実行する
 - TypeScript の型チェックでエラーがないことを確認する
 - Issue の要件を満たしていることを確認する

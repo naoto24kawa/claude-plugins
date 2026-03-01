@@ -78,7 +78,6 @@ PR 本文から Test Plan セクションを抽出する:
 - `test_user.email` / `test_user.password` - テストユーザー認証情報
 - `graphql_endpoint` - GraphQL エンドポイント
 
-設定ファイルが存在しない場合は CLAUDE.md から従来通り読み取る (後方互換)。
 
 ### Playwright スクリプトの生成と実行
 

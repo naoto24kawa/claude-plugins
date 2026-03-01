@@ -34,8 +34,7 @@ $ARGUMENTS を以下のルールでパースする:
 5. 既に PR が存在する (open or merged) Issue は「PR 済み」としてスキップリストに入れる
 6. 関連リポジトリを検出する
    - `.claude/issue-to-pr.local.json` を Read tool で読み、`related_repos` から nameWithOwner に対応するローカルパスを取得する
-   - `related_repos` がない場合は `.claude/related-repos.local.json` をフォールバックとして読む (後方互換)
-   - いずれも存在しない場合: 単一リポジトリモードで続行する
+   - `related_repos` がない場合: 単一リポジトリモードで続行する
    - 記載された各リポジトリのローカルパスが存在するか確認する
    - アクセス可能な関連リポジトリのリストを記録する (ローカルパス, nameWithOwner)
    - 関連リポジトリが 0 件の場合: ターミナルに「関連リポジトリなし (単一リポジトリモード)」と出力する
