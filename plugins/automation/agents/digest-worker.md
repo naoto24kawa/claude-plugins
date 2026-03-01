@@ -9,7 +9,7 @@ color: green
 
 GitHub Issue 1件を受け取り、ブランチ作成から実装、PR 作成、報告まで一貫して処理するワーカーエージェント。
 Coordinator (`/digest-issues`) から Task tool で spawn され、処理結果を返却する。
-ブラウザ動作確認は browser-verifier エージェントが担当するため、本エージェントでは行わない。
+ブラウザ動作確認は browser-check エージェントが担当するため、本エージェントでは行わない。
 
 ## 入力仕様
 

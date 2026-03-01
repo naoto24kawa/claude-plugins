@@ -193,13 +193,13 @@ for each successful PR:
    - `git branch --show-current` で確認し、main にいない場合は `git checkout main` を実行
    - `git status --porcelain` で dirty state を確認し、空でない場合は `git stash` してから `git checkout main` を実行
 
-2. Task tool で browser-verifier Agent を起動する:
-   - subagent_type: "general-purpose"
+2. Task tool で browser-check Agent を起動する:
+   - subagent_type: "automation:browser-check"
    - prompt は以下のテンプレートに従って構築する:
 
    ```
-   あなたは browser-verifier エージェントです。
-   まず Read tool で `${CLAUDE_PLUGIN_ROOT}/agents/browser-verifier.md` を読み、その指示に従って処理してください。
+   あなたは browser-check エージェントです。
+   まず Read tool で `${CLAUDE_PLUGIN_ROOT}/agents/browser-check.md` を読み、その指示に従って処理してください。
 
    ## 対象 PR
 
@@ -211,18 +211,21 @@ for each successful PR:
    - type: <type>
    - verify_targets: |
        <Issue の内容から推測される確認対象の画面・操作の概要>
+   - manage_server: true
+   - auto_fix: true
    ```
 
-3. Verifier の結果を受け取る (browser_check, skip_reason, failure_detail, screens_checked)
-   - Verifier の出力から `## browser-verifier result` セクションをパースする
-   - パースに失敗した場合は browser_check: SKIP として扱う
+3. 結果を受け取る
+   - 出力から `## browser-check result` セクションをパースする
+   - パースに失敗した場合は status: skip として扱う
 
 4. 結果を成功リストの該当 PR に紐づけて記録する (browser_check フィールドを追加)
 
 5. 結果に応じてターミナルに進捗を出力する:
-   - OK: "V PR #<pr_number> ブラウザ確認 OK (<screens_checked> 画面)"
-   - NG: "X PR #<pr_number> ブラウザ確認 NG: <failure_detail>"
-   - SKIP: "- PR #<pr_number> ブラウザ確認スキップ: <skip_reason>"
+   - success: "V PR #<pr_number> ブラウザ確認 OK (<checked_items> 項目)"
+   - partial: "! PR #<pr_number> ブラウザ確認 一部NG: <failure_reason>"
+   - failure: "X PR #<pr_number> ブラウザ確認 失敗: <failure_reason>"
+   - skip: "- PR #<pr_number> ブラウザ確認スキップ: <skip_reason>"
 
 6. 次の PR へ進む
 
