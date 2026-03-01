@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.17.0",
-  "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, notification, and specification generation plugins for development workflows",
+  "version": "3.18.0",
+  "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, notification, specification generation, and Issue-to-PR automation plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
@@ -94,6 +94,17 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/spec",
+      "category": "productivity"
+    },
+    {
+      "name": "issue-to-pr",
+      "description": "GitHub Issue auto-classification, implementation, and PR creation workflow automation with browser verification and screenshot integration",
+      "version": "0.1.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/issue-to-pr",
       "category": "productivity"
     }
   ]
