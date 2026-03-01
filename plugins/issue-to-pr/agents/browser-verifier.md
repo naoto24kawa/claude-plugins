@@ -23,11 +23,21 @@ Coordinator から prompt で以下の情報が渡される:
 
 ## 初期化
 
+### 設定ファイルの読み込み
+
+`.claude/issue-to-pr.local.json` を Read tool で読み、環境固有の設定を取得する:
+
+- `dev_server_port` - dev サーバーポート
+- `test_user.email` / `test_user.password` - テストユーザー認証情報
+- `graphql_endpoint` - GraphQL エンドポイント
+
+設定ファイルが存在しない場合は CLAUDE.md から従来通り読み取る (後方互換)。
+
+### CLAUDE.md の読み込み
+
 CLAUDE.md を Read tool で読み、以下の情報を特定して記憶する:
 
-- dev サーバー起動コマンドとポート番号
-- テストユーザーの認証情報 (メール、パスワード)
-- GraphQL エンドポイント
+- dev サーバー起動コマンド (設定ファイルにないもの)
 
 Playwright MCP ツールを ToolSearch で検索し、利用可能か確認する:
 
@@ -57,7 +67,7 @@ gh pr checkout <pr_number>
 
 ### バックエンド接続確認
 
-CLAUDE.md に記載の GraphQL エンドポイント (例: `http://localhost:8089/graphql`) に curl でリクエストを送る。
+設定ファイルの `graphql_endpoint` (または CLAUDE.md に記載の GraphQL エンドポイント) に curl でリクエストを送る。
 最低2回はリトライし、いずれも失敗した場合のみ「未接続」と判断する。
 
 ```bash
@@ -69,7 +79,7 @@ for i in 1 2; do curl -s -o /dev/null -w "%{http_code}" http://localhost:<backen
 
 ### dev サーバー起動
 
-CLAUDE.md から特定した dev コマンドでサーバーをバックグラウンド起動する。
+CLAUDE.md から特定した dev コマンドで、設定ファイルの `dev_server_port` のポートでサーバーをバックグラウンド起動する。
 MEMORY.md に dev サーバーの起動方法が記載されている場合はそちらを優先する。
 
 サーバーが HTTP 200 を返すまで curl でポーリングする (最大30秒)。
@@ -81,7 +91,7 @@ Coordinator から渡された verify_targets と issue_body から確認すべ�
 
 ### ログイン (認証が必要な場合)
 
-CLAUDE.md から特定したテストユーザー認証情報を使用する。
+設定ファイルの `test_user` (または CLAUDE.md から特定した認証情報) を使用する。
 
 - `browser_navigate` でログインページに遷移
 - `browser_snapshot` でページの ref を取得

@@ -27,11 +27,21 @@ Coordinator から prompt で以下の情報が渡される:
 
 処理開始時に以下を実行し、プロジェクト固有の情報を取得する。
 
+### 設定ファイルの読み込み
+
+`.claude/issue-to-pr.local.json` を Read tool で読み、環境固有の設定を取得する:
+
+- `slack_channel` - Slack 通知先チャンネル ID
+- `test_command` - テスト実行コマンド
+
+設定ファイルが存在しない場合は CLAUDE.md から従来通り読み取る (後方互換)。
+
+### CLAUDE.md の読み込み
+
 CLAUDE.md を Read tool で読み、以下の情報を特定して記憶する:
 
-- テスト実行コマンド
 - 開発規約 (TypeScript, React, CSS 等)
-- 通知設定セクションの Slack チャンネル ID (存在する場合)
+- プロジェクト構成・フォルダ構造
 
 CLAUDE.md の「関連リポジトリ」セクションを確認する。Coordinator から渡された related_repos のローカルパスを使用する。関連リポジトリがある場合は、各リポジトリの CLAUDE.md も Read tool で読み、開発規約・テストコマンド等を記憶する。
 
@@ -72,7 +82,7 @@ slug は Issue タイトルから英語の短縮形を生成する。日本語�
 
 ### 検証
 
-- CLAUDE.md に記載のテストコマンドでテストを実行し、全テストが pass することを確認する。superpowers プラグインがインストールされている場合は superpowers:verification-before-completion スキルに従う
+- 設定ファイルの `test_command` (または CLAUDE.md に記載のテストコマンド) でテストを実行し、全テストが pass することを確認する。superpowers プラグインがインストールされている場合は superpowers:verification-before-completion スキルに従う
 - 関連リポジトリ: 各リポジトリの CLAUDE.md に記載のテストコマンドも実行する
 - TypeScript の型チェックでエラーがないことを確認する
 - Issue の要件を満たしていることを確認する
@@ -109,8 +119,8 @@ Issue の処理完了直後に、以下の報告を全て行ってから結果�
 
 #### Slack 通知
 
-Slack Bot MCP が利用可能で、かつ初期化で CLAUDE.md の通知設定セクションから Slack チャンネル ID を取得できた場合のみ通知する。
-通知設定セクションが存在しない場合は Slack 通知をスキップする。
+Slack Bot MCP が利用可能で、かつ初期化で設定ファイルから `slack_channel` を取得できた場合のみ通知する。
+設定ファイルに `slack_channel` がない場合は Slack 通知をスキップする。
 
 成功時のメッセージ:
 
@@ -173,7 +183,7 @@ Bot MCP が利用不可の場合はターミナル出力のみとする。
 2 回リトライしても解決しない場合は以下を行う:
 
 - GitHub Issue に失敗コメントを投稿する (`gh issue comment <number> --body <body>`)
-- 初期化で Slack チャンネル ID を取得できていれば失敗通知を送信する
+- 初期化で設定ファイルから `slack_channel` を取得できていれば失敗通知を送信する
 - Coordinator に failure の出力仕様で結果を返す (main への復帰は「main に戻る」セクションで行う)
 
 ### 失敗報告のテンプレート

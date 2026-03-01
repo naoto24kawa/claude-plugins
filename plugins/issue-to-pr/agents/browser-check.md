@@ -70,13 +70,15 @@ PR 本文から Test Plan セクションを抽出する:
 
 ブラウザ検証対象が 0 件の場合、success (checked_items: 0) を出力して終了する。
 
-### CLAUDE.md から設定情報を取得
+### 設定情報の取得
 
-Read tool で CLAUDE.md を読み、以下を取得する:
+`.claude/issue-to-pr.local.json` を Read tool で読み、環境固有の設定を取得する:
 
-- dev サーバーポート (デフォルト: 9081)
-- テストユーザー認証情報 (email, password)
-- GraphQL エンドポイント
+- `dev_server_port` - dev サーバーポート (デフォルト: 9081)
+- `test_user.email` / `test_user.password` - テストユーザー認証情報
+- `graphql_endpoint` - GraphQL エンドポイント
+
+設定ファイルが存在しない場合は CLAUDE.md から従来通り読み取る (後方互換)。
 
 ### Playwright スクリプトの生成と実行
 

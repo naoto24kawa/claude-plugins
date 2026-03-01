@@ -120,7 +120,7 @@ AskUserQuestion で以下を確認する:
   - 推奨: <recommendation>
   処理者: Claude Code /digest-issues
   ```
-- Slack 通知: Slack Bot MCP が利用可能で、かつ CLAUDE.md の通知設定セクションに Slack チャンネル ID がある場合のみ通知する
+- Slack 通知: Slack Bot MCP が利用可能で、かつ `.claude/issue-to-pr.local.json` に `slack_channel` がある場合のみ通知する
   テンプレート: `:fast_forward: *#<number> <title>* スキップ - 理由: <skip_reason>`
 - Bot MCP が利用不可、またはチャンネル ID がない場合はターミナル出力のみ
 
