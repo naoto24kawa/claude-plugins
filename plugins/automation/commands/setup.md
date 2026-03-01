@@ -1,16 +1,16 @@
 ---
-description: 'issue-to-pr プラグインの設定ファイルをセットアップする'
+description: 'automation プラグインの設定ファイルをセットアップする'
 ---
 
-# issue-to-pr セットアップ
+# automation セットアップ
 
-`.claude/issue-to-pr.local.json` を対話的に作成・更新する。
+`.claude/automation.local.json` を対話的に作成・更新する。
 
 ## 手順
 
 ### 1. 既存設定の確認
 
-`.claude/issue-to-pr.local.json` を Read tool で読む。
+`.claude/automation.local.json` を Read tool で読む。
 
 - ファイルが存在する場合: 現在の設定を表示し、「更新しますか?」と確認する
 - ファイルが存在しない場合: 新規作成として進む
@@ -44,7 +44,7 @@ AskUserQuestion で以下を一括確認する。CLAUDE.md から検出できた
 
 `.claude/` ディレクトリが存在しない場合は作成する。
 
-確認した値で `.claude/issue-to-pr.local.json` を Write tool で書き込む:
+確認した値で `.claude/automation.local.json` を Write tool で書き込む:
 
 ```json
 {
@@ -66,7 +66,7 @@ AskUserQuestion で以下を一括確認する。CLAUDE.md から検出できた
 
 ### 5. .gitignore の確認
 
-`.gitignore` を Read tool で読み、`.claude/*.local.json` または `.claude/issue-to-pr.local.json` が含まれているか確認する。
+`.gitignore` を Read tool で読み、`.claude/*.local.json` または `.claude/automation.local.json` が含まれているか確認する。
 
 - 含まれていない場合: `.gitignore` に `.claude/*.local.json` を追加する
 - 含まれている場合: そのまま

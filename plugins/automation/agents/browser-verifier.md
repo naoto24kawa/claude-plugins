@@ -25,7 +25,7 @@ Coordinator から prompt で以下の情報が渡される:
 
 ### 設定ファイルの読み込み
 
-`.claude/issue-to-pr.local.json` を Read tool で読み、環境固有の設定を取得する:
+`.claude/automation.local.json` を Read tool で読み、環境固有の設定を取得する:
 
 - `dev_server_port` - dev サーバーポート
 - `test_user.email` / `test_user.password` - テストユーザー認証情報

@@ -33,7 +33,7 @@ $ARGUMENTS を以下のルールでパースする:
    - 検索結果の PR 本文を `\b(closes|fixes|resolves)\s+#<number>\b` で再検証し、誤マッチを除外する
 5. 既に PR が存在する (open or merged) Issue は「PR 済み」としてスキップリストに入れる
 6. 関連リポジトリを検出する
-   - `.claude/issue-to-pr.local.json` を Read tool で読み、`related_repos` から nameWithOwner に対応するローカルパスを取得する
+   - `.claude/automation.local.json` を Read tool で読み、`related_repos` から nameWithOwner に対応するローカルパスを取得する
    - `related_repos` がない場合: 単一リポジトリモードで続行する
    - 記載された各リポジトリのローカルパスが存在するか確認する
    - アクセス可能な関連リポジトリのリストを記録する (ローカルパス, nameWithOwner)
@@ -119,7 +119,7 @@ AskUserQuestion で以下を確認する:
   - 推奨: <recommendation>
   処理者: Claude Code /digest-issues
   ```
-- Slack 通知: Slack Bot MCP が利用可能で、かつ `.claude/issue-to-pr.local.json` に `slack_channel` がある場合のみ通知する
+- Slack 通知: Slack Bot MCP が利用可能で、かつ `.claude/automation.local.json` に `slack_channel` がある場合のみ通知する
   テンプレート: `:fast_forward: *#<number> <title>* スキップ - 理由: <skip_reason>`
 - Bot MCP が利用不可、またはチャンネル ID がない場合はターミナル出力のみ
 

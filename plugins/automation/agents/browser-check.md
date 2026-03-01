@@ -72,7 +72,7 @@ PR 本文から Test Plan セクションを抽出する:
 
 ### 設定情報の取得
 
-`.claude/issue-to-pr.local.json` を Read tool で読み、環境固有の設定を取得する:
+`.claude/automation.local.json` を Read tool で読み、環境固有の設定を取得する:
 
 - `dev_server_port` - dev サーバーポート (デフォルト: 9081)
 - `test_user.email` / `test_user.password` - テストユーザー認証情報

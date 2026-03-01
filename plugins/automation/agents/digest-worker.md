@@ -29,7 +29,7 @@ Coordinator から prompt で以下の情報が渡される:
 
 ### 設定ファイルの読み込み
 
-`.claude/issue-to-pr.local.json` を Read tool で読み、環境固有の設定を取得する:
+`.claude/automation.local.json` を Read tool で読み、環境固有の設定を取得する:
 
 - `slack_channel` - Slack 通知先チャンネル ID
 - `test_command` - テスト実行コマンド
