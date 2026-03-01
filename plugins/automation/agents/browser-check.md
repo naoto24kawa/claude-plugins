@@ -202,7 +202,7 @@ gh pr edit <pr_number> --body-file /tmp/browser-check-pr<pr_number>/body.md
 
 ### pr-screenshots エージェントで description にスクショ統合
 
-Agent tool で pr-screenshots エージェントを spawn する:
+Task tool で pr-screenshots エージェントを spawn する:
 
 ```
 あなたは pr-screenshots エージェントです。

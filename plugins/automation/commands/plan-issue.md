@@ -1,5 +1,6 @@
 ---
 description: 'GitHub Issueを対話的に検討し実装計画を作成する'
+argument-hint: '#issue-number'
 ---
 
 # Issue検討 (plan-issue)
@@ -25,14 +26,26 @@ $ARGUMENTS を以下のルールでパースする:
 
 ## 初期化
 
+### 設定ファイルの読み込み
+
+`.claude/automation.local.json` を Read tool で読み、環境固有の設定を取得する:
+
+- `slack_channel` - Slack 通知先チャンネル ID
+- `test_command` - テスト実行コマンド
+- `related_repos` - 関連リポジトリ (nameWithOwner: ローカルパス)
+
+### CLAUDE.md の読み込み
+
 CLAUDE.md を Read tool で読み、以下の情報を特定して記憶する:
 
 - プロジェクト構成 (ディレクトリ構造、技術スタック)
 - 開発規約
-- テストコマンド
-- 通知設定セクションの Slack チャンネル ID (存在する場合)
 
-Additional working directories が設定されている場合は、関連リポジトリの CLAUDE.md も読む。
+### 関連リポジトリの確認
+
+設定ファイルの `related_repos` にリポジトリがある場合は、各リポジトリの CLAUDE.md も Read tool で読み、開発規約・プロジェクト構成を記憶する。
+
+### Slack MCP の確認
 
 `mcp__slack-bot__slack_bot_post_message` ツールが利用可能か ToolSearch で確認する。
 
@@ -58,7 +71,7 @@ Issue の内容から関連するコードを調査する:
 
 - CLAUDE.md のプロジェクト構成を参照し、関連ディレクトリを特定する
 - Glob / Grep で関連ファイルを探索する
-- Additional working directories がある場合はそちらも調査する
+- 設定ファイルの `related_repos` にリポジトリがある場合はそちらも調査する
 - 関連ファイルの概要を把握する (全文は読まない、構造と役割を理解する)
 
 ## Phase 1: 分析 + アプローチ提案
@@ -150,8 +163,8 @@ AskUserQuestion でアプローチを選択してもらう。
 
 ### Slack 通知
 
-Slack Bot MCP が利用可能で、かつ初期化で CLAUDE.md の通知設定セクションから Slack チャンネル ID を取得できた場合のみ通知する。
-通知設定セクションが存在しない場合は Slack 通知をスキップする。
+Slack Bot MCP が利用可能で、かつ `.claude/automation.local.json` に `slack_channel` がある場合のみ通知する。
+設定ファイルに `slack_channel` がない場合は Slack 通知をスキップする。
 
 テンプレート:
 ```

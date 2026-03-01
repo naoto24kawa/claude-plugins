@@ -1,5 +1,6 @@
 ---
 description: 'GitHub Issueを自動分類・実装・PR作成する'
+argument-hint: '[--max N] [--label LABEL] [#issue...]'
 ---
 
 # Issue自動消化 (digest-issues)
@@ -140,7 +141,7 @@ for each approved issue:
    - main にいない場合は `git checkout main` を実行
 
 2. Task tool で digest-worker Agent を起動する:
-   - subagent_type: "general-purpose"
+   - subagent_type: "automation:digest-worker"
    - prompt は以下のテンプレートに従って構築する:
 
    ```

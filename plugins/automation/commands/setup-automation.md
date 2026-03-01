@@ -27,18 +27,19 @@ CLAUDE.md を Read tool で読み、以下の値を推測する:
 
 ### 3. 対話的に設定値を確認
 
-AskUserQuestion で以下を一括確認する。CLAUDE.md から検出できた値はデフォルト候補として提示する。
+CLAUDE.md から検出できた値はデフォルト候補として提示する。AskUserQuestion は1回の呼び出しで最大4問のため、2回に分けて確認する。
 
-質問項目:
+AskUserQuestion (1回目) - 開発環境:
 
 1. **test_command** - テスト実行コマンド
 2. **dev_server_port** - dev サーバーポート
-3. **test_user** - テストユーザー (email / password)
-4. **graphql_endpoint** - GraphQL エンドポイント
-5. **slack_channel** - Slack 通知先チャンネル ID (空欄で通知なし)
-6. **related_repos** - 関連リポジトリ (nameWithOwner: localPath の組)
+3. **graphql_endpoint** - GraphQL エンドポイント
+4. **test_user** - テストユーザー (email / password)
 
-関連リポジトリが必要かを確認し、必要な場合は nameWithOwner とローカルパスを入力してもらう。
+AskUserQuestion (2回目) - 連携設定:
+
+1. **slack_channel** - Slack 通知先チャンネル ID (空欄で通知なし)
+2. **related_repos** - 関連リポジトリの有無 (ありの場合は nameWithOwner: localPath の組を入力してもらう)
 
 ### 4. 設定ファイルの書き込み
 
