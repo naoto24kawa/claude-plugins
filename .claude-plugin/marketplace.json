@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, notification, specification generation, and Issue-to-PR automation plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
@@ -9,36 +9,14 @@
   },
   "plugins": [
     {
-      "name": "review",
-      "description": "Comprehensive code review toolkit for TypeScript, Hono backend, React frontend, and architecture patterns with specialized review agents",
-      "version": "1.1.0",
+      "name": "automation",
+      "description": "GitHub Issue auto-classification, implementation, and PR creation workflow automation with browser verification and screenshot integration",
+      "version": "0.1.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"
       },
-      "source": "./plugins/review",
-      "category": "productivity"
-    },
-    {
-      "name": "claude",
-      "description": "Reviews Claude Code configuration files against official documentation with A-F graded reports and actionable recommendations",
-      "version": "2.1.3",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/claude",
-      "category": "development"
-    },
-    {
-      "name": "notion",
-      "description": "Notion integration skills for knowledge capture, meeting intelligence, research documentation, and spec-to-implementation workflows",
-      "version": "1.0.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/notion",
+      "source": "./plugins/automation",
       "category": "productivity"
     },
     {
@@ -50,28 +28,6 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/minio-plan-files",
-      "category": "productivity"
-    },
-    {
-      "name": "github",
-      "description": "GitHub workflow automation for creating structured Issues as specifications and Pull Requests as technical records with As-Is/To-Be documentation",
-      "version": "1.2.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/github",
-      "category": "productivity"
-    },
-    {
-      "name": "remote-chrome",
-      "description": "Remote Chrome E2E testing via SSH and tmux MCP. Run custom Playwright-core scripts on remote macOS for browser interaction, verification, and screenshot capture workflows.",
-      "version": "2.0.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/remote-chrome",
       "category": "productivity"
     },
     {
@@ -94,17 +50,6 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/spec",
-      "category": "productivity"
-    },
-    {
-      "name": "automation",
-      "description": "GitHub Issue auto-classification, implementation, and PR creation workflow automation with browser verification and screenshot integration",
-      "version": "0.1.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/automation",
       "category": "productivity"
     }
   ]
