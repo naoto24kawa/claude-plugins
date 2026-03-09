@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Claude Code用のプラグインマーケットプレースです。6つのプラグイン (review、claude、notion、github、minio-plan-files、observability) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計などを自動化します。
+Claude Code用のプラグインマーケットプレースです。7つのプラグイン (review、claude、notion、github、minio-plan-files、observability、dev-process) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計、開発プロセス基盤などを自動化します。
 
 ## アーキテクチャ
 
@@ -18,6 +18,7 @@ Claude Code用のプラグインマーケットプレースです。6つのプ�
 | github | 1.0.0 | 2 | 0 | productivity | GitHubワークフロー (Issue/PR作成) |
 | minio-plan-files | 1.0.0 | 6 | 0 | productivity | MinIO+ElasticMQ AIエージェント向けプラン共有キュー |
 | observability | 1.0.0 | 2 | 0 | productivity | 観測系設計セットアップ + 継続監査 |
+| dev-process | 1.0.0 | 3 | 0 | productivity | 開発プロセス基盤 (セットアップ/仕様同期/監査) |
 
 ### ディレクトリ構造
 
@@ -57,10 +58,15 @@ Claude Code用のプラグインマーケットプレースです。6つのプ�
     │       ├── plan-done/      # Agent: plan完了
     │       ├── plan-fail/      # Agent: plan失敗
     │       └── plan-status/    # ステータス確認 & retry
-    └── observability/          # 観測系設計プラグイン
+    ├── observability/          # 観測系設計プラグイン
+    │   └── skills/
+    │       ├── observability-setup/  # 初回セットアップ (パターン選択 + 設計確定)
+    │       └── observability-audit/  # 継続的な監査 (設計との整合性検査)
+    └── dev-process/            # 開発プロセス基盤プラグイン
         └── skills/
-            ├── observability-setup/  # 初回セットアップ (パターン選択 + 設計確定)
-            └── observability-audit/  # 継続的な監査 (設計との整合性検査)
+            ├── setup/          # プロジェクト初回セットアップ
+            ├── spec-sync/      # 仕様ドキュメント管理
+            └── process-audit/  # プロセス健全性監査
 ```
 
 ### Progressive Disclosure パターン
@@ -86,6 +92,7 @@ Claude Code用のプラグインマーケットプレースです。6つのプ�
 /plugin install notion@naoto24kawa-claude-plugins
 /plugin install github@naoto24kawa-claude-plugins
 /plugin install observability@naoto24kawa-claude-plugins
+/plugin install dev-process@naoto24kawa-claude-plugins
 ```
 
 ### スキルの実行例
@@ -116,6 +123,11 @@ Claude Code用のプラグインマーケットプレースです。6つのプ�
 # Observability系 (2スキル)
 /skill observability:observability-setup
 /skill observability:observability-audit
+
+# Dev Process系 (3スキル)
+/skill dev-process:dev-process-setup
+/skill dev-process:spec-sync
+/skill dev-process:process-audit
 ```
 
 ## 開発ワークフロー
