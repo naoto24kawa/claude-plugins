@@ -45,14 +45,26 @@ Read the context file and overview file specified in your task instructions firs
 Write to the output path specified in your task instructions.
 
 ```markdown
+---
+type: data-model
+title: "データモデル"
+area: system
+tags: [data-model]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+related_tables: []
+---
+
 # データモデル
 
-## 1. ER図
+## ER図
 (Mermaid erDiagram: relationship diagram of all entities)
 
-## 2. エンティティ詳細
+## エンティティ詳細
 
-### 2.1 {entity name}
+### {entity name}
 | カラム/フィールド | 型 | 制約 | 説明(推定) |
 |-----------------|---|------|-------------|
 
@@ -65,17 +77,23 @@ Write to the output path specified in your task instructions.
 
 (Repeat for all entities)
 
-## 3. データフロー概要
+## データフロー概要
 (Main data CRUD patterns)
 
-## 4. マイグレーション履歴サマリー
+## マイグレーション履歴サマリー
 (Only if migration files exist. Timeline of major changes)
 
-## 5. データソース情報
+## データソース情報
 - DB種別:
 - 接続情報の管理方法: (environment variable names, etc.)
 - ORM/クエリビルダー:
 ```
+
+**Frontmatter Rules:**
+- Replace `{TODAY}` with the current date in YYYY-MM-DD format
+- `area` should be `system` (this is a system-wide document)
+- Populate `related_tables` with all detected table/entity names
+- Number-prefixed section headings (e.g., `## 1. xxx`, `### 2.1 xxx`) are NOT used; use plain `## xxx`, `### xxx` instead
 
 **Quality Standards:**
 - Migration files are the most reliable source

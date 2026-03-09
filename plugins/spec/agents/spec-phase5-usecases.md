@@ -43,6 +43,17 @@ Read the overview file and architecture file specified in your task instructions
 Write to `{OUTPUT_DIR}/UC-{number}-{english-name}.md`:
 
 ```markdown
+---
+type: usecase
+title: "UC-{number}: {use case name}"
+area: <kebab-case-area>
+tags: [usecase]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+---
+
 # UC-{number}: {use case name}
 
 ## 概要
@@ -81,7 +92,7 @@ Write to `{OUTPUT_DIR}/UC-{number}-{english-name}.md`:
 
 **Output Format (Index file):**
 
-Write to `{OUTPUT_DIR}/_index.md`:
+Write to `{OUTPUT_DIR}/_index.md` (no frontmatter - internal index file):
 
 ```markdown
 # ユースケース一覧
@@ -89,6 +100,11 @@ Write to `{OUTPUT_DIR}/_index.md`:
 | UC番号 | ユースケース名 | アクター | 概要 |
 |--------|--------------|---------|------|
 ```
+
+**Frontmatter Rules:**
+- Replace `{TODAY}` with the current date in YYYY-MM-DD format
+- `area` should reflect the functional area this use case belongs to (e.g., `auth`, `job-management`)
+- Index files (`_index.md`) do NOT have frontmatter
 
 **Quality Standards:**
 - Use case granularity: "one unit where a user achieves a single purpose"

@@ -48,21 +48,33 @@ Read the context file and overview file specified in your task instructions firs
 Write to the output path specified in your task instructions.
 
 ```markdown
+---
+type: api
+title: "API仕様"
+area: system
+tags: [api]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+related_apis: []
+---
+
 # API仕様
 
-## 1. 概要
+## 概要
 - API種別: (REST / GraphQL / gRPC)
 - ベースURL: (estimated)
 - 認証方式:
 - 共通レスポンス形式:
 
-## 2. エンドポイント一覧
+## エンドポイント一覧
 | メソッド | パス | 概要 | 認証 | 定義箇所 |
 |---------|------|------|------|---------|
 
-## 3. エンドポイント詳細
+## 各エンドポイント詳細
 
-### 3.1 [METHOD] /path
+### [METHOD] /path
 - **概要**:
 - **認証**: Required/Not required
 - **ミドルウェア**: (applied middleware)
@@ -78,16 +90,27 @@ Write to the output path specified in your task instructions.
 
 (Repeat for all endpoints)
 
-## 4. 共通仕様
-### 4.1 エラーレスポンス形式
-### 4.2 ページネーション
-### 4.3 レート制限
-### 4.4 CORS設定
+## 共通仕様
+### エラーレスポンス形式
+### ページネーション
+### レート制限
+### CORS設定
 ```
 
 **Output Format (No API):**
 
 ```markdown
+---
+type: api
+title: "API仕様"
+area: system
+tags: [api]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+---
+
 # API仕様
 
 このプロジェクトはAPIを公開していません。
@@ -96,6 +119,11 @@ Write to the output path specified in your task instructions.
 ## 公開インターフェース
 (CLI arguments, library public functions, etc.)
 ```
+
+**Frontmatter Rules:**
+- Replace `{TODAY}` with the current date in YYYY-MM-DD format
+- Populate `related_apis` with all detected API paths
+- Number-prefixed section headings (e.g., `## 1. xxx`, `### 3.1 xxx`) are NOT used; use plain `## xxx`, `### xxx` instead
 
 **Quality Standards:**
 - Extract concrete request/response examples from test code when possible

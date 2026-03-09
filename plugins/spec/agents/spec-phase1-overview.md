@@ -45,29 +45,45 @@ Read the context file specified in your task instructions first (typically `_con
 Write to the output path specified in your task instructions.
 
 ```markdown
+---
+type: overview
+title: "システム概要"
+area: system
+tags: [overview]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+---
+
 # システム概要
 
-## 1. プロジェクトの目的
+## プロジェクトの目的
 (Problem this system solves, target users)
 
-## 2. 技術スタック
+## 技術スタック
 | カテゴリ | 技術 | バージョン |
 |---------|------|-----------|
 
-## 3. システム境界図
+## システム境界図
 (Mermaid graph: relationship between this system, external systems, and users)
 
-## 4. 主要機能の一覧
+## 主要機能の一覧
 | # | 機能名 | 概要 | エントリポイント |
 |---|--------|------|-----------------|
 
-## 5. 前提・制約
+## 前提・制約
 (Inferred prerequisites, known constraints)
 
-## 6. 用語集
+## 用語集
 | 用語 | 意味(推定) | コード上の表現 |
 |------|-------------|---------------|
 ```
+
+**Frontmatter Rules:**
+- Replace `{TODAY}` with the current date in YYYY-MM-DD format
+- `area` should be `system` (this is a system-wide document)
+- Number-prefixed section headings (e.g., `## 1. xxx`) are NOT used; use plain `## xxx` instead
 
 **Quality Standards:**
 - Mark uncertain information with `⚠️ 推定`

@@ -23,7 +23,7 @@ repair_history_rag: # true / false
 
 ## 構成図
 
-<!-- observability-setup が選択パターンに応じて埋める -->
+<!-- setup が選択パターンに応じて埋める -->
 
 ## 3差分の設計判断
 

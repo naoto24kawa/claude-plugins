@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, notification, specification generation, and Issue-to-PR automation plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
@@ -73,6 +73,17 @@
       },
       "source": "./plugins/dev-process",
       "category": "productivity"
+    },
+    {
+      "name": "plugin-dev",
+      "description": "Plugin development tools for diagnosing and fixing skill errors, validating plugin structure, and improving skill quality. Includes Stop hook for automatic error detection and specialized agents for syntax fixing, workflow debugging, and quality improvement.",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/plugin-dev",
+      "category": "development"
     }
   ]
 }

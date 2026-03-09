@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Claude Code用のプラグインマーケットプレースです。7つのプラグイン (review、claude、notion、github、minio-plan-files、observability、dev-process) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計、開発プロセス基盤などを自動化します。
+Claude Code用のプラグインマーケットプレースです。8つのプラグイン (review、claude、notion、github、minio-plan-files、observability、dev-process、plugin-dev) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計、開発プロセス基盤、プラグイン開発支援などを自動化します。
 
 ## アーキテクチャ
 
@@ -19,6 +19,7 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
 | minio-plan-files | 1.0.0 | 6 | 0 | productivity | MinIO+ElasticMQ AIエージェント向けプラン共有キュー |
 | observability | 1.0.0 | 2 | 0 | productivity | 観測系設計セットアップ + 継続監査 |
 | dev-process | 1.0.0 | 3 | 0 | productivity | 開発プロセス基盤 (セットアップ/仕様同期/監査) |
+| plugin-dev | 1.0.0 | 2 | 3 | development | スキルエラー自動検知・診断・修正 |
 
 ### ディレクトリ構造
 
@@ -60,13 +61,23 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
     │       └── plan-status/    # ステータス確認 & retry
     ├── observability/          # 観測系設計プラグイン
     │   └── skills/
-    │       ├── observability-setup/  # 初回セットアップ (パターン選択 + 設計確定)
+    │       ├── setup/              # 初回セットアップ (パターン選択 + 設計確定)
     │       └── observability-audit/  # 継続的な監査 (設計との整合性検査)
-    └── dev-process/            # 開発プロセス基盤プラグイン
-        └── skills/
-            ├── setup/          # プロジェクト初回セットアップ
-            ├── spec-sync/      # 仕様ドキュメント管理
-            └── process-audit/  # プロセス健全性監査
+    ├── dev-process/            # 開発プロセス基盤プラグイン
+    │   └── skills/
+    │       ├── setup/          # プロジェクト初回セットアップ
+    │       ├── spec-sync/      # 仕様ドキュメント管理
+    │       └── process-audit/  # プロセス健全性監査
+    └── plugin-dev/             # プラグイン開発ツール
+        ├── skills/
+        │   ├── setup/              # 導入確認・動作ガイド
+        │   └── skill-improver/     # スキルエラー診断・修正
+        ├── agents/
+        │   ├── plugindev-syntax-fixer.md
+        │   ├── plugindev-workflow-debugger.md
+        │   └── plugindev-quality-improver.md
+        └── hooks/
+            └── hooks.json          # Stop Hook (エラー検知)
 ```
 
 ### Progressive Disclosure パターン
@@ -93,6 +104,7 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
 /plugin install github@naoto24kawa-claude-plugins
 /plugin install observability@naoto24kawa-claude-plugins
 /plugin install dev-process@naoto24kawa-claude-plugins
+/plugin install plugin-dev@naoto24kawa-claude-plugins
 ```
 
 ### スキルの実行例
@@ -121,13 +133,17 @@ Claude Code用のプラグインマーケットプレースです。7つのプ�
 /skill github:create-pr
 
 # Observability系 (2スキル)
-/skill observability:observability-setup
+/skill observability:setup
 /skill observability:observability-audit
 
 # Dev Process系 (3スキル)
 /skill dev-process:dev-process-setup
 /skill dev-process:spec-sync
 /skill dev-process:process-audit
+
+# Plugin Dev系 (2スキル + 3エージェント)
+/skill plugin-dev:setup
+/skill plugin-dev:skill-improver
 ```
 
 ## 開発ワークフロー

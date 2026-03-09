@@ -42,17 +42,28 @@ Read the context file and overview file specified in your task instructions firs
 Write to the output path specified in your task instructions.
 
 ```markdown
+---
+type: architecture
+title: "アーキテクチャ・モジュール構造"
+area: system
+tags: [architecture]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+---
+
 # アーキテクチャ・モジュール構造
 
-## 1. アーキテクチャパターン
+## アーキテクチャパターン
 (Detected patterns: MVC, Clean Architecture, DDD, Layered, etc.)
 
-## 2. レイヤー構造
+## レイヤー構造
 (Mermaid graph: dependency direction between layers)
 
-## 3. モジュール一覧
+## モジュール一覧
 
-### 3.1 モジュール: {module name}
+### モジュール: {module name}
 - **パス**: (directory path)
 - **責務**: (role of this module)
 - **主要ファイル**: (3-5 representative files)
@@ -62,16 +73,21 @@ Write to the output path specified in your task instructions.
 
 (Repeat for all modules)
 
-## 4. モジュール依存関係図
+## モジュール依存関係図
 (Mermaid graph: inter-module dependencies)
 
-## 5. 横断的関心事
-### 5.1 認証・認可
-### 5.2 エラーハンドリング
-### 5.3 ロギング
-### 5.4 ミドルウェア/インターセプター
-### 5.5 設定管理
+## 横断的関心事
+### 認証・認可
+### エラーハンドリング
+### ロギング
+### ミドルウェア/インターセプター
+### 設定管理
 ```
+
+**Frontmatter Rules:**
+- Replace `{TODAY}` with the current date in YYYY-MM-DD format
+- `area` should be `system` (this is a system-wide document)
+- Number-prefixed section headings (e.g., `## 1. xxx`, `### 3.1 xxx`) are NOT used; use plain `## xxx`, `### xxx` instead
 
 **Quality Standards:**
 - Flag circular dependencies with `⚠️ 循環依存`

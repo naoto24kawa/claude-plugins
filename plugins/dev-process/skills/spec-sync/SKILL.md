@@ -162,4 +162,4 @@ Glob で `docs/specs/*.md` を検索し、各ファイルを Read して内容�
 ## リファレンスファイル (references/)
 
 - **`references/frontmatter-schema.md`** - docs/specs frontmatter の必須/オプションフィールド定義、doc_status 遷移ルール
-- **`references/spec-template.md`** - type 別 (feature, api, data-model, screen, batch, integration) の仕様ドキュメントテンプレート
+- **`references/spec-template.md`** - type 別 (feature, api, data-model, screen, batch, integration, overview, architecture, usecase, business-rules, non-functional) の仕様ドキュメントテンプレート

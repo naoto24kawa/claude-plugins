@@ -1,6 +1,6 @@
 ---
-name: observability-setup
-description: This skill should be used when the user asks to "観測系のセットアップをしたい", "observabilityを設定したい", "ログ/トレース設計を始めたい", "自己修復システムの観測系を構成したい", "observability-setupを実行したい", "パターンA/B/C/Dを選びたい", "Pino/OTelの導入方針を決めたい". プロジェクト初期にインフラ(AWS/CF)とアーキテクチャ(単一/マイクロ)を選択し、4パターンから観測系設計を確定して .docs/observability-design.md に出力する初回セットアップスキル。
+name: setup
+description: This skill should be used when the user asks to "観測系のセットアップをしたい", "observabilityを設定したい", "ログ/トレース設計を始めたい", "自己修復システムの観測系を構成したい", "observability setupを実行したい", "パターンA/B/C/Dを選びたい", "Pino/OTelの導入方針を決めたい". プロジェクト初期にインフラ(AWS/CF)とアーキテクチャ(単一/マイクロ)を選択し、4パターンから観測系設計を確定して .docs/observability-design.md に出力する初回セットアップスキル。
 allowed-tools: [Read, Write, Glob, Grep, AskUserQuestion]
 user-invocable: true
 ---

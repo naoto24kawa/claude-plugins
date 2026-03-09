@@ -11,8 +11,8 @@ user-invocable: true
 
 ## 前提条件
 
-- `observability-setup` で `.docs/observability-design.md` が生成済みであること
-- ファイルが存在しない場合、「先に `observability-setup` を実行して設計を確定してください」と案内して終了する
+- `setup` で `.docs/observability-design.md` が生成済みであること
+- ファイルが存在しない場合、「先に `setup` を実行して設計を確定してください」と案内して終了する
 - 非Node.jsプロジェクト(package.json が存在しない)の場合、LOG-001/TRACE-001 等のパッケージチェックをスキップし、代替の検査方法(import文の直接検索等)にフォールバックする
 
 ## ワークフロー

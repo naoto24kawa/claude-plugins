@@ -16,7 +16,7 @@
 ```
 plugins/observability/
 ├── skills/
-│   ├── observability-setup/       # 初回セットアップスキル
+│   ├── setup/       # 初回セットアップスキル
 │   │   ├── SKILL.md
 │   │   ├── reference/
 │   │   │   ├── pattern-a.md       # AWS x 単一アプリ
@@ -32,7 +32,7 @@ plugins/observability/
 │           └── audit-checklist.md  # 検査項目の詳細定義
 ```
 
-## スキル1: observability-setup
+## スキル1: setup
 
 ### 目的
 
@@ -96,7 +96,7 @@ repair_history_rag: true
 ```
 Step 1: 設計ドキュメント読み込み
   → .docs/observability-design.md の frontmatter をパース
-  → なければ「先に observability-setup を実行してください」で終了
+  → なければ「先に setup を実行してください」で終了
 
 Step 2: コード検査 (パターン共通)
   → Pino 導入チェック (package.json / import)
@@ -149,7 +149,7 @@ Pattern: A (AWS x 単一アプリ)
 ## 2スキル間の連携
 
 ```
-observability-setup (初回)
+setup (初回)
   → .docs/observability-design.md 出力
 
 observability-audit (繰り返し)
