@@ -14,6 +14,7 @@
 - 検査方法: Pino の設定ファイルを Grep で検索し、transport/prettifier 設定を確認
 - OK: 本番設定で JSON 出力
 - WARN: prettifier が本番設定に残っている
+- NG: Pino の設定が存在しない、または JSON 出力が無効化されている
 - 修正提案: NODE_ENV=production で prettifier を無効化
 
 ### LOG-003: severity 統一
