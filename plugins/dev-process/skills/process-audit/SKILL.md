@@ -61,13 +61,9 @@ git log --oneline -50
 
 `checklists/spec-coverage.md` に従い、以下を確認:
 
-```bash
-# docs/specs/ のファイル一覧
-ls docs/specs/*.md 2>/dev/null
-
-# 各ファイルの frontmatter から area を抽出
-grep -r "^area:" docs/specs/
-```
+- Glob で `docs/specs/*.md` のファイル一覧を取得
+- 各ファイルを Read し、frontmatter の `area` と `doc_status` を抽出
+- Grep でコードベースの機能領域を推定
 
 チェック:
 - コードの機能領域に対応する docs/specs/ ファイルがあるか
@@ -75,6 +71,10 @@ grep -r "^area:" docs/specs/
 - `doc_status: deprecated` のファイルがないか
 
 **Verification**: カバレッジ情報を集計した
+
+**Error Handling**:
+- docs/specs/ が存在しない場合: インフラ健全性 NG として報告し、`dev-process-setup` を案内
+- gh CLI 未認証: トレーサビリティ監査をスキップし、その旨をレポートに記載
 
 ### Step 5: レポート出力
 
@@ -135,3 +135,9 @@ grep -r "^area:" docs/specs/
 | C | 複数の不足、率 50-69% |
 | D | 多数の不足、率 30-49% |
 | F | 基盤が未導入、率 30% 未満 |
+
+## チェックリストファイル (checklists/)
+
+- **`checklists/infra-health.md`** - 必須ファイル存在確認、CLAUDE.md 内容チェック、Actions 有効性確認
+- **`checklists/traceability.md`** - PR closes 率、コミットメッセージ準拠率、追跡チェーン完全性
+- **`checklists/spec-coverage.md`** - area 網羅性、鮮度チェック (draft放置)、related 整合性

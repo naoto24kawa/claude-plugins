@@ -28,15 +28,11 @@ docs/specs/ のストック型仕様ドキュメントを管理する。3つの�
 
 ### Step 1: コードベース分析
 
-```bash
-# ディレクトリ構成の把握
-find . -type f -name "*.ts" -o -name "*.py" -o -name "*.go" -o -name "*.rs" | head -100
+Glob でソースファイルを検索し、ディレクトリ構成から機能領域を特定する:
 
-# 既存の docs/specs/ 確認
-ls docs/specs/ 2>/dev/null
-```
-
-Glob と Grep でコードベースの機能領域を洗い出す。
+- Glob で `src/**/*.ts`, `app/**/*.py`, `**/*.go` 等を検索
+- Glob で `docs/specs/*.md` の既存ファイルを確認
+- Grep でルーティング定義、モデル定義、主要な export を検索
 
 **Verification**: 機能領域の一覧が作成できた
 
@@ -55,6 +51,9 @@ Glob と Grep でコードベースの機能領域を洗い出す。
 ```
 
 **Verification**: ユーザーが area 一覧を承認した
+
+**Error Handling**:
+- area が検出できない場合: ユーザーに手動で機能領域を列挙してもらう
 
 ### Step 3: ドラフト生成
 
@@ -83,6 +82,9 @@ git diff main...HEAD --stat
 ```
 
 **Verification**: 変更されたファイルを把握した
+
+**Error Handling**:
+- main ブランチにいる場合: 直近のコミットから差分を取得 (`git diff HEAD~1`)
 
 ### Step 2: 影響する仕様の特定
 
@@ -113,13 +115,12 @@ git diff main...HEAD --stat
 
 ### Step 1: 全仕様ファイルの読み込み
 
-```bash
-ls docs/specs/*.md
-```
-
-各ファイルを Read して内容を把握する。
+Glob で `docs/specs/*.md` を検索し、各ファイルを Read して内容を把握する。
 
 **Verification**: 全ファイルを読み込んだ
+
+**Error Handling**:
+- docs/specs/ にファイルがない場合: モード A (初回生成) の実行を案内する
 
 ### Step 2: コード実態との比較
 
@@ -156,3 +157,8 @@ ls docs/specs/*.md
 - 仕様には「何がどうなっているか」を記述する
 - 「なぜそうなっているか」は PR/Issue/commit に残す
 - この分離により、仕様は事実として信頼でき、変更理由は追跡チェーンで辿れる
+
+## リファレンスファイル (references/)
+
+- **`references/frontmatter-schema.md`** - docs/specs frontmatter の必須/オプションフィールド定義、doc_status 遷移ルール
+- **`references/spec-template.md`** - type 別 (feature, api, data-model) の仕様ドキュメントテンプレート

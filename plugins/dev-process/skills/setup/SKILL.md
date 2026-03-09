@@ -35,24 +35,13 @@ user-invocable: true
 
 ### Step 1: プロジェクト分析
 
-以下を調査する:
+以下を Glob で調査する:
 
-```bash
-# 言語/フレームワーク検出
-ls package.json Cargo.toml go.mod pyproject.toml requirements.txt 2>/dev/null
-
-# 既存 CLAUDE.md
-ls CLAUDE.md 2>/dev/null
-
-# 既存テンプレート
-ls .github/ISSUE_TEMPLATE/ .github/PULL_REQUEST_TEMPLATE.md 2>/dev/null
-
-# docs/specs の有無
-ls docs/specs/ 2>/dev/null
-
-# GitHub Actions の有無
-ls .github/workflows/ 2>/dev/null
-```
+- 言語/フレームワーク検出: Glob で `package.json`, `Cargo.toml`, `go.mod`, `pyproject.toml` を検索
+- 既存 CLAUDE.md: Glob で `CLAUDE.md` を検索
+- 既存テンプレート: Glob で `.github/ISSUE_TEMPLATE/*`, `.github/PULL_REQUEST_TEMPLATE.md` を検索
+- docs/specs の有無: Glob で `docs/specs/*.md` を検索
+- GitHub Actions の有無: Glob で `.github/workflows/*.yml` を検索
 
 **Verification**: プロジェクトの現状が把握できた
 
@@ -105,13 +94,16 @@ mkdir -p .github/ISSUE_TEMPLATE
 
 ### Step 5: PR テンプレート生成
 
-`generators/pr-template.md` を Read し、`.github/PULL_REQUEST_TEMPLATE.md` に Write する。
+`generators/pr-template.md` (またはオーバーライド) を Read し、`.github/PULL_REQUEST_TEMPLATE.md` に Write する。
 
 ```bash
 mkdir -p .github
 ```
 
 **Verification**: `.github/PULL_REQUEST_TEMPLATE.md` が存在する
+
+**Error Handling**:
+- 既存テンプレートあり: ユーザーに上書き確認
 
 ### Step 6: GitHub Actions ワークフロー生成
 
@@ -138,28 +130,9 @@ mkdir -p docs/specs
 
 ### Step 8: ラベル体系の作成
 
-`generators/labels.md` を Read し、gh CLI でラベルを作成する。
+`generators/labels.md` (またはオーバーライド) を Read し、定義されたラベルを `gh label create --force` で作成する。
 
-```bash
-# type ラベル
-gh label create "type:implementation" --color "0E8A16" --description "実装タスク" --force
-gh label create "type:research" --color "D4C5F9" --description "調査タスク" --force
-gh label create "type:bug" --color "D73A4A" --description "バグ修正" --force
-gh label create "type:improvement" --color "A2EEEF" --description "改善" --force
-gh label create "type:documentation" --color "0075CA" --description "ドキュメント" --force
-
-# priority ラベル
-gh label create "priority:high" --color "B60205" --description "高優先度" --force
-gh label create "priority:medium" --color "FBCA04" --description "中優先度" --force
-gh label create "priority:low" --color "0E8A16" --description "低優先度" --force
-
-# status ラベル
-gh label create "status:ready" --color "0E8A16" --description "着手可能" --force
-gh label create "status:in-progress" --color "FBCA04" --description "作業中" --force
-gh label create "status:in-review" --color "D4C5F9" --description "レビュー中" --force
-```
-
-area ラベルはプロジェクト固有のため、ユーザーに確認してから作成する。
+area ラベルはプロジェクト固有のため、AskUserQuestion でユーザーに確認してから作成する。
 
 **Verification**: `gh label list` でラベルが存在する
 
@@ -188,3 +161,14 @@ area ラベルはプロジェクト固有のため、ユーザーに確認して
 ```
 
 **Verification**: 全生成物が配置されている
+
+## テンプレートファイル (generators/)
+
+各ステップで Read して使用するデフォルトテンプレート:
+
+- **`generators/claude-md-rules.md`** - CLAUDE.md に注入する開発プロセス規約
+- **`generators/issue-template.md`** - GitHub Issue フォームテンプレート (YAML)
+- **`generators/pr-template.md`** - Pull Request テンプレート
+- **`generators/actions-pr-check.md`** - PR 品質ゲート GitHub Actions ワークフロー
+- **`generators/actions-weekly.md`** - 週次プロセスチェック GitHub Actions ワークフロー
+- **`generators/labels.md`** - ラベル体系定義 (名前、色、説明)
