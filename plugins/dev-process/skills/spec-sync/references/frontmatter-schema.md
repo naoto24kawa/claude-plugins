@@ -4,7 +4,7 @@
 
 | フィールド | 型 | 説明 | 例 |
 |-----------|------|------|-----|
-| type | enum | ドキュメント種別 | feature, api, data-model, screen, batch, integration |
+| type | enum | ドキュメント種別 | `feature`, `api`, `data-model`, `screen`, `batch`, `integration` |
 | title | string | 日本語タイトル | "認証・認可" |
 | area | string | 機能領域 (英語kebab-case) | auth, job-management |
 | tags | string[] | タグ (英語kebab-case) | [api, authentication] |

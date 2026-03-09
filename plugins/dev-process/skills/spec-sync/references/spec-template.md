@@ -104,3 +104,126 @@ related_tables: []
 
 ## インデックス
 ```
+
+## type: screen
+
+```markdown
+---
+type: screen
+title: "<画面名>"
+area: <kebab-case>
+tags: [screen]
+doc_status: draft
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+related: []
+---
+
+# <画面名>
+
+## 概要
+
+<!-- この画面が何であるかを1-2文で -->
+
+## 画面一覧
+
+| 画面ID | 画面名 | パス | 説明 |
+|--------|--------|------|------|
+
+## 各画面詳細
+
+### <画面名>
+
+- レイアウト
+- 入力項目
+- アクション
+- バリデーション
+
+## 状態遷移
+
+<!-- 画面間遷移がある場合は Mermaid で記述 -->
+```
+
+## type: batch
+
+```markdown
+---
+type: batch
+title: "<バッチ名>"
+area: <kebab-case>
+tags: [batch]
+doc_status: draft
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+related: []
+---
+
+# <バッチ名>
+
+## 概要
+
+<!-- このバッチが何であるかを1-2文で -->
+
+## ジョブ一覧
+
+| ジョブID | ジョブ名 | スケジュール | 説明 |
+|----------|----------|-------------|------|
+
+## 各ジョブ詳細
+
+### <ジョブ名>
+
+- トリガー (cron/イベント/手動)
+- 入力データ
+- 処理内容
+- 出力データ
+- エラーハンドリング
+
+## リトライ・冪等性
+
+<!-- リトライ戦略と冪等性の保証方法 -->
+```
+
+## type: integration
+
+```markdown
+---
+type: integration
+title: "<連携名>"
+area: <kebab-case>
+tags: [integration]
+doc_status: draft
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+related: []
+related_apis: []
+---
+
+# <連携名>
+
+## 概要
+
+<!-- この外部連携が何であるかを1-2文で -->
+
+## 連携先一覧
+
+| 連携先 | プロトコル | 方向 | 説明 |
+|--------|-----------|------|------|
+
+## 各連携詳細
+
+### <連携先名>
+
+- 認証方式
+- エンドポイント/接続先
+- データフォーマット
+- リクエスト/レスポンス例
+
+## エラーハンドリング
+
+<!-- タイムアウト、リトライ、フォールバック -->
+
+## 制約・SLA
+
+<!-- レート制限、可用性要件 -->
+```

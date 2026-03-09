@@ -157,8 +157,9 @@ Glob で `docs/specs/*.md` を検索し、各ファイルを Read して内容�
 - 仕様には「何がどうなっているか」を記述する
 - 「なぜそうなっているか」は PR/Issue/commit に残す
 - この分離により、仕様は事実として信頼でき、変更理由は追跡チェーンで辿れる
+- 設計判断の経緯は `decisions/` ディレクトリ (ADR等) に記録し、仕様からは参照のみ行う
 
 ## リファレンスファイル (references/)
 
 - **`references/frontmatter-schema.md`** - docs/specs frontmatter の必須/オプションフィールド定義、doc_status 遷移ルール
-- **`references/spec-template.md`** - type 別 (feature, api, data-model) の仕様ドキュメントテンプレート
+- **`references/spec-template.md`** - type 別 (feature, api, data-model, screen, batch, integration) の仕様ドキュメントテンプレート
