@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Claude Code用のプラグインマーケットプレースです。4つのプラグイン (review、claude、notion、github) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフローなどを自動化します。
+Claude Code用のプラグインマーケットプレースです。6つのプラグイン (review、claude、notion、github、minio-plan-files、observability) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計などを自動化します。
 
 ## アーキテクチャ
 
@@ -17,6 +17,7 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
 | notion | 1.0.0 | 4 | 0 | productivity | Notion連携 |
 | github | 1.0.0 | 2 | 0 | productivity | GitHubワークフロー (Issue/PR作成) |
 | minio-plan-files | 1.0.0 | 6 | 0 | productivity | MinIO+ElasticMQ AIエージェント向けプラン共有キュー |
+| observability | 1.0.0 | 2 | 0 | productivity | 観測系設計セットアップ + 継続監査 |
 
 ### ディレクトリ構造
 
@@ -48,14 +49,18 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
     │   │   ├── create-issue/   # Issue作成 (仕様書)
     │   │   └── create-pr/      # PR作成 (技術記録)
     │   └── templates/          # Issue/PRテンプレート
-    └── minio-plan-files/       # MinIO+ElasticMQ プラン共有プラグイン
+    ├── minio-plan-files/       # MinIO+ElasticMQ プラン共有プラグイン
+    │   └── skills/
+    │       ├── minio-setup/    # 初回セットアップ
+    │       ├── plan-submit/    # Dispatcher: planをキューに投入
+    │       ├── plan-fetch/     # Agent: planを取得
+    │       ├── plan-done/      # Agent: plan完了
+    │       ├── plan-fail/      # Agent: plan失敗
+    │       └── plan-status/    # ステータス確認 & retry
+    └── observability/          # 観測系設計プラグイン
         └── skills/
-            ├── minio-setup/    # 初回セットアップ
-            ├── plan-submit/    # Dispatcher: planをキューに投入
-            ├── plan-fetch/     # Agent: planを取得
-            ├── plan-done/      # Agent: plan完了
-            ├── plan-fail/      # Agent: plan失敗
-            └── plan-status/    # ステータス確認 & retry
+            ├── observability-setup/  # 初回セットアップ (パターン選択 + 設計確定)
+            └── observability-audit/  # 継続的な監査 (設計との整合性検査)
 ```
 
 ### Progressive Disclosure パターン
@@ -80,6 +85,7 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
 /plugin install claude@naoto24kawa-claude-plugins
 /plugin install notion@naoto24kawa-claude-plugins
 /plugin install github@naoto24kawa-claude-plugins
+/plugin install observability@naoto24kawa-claude-plugins
 ```
 
 ### スキルの実行例
@@ -106,6 +112,10 @@ Claude Code用のプラグインマーケットプレースです。4つのプ�
 # GitHub系 (2スキル)
 /skill github:create-issue
 /skill github:create-pr
+
+# Observability系 (2スキル)
+/skill observability:observability-setup
+/skill observability:observability-audit
 ```
 
 ## 開発ワークフロー

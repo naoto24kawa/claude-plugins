@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "Code review, Claude Code configuration review, Notion integration, and GitHub workflow automation plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
@@ -61,6 +61,28 @@
         "email": "naoto24kawa@gmail.com"
       },
       "source": "./plugins/github",
+      "category": "productivity"
+    },
+    {
+      "name": "observability",
+      "description": "AI self-healing system observability design setup and continuous audit. Guides pattern selection (AWS/Cloudflare x single/microservices), confirms trace_id/repair design decisions, and audits code compliance against the design document.",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/observability",
+      "category": "productivity"
+    },
+    {
+      "name": "dev-process",
+      "description": "Development process infrastructure plugin. Sets up CLAUDE.md rules, Issue/PR templates, GitHub Actions quality gates, docs/specs structure, and provides AI-powered spec sync and process auditing for personal projects.",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/dev-process",
       "category": "productivity"
     }
   ]
