@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-Claude Code用のプラグインマーケットプレースです。8つのプラグイン (review、claude、notion、github、minio-plan-files、observability、dev-process、plugin-dev) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計、開発プロセス基盤、プラグイン開発支援などを自動化します。
+Claude Code用のプラグインマーケットプレースです。7つのプラグイン (review、claude、notion、github、minio-plan-files、observability、dev-process) を提供し、スキルとエージェントを組み合わせてコードレビュー、品質評価、GitHubワークフロー、観測系設計、開発プロセス基盤+仕様生成などを自動化します。
 
 ## アーキテクチャ
 
@@ -18,8 +18,8 @@ Claude Code用のプラグインマーケットプレースです。8つのプ�
 | github | 1.0.0 | 2 | 0 | productivity | GitHubワークフロー (Issue/PR作成) |
 | minio-plan-files | 1.0.0 | 6 | 0 | productivity | MinIO+ElasticMQ AIエージェント向けプラン共有キュー |
 | observability | 1.0.0 | 2 | 0 | productivity | 観測系設計セットアップ + 継続監査 |
-| dev-process | 1.0.0 | 3 | 0 | productivity | 開発プロセス基盤 (セットアップ/仕様同期/監査) |
-| plugin-dev | 1.0.0 | 2 | 3 | development | スキルエラー自動検知・診断・修正 |
+| dev-process | 2.0.0 | 5 | 9 | productivity | 開発プロセス基盤 + 仕様生成/更新/乖離検出/監査 |
+| plugin-dev | 1.0.0 | 2 | 2 | development | スキルエラー自動検知・診断・修正 |
 
 ### ディレクトリ構造
 
@@ -63,19 +63,22 @@ Claude Code用のプラグインマーケットプレースです。8つのプ�
     │   └── skills/
     │       ├── setup/              # 初回セットアップ (パターン選択 + 設計確定)
     │       └── observability-audit/  # 継続的な監査 (設計との整合性検査)
-    ├── dev-process/            # 開発プロセス基盤プラグイン
-    │   └── skills/
-    │       ├── setup/          # プロジェクト初回セットアップ
-    │       ├── spec-sync/      # 仕様ドキュメント管理
-    │       └── process-audit/  # プロセス健全性監査
+    ├── dev-process/            # 開発プロセス基盤 + 仕様管理プラグイン
+    │   ├── skills/
+    │   │   ├── setup/              # プロジェクト初回セットアップ
+    │   │   ├── spec-coordinator/   # 仕様書の初回生成 (9エージェント)
+    │   │   ├── spec-update/        # PR差分による仕様更新
+    │   │   ├── spec-drift/         # 仕様-コード乖離検出
+    │   │   └── process-audit/      # プロセス健全性監査
+    │   ├── agents/                 # 9つの仕様生成エージェント (Phase 0-8)
+    │   └── references/             # 共有リファレンス (frontmatter, templates)
     └── plugin-dev/             # プラグイン開発ツール
         ├── skills/
         │   ├── setup/              # 導入確認・動作ガイド
         │   └── skill-improver/     # スキルエラー診断・修正
         ├── agents/
         │   ├── plugindev-syntax-fixer.md
-        │   ├── plugindev-workflow-debugger.md
-        │   └── plugindev-quality-improver.md
+        │   └── plugindev-workflow-debugger.md
         └── hooks/
             └── hooks.json          # Stop Hook (エラー検知)
 ```
@@ -136,12 +139,14 @@ Claude Code用のプラグインマーケットプレースです。8つのプ�
 /skill observability:setup
 /skill observability:observability-audit
 
-# Dev Process系 (3スキル)
+# Dev Process系 (5スキル + 9エージェント)
 /skill dev-process:dev-process-setup
-/skill dev-process:spec-sync
+/skill dev-process:spec-coordinator
+/skill dev-process:spec-update
+/skill dev-process:spec-drift
 /skill dev-process:process-audit
 
-# Plugin Dev系 (2スキル + 3エージェント)
+# Plugin Dev系 (2スキル + 2エージェント)
 /skill plugin-dev:setup
 /skill plugin-dev:skill-improver
 ```
