@@ -1,7 +1,8 @@
 # Diagnosis Rules - エラー分類ルールと修正パターン
 
 skill-improver の Step 3 (Error Classification) で使用する診断ルール。
-検出されたエラーを 3 種類に分類し、適切な修正エージェントに委譲する。
+検出されたエラーを syntax / runtime の 2 種類に分類し、適切な修正エージェントに委譲する。
+品質問題 (Progressive Disclosure, description品質等) は skill-development や claude-config-review の範囲。
 
 ---
 
@@ -85,45 +86,13 @@ SKILL.md の YAML フロントマターや構造に関するエラー。
 
 ---
 
-### 3. quality - Standards Violation
+### Note: 品質問題について
 
-スキルは動作するが、品質基準を満たしていない。
-保守性やユーザー体験に影響する。
+スキルの品質問題 (Progressive Disclosure 違反、description品質、Verification/Error Handling 欠如等) は
+本スキルのスコープ外。以下のツールを案内する:
 
-**委譲先**: `plugindev-quality-improver`
-
-#### 検出パターンと修正方針
-
-| ID | 検出パターン | Severity | 自動修正 | 修正内容 |
-|----|------------|----------|---------|---------|
-| QUA-001 | SKILL.md が 500 行超過 | High | auto-split + user confirm (分割点) | Progressive Disclosure に従い reference/ へ分離 |
-| QUA-002 | 参照の深さが 1 階層を超過 (reference → 別ファイル → 更に別ファイル) | Medium | auto | 参照チェーンをフラット化 (1 階層に収める) |
-| QUA-003 | Progressive Disclosure が未適用 (長大な情報が SKILL.md に直接記述) | Medium | suggest | 分離候補セクションを提示 |
-| QUA-004 | `description` が短すぎる (50 文字未満) | Medium | auto | より具体的な description にリライト |
-| QUA-005 | `description` が長すぎる (1024 文字超過) | High | auto | 1024 文字以内に要約 |
-| QUA-006 | Verification セクションが存在しない | Medium | auto | 検証ステップのテンプレートを追加 |
-| QUA-007 | Error Handling が存在しない | Medium | auto | エラーハンドリングのテンプレートを追加 |
-| QUA-008 | テンプレートやサンプルが不足 | Low | suggest | テンプレート追加を提案 |
-| QUA-009 | `context:fork` が未使用 (複雑なスキルの場合) | Low | suggest (user confirm) | context:fork 適用箇所を提案 |
-| QUA-010 | `agents` が未活用 (マルチスペシャリストタスクの場合) | Low | suggest (user confirm) | エージェント分離の提案 |
-
-#### 検出ロジック
-
-```
-1. SKILL.md の行数カウント → 500 行超過なら QUA-001
-2. reference/ ファイルの内容を走査:
-   - 更に別ファイルへの Read 参照があるか → あれば QUA-002
-3. SKILL.md 内の各セクションの行数を計測:
-   - 単一セクションが 100 行を超え、reference/ に分離可能なら QUA-003
-4. description の文字数チェック:
-   - 50 文字未満 → QUA-004
-   - 1024 文字超過 → QUA-005
-5. "Verification" または "検証" セクションの有無 → 不在なら QUA-006
-6. "Error" または "エラー" ハンドリングセクションの有無 → 不在なら QUA-007
-7. templates/ ディレクトリまたはサンプルコードの有無 → 不在なら QUA-008
-8. ステップ数が 5 以上で context:fork 未使用 → QUA-009
-9. 3 種類以上の専門領域を扱うが agents 未定義 → QUA-010
-```
+- スキル作成・改善ガイド: `/skill plugin-dev:skill-development`
+- A-Fグレード品質レビュー: `/skill claude:claude-config-review`
 
 ---
 
@@ -140,12 +109,10 @@ SKILL.md の YAML フロントマターや構造に関するエラー。
 
 ```
 エラー検出
-  ├── スキルがロードできない? → Critical
-  ├── ワークフローが途中で停止する? → High
-  ├── 動作するが基準違反がある?
-  │     ├── 行数超過/description 超過 → High
-  │     └── その他の品質問題 → Medium
-  └── ベストプラクティス改善? → Low
+  ├── スキルがロードできない? → Critical (syntax)
+  ├── ワークフローが途中で停止する? → High (runtime)
+  ├── 軽微な構文/参照問題? → Medium (syntax/runtime)
+  └── 品質問題? → スコープ外 (skill-development / claude-config-review へ案内)
 ```
 
 ---
@@ -214,10 +181,10 @@ mcp__<server-name>__<tool-name>
   修正方法: auto
   委譲先: plugindev-workflow-debugger
 
-[Medium] QUA-006: Verification セクションが存在しない
-  場所: plugins/example/skills/my-skill/SKILL.md
-  検出値: (Verification/検証セクション未検出)
-  修正案: ワークフロー末尾に検証ステップを追加
+[Medium] RUN-004: 相対パスが壊れている
+  場所: plugins/example/skills/my-skill/SKILL.md:72
+  検出値: ./reference/old-name.md (ファイル名変更後の参照)
+  修正案: ./reference/new-name.md に修正
   修正方法: auto
-  委譲先: plugindev-quality-improver
+  委譲先: plugindev-workflow-debugger
 ```

@@ -4,22 +4,23 @@ description: |
   Diagnoses and fixes skill errors automatically. This skill should be used
   when the user asks to "スキルを修正したい", "skill error", "SKILL.mdのエラーを直して",
   "スキルが動かない", "frontmatterエラー", "参照ファイルが見つからない",
-  "skill-improverを実行したい", "スキルの品質を改善したい".
+  "skill-improverを実行したい".
   Triggered by skill-error-detector Stop hook or manually invoked.
-  Classifies errors into syntax/runtime/quality and delegates to specialized
-  agents: plugindev-syntax-fixer, plugindev-workflow-debugger, plugindev-quality-improver.
+  Classifies errors into syntax/runtime and delegates to specialized agents.
+  For quality issues, suggests using plugin-dev:skill-development or
+  claude:claude-config-review instead.
 allowed-tools: [Read, Edit, Write, Glob, Grep, AskUserQuestion, Agent]
 context: fork
 agents:
   - plugindev-syntax-fixer
   - plugindev-workflow-debugger
-  - plugindev-quality-improver
 user-invocable: true
 ---
 
 # Skill Improver
 
-スキルのエラーを診断し、自動修正する。3つの専門エージェントに委譲して対応する。
+スキルの構文エラーと実行時エラーを診断し、自動修正する。2つの専門エージェントに委譲して対応する。
+品質問題については `plugin-dev:skill-development` または `claude:claude-config-review` を案内する。
 
 ## 前提条件
 
@@ -50,7 +51,6 @@ user-invocable: true
   また、エラーの種類を選択してください:
   - syntax: YAMLフロントマター、構文エラー
   - runtime: ワークフロー実行時のエラー
-  - quality: 品質基準への違反
   - unknown: 不明(自動判定に委ねる)
   ```
 
@@ -75,9 +75,12 @@ user-invocable: true
 |------|------|-----|
 | syntax | YAMLフロントマター、マークダウン構文 | インデント不正、必須フィールド欠落、型不一致 |
 | runtime | ワークフロー実行時の問題 | 参照ファイル不在、ツール不足、ステップ間の矛盾 |
-| quality | 品質基準への非準拠 | 500行超過、description形式不正、命名規則違反 |
 
-3. 複数のエラータイプが該当する場合、重大度の高い順に処理する: syntax > runtime > quality
+品質問題 (500行超過、description形式不正等) が検出された場合は、以下を案内する:
+- スキル作成・改善: `/skill plugin-dev:skill-development`
+- 品質レビュー: `/skill claude:claude-config-review`
+
+3. 複数のエラータイプが該当する場合、重大度の高い順に処理する: syntax > runtime
 
 **検証**: エラーが1つ以上のタイプに分類されていること
 
@@ -89,7 +92,6 @@ user-invocable: true
 |-------------|-------------------|------|
 | syntax | plugindev-syntax-fixer | YAMLパース、必須フィールド、構文修正 |
 | runtime | plugindev-workflow-debugger | ワークフロー実行、参照整合性の修正 |
-| quality | plugindev-quality-improver | 品質基準準拠、Progressive Disclosure最適化 |
 
 エージェントへのプロンプトに以下を含める:
 
@@ -160,7 +162,7 @@ user-invocable: true
 ## Skill Improvement Report
 
 - **Target**: <plugin>:<skill>
-- **Error Type**: syntax / runtime / quality
+- **Error Type**: syntax / runtime
 - **Issues Found**: N
 - **Auto-Fixed**: M
 - **User-Confirmed Fixes**: K
