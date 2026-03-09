@@ -39,7 +39,7 @@ format: `<type>(<scope>): <subject>`
 
 ```yaml
 ---
-type: feature | api | data-model | screen | batch | integration
+type: feature | api | data-model | screen | batch | integration | overview | architecture | usecase | business-rules | non-functional
 title: "日本語タイトル"
 area: kebab-case-area
 tags: [kebab-case-tag]
@@ -51,6 +51,18 @@ related: []
 ```
 
 - コードに影響する仕様変更は PR にセットで含める
+
+## Notion 連携ルール
+
+- Notion は要望・調査・ナレッジの蓄積場所として使う (フロー型の起点)
+- GitHub Issue は実装タスクの管理場所 (フロー型の実行単位)
+- Notion → Issue の流れ:
+  - Notion で要望や調査をまとめる
+  - 実装判断が出たら GitHub Issue を作成し `refs notion-xxx` で紐付ける
+- Issue → Notion の流れ:
+  - 実装で得た知見やナレッジは Notion に記録する
+  - PR/Issue のリンクを Notion ページに貼る
+- トレーサビリティチェーン: Notion → Issue → commit → PR → docs/specs
 
 ## 言語使い分け
 
