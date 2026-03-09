@@ -1,0 +1,5 @@
+{
+  "name": "automation",
+  "version": "0.1.0",
+  "description": "GitHub Issue auto-classification, implementation, and PR creation workflow automation with browser verification and screenshot integration"
+}

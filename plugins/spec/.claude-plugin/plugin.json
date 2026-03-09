@@ -1,0 +1,5 @@
+{
+  "name": "spec",
+  "version": "1.1.0",
+  "description": "Automated specification document generation and incremental updates from codebases. Includes spec-coordinator for full generation using 9 specialized sub-agents, and spec-update for incremental updates from PR/branch diffs."
+}

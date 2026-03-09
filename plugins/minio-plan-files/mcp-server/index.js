@@ -9,9 +9,10 @@
  *   plan_status  - 各プレフィックスの件数とキュー状態を確認
  *   plan_submit  - planをMinIOにアップロードしてSQSキューに投入
  *   plan_fetch   - SQSから1件取得してダウンロード + pending/→processing/ + delete-message
- *   plan_done    - 処理完了 (processing/→done/)
- *   plan_fail    - 処理失敗 (processing/→failed/)
+ *   plan_done    - 処理完了 (processing/→done/) + 通知送信
+ *   plan_fail    - 処理失敗 (processing/→failed/) + 通知送信
  *   plan_retry   - failed/のplanをpending/に再投入
+ *   plan_wait    - 指定planの完了/失敗を通知キューで待機
  *
  * 環境変数:
  *   MINIO_SHARED_PLAN_FILES_HOST  MinIO/ElasticMQ のホスト (default: localhost)
@@ -51,6 +52,9 @@ const HOST = process.env.MINIO_SHARED_PLAN_FILES_HOST ?? "localhost";
 const S3_ENDPOINT = process.env.PLAN_S3_ENDPOINT ?? `http://${HOST}:9000`;
 const SQS_ENDPOINT = process.env.PLAN_SQS_ENDPOINT ?? `http://${HOST}:9324`;
 const QUEUE_URL = process.env.PLAN_QUEUE_URL ?? `${SQS_ENDPOINT}/000000000000/plans`;
+const NOTIFICATION_QUEUE_URL =
+  process.env.PLAN_NOTIFICATION_QUEUE_URL ??
+  `${SQS_ENDPOINT}/000000000000/plan-notifications`;
 const BUCKET = process.env.PLAN_BUCKET ?? "shared";
 const REGION = process.env.PLAN_AWS_REGION ?? "us-east-1";
 const ACCESS_KEY = process.env.PLAN_AWS_ACCESS_KEY_ID ?? "fileshare";
@@ -127,6 +131,26 @@ async function findSingleProcessingFile(project) {
 
 function errResult(text) {
   return { content: [{ type: "text", text }], isError: true };
+}
+
+async function sendNotification({ filename, project, status, reason, s3_key }) {
+  try {
+    await sqs.send(
+      new SendMessageCommand({
+        QueueUrl: NOTIFICATION_QUEUE_URL,
+        MessageBody: JSON.stringify({
+          filename,
+          project,
+          status,
+          reason: reason ?? null,
+          s3_key,
+          timestamp: new Date().toISOString(),
+        }),
+      })
+    );
+  } catch {
+    // 通知送信失敗はワーニングのみ (S3移動は既に完了しているため)
+  }
 }
 
 // ========== MCP サーバー ==========
@@ -232,6 +256,7 @@ server.tool(
           type: "text",
           text: [
             `Submitted: s3://${BUCKET}/${s3Key}`,
+            `Filename: ${fname}`,
             `Message ID: ${msgResp.MessageId}`,
           ].join("\n"),
         },
@@ -315,7 +340,7 @@ server.tool(
 // ---------- plan_done ----------
 server.tool(
   "plan_done",
-  "processing/のplanをdone/に移動する (S3ディレクトリ移動のみ)",
+  "processing/のplanをdone/にS3移動し、plan-notificationsキューに完了通知を送信する",
   {
     filename: z
       .string()
@@ -361,6 +386,15 @@ server.tool(
     // processing/ → done/
     await s3Move(processingKey, doneKey);
 
+    // 完了通知を送信
+    await sendNotification({
+      filename: fname,
+      project: proj,
+      status: "done",
+      reason: null,
+      s3_key: doneKey,
+    });
+
     return {
       content: [
         {
@@ -375,7 +409,7 @@ server.tool(
 // ---------- plan_fail ----------
 server.tool(
   "plan_fail",
-  "processing/のplanをfailed/に移動する (S3ディレクトリ移動のみ)",
+  "processing/のplanをfailed/にS3移動し、plan-notificationsキューに失敗通知を送信する",
   {
     filename: z
       .string()
@@ -405,6 +439,15 @@ server.tool(
 
     // processing/ → failed/
     await s3Move(processingKey, failedKey);
+
+    // 失敗通知を送信
+    await sendNotification({
+      filename: fname,
+      project: proj,
+      status: "failed",
+      reason,
+      s3_key: failedKey,
+    });
 
     return {
       content: [
@@ -468,6 +511,109 @@ server.tool(
     return {
       content: [{ type: "text", text: `再投入完了: ${count} 件` }],
     };
+  }
+);
+
+// ---------- plan_wait ----------
+server.tool(
+  "plan_wait",
+  "指定したplanの完了/失敗を待機する。通知キューをlong-pollし、対象filenameの通知が届くまで待つ (Dispatcher側)",
+  {
+    filenames: z
+      .array(z.string())
+      .describe("待機対象のファイル名リスト"),
+    project: z.string().optional().describe("プロジェクト名 (省略時: 自動取得)"),
+    timeout_seconds: z
+      .number()
+      .optional()
+      .describe("最大待機秒数 (default: 300, max: 600)"),
+  },
+  async ({ filenames, project, timeout_seconds = 300 }) => {
+    const proj = project ?? getDefaultProject();
+    const timeout = Math.min(timeout_seconds, 600);
+    const deadline = Date.now() + timeout * 1000;
+
+    // 結果を追跡
+    const results = new Map();
+    for (const f of filenames) {
+      results.set(f, { status: "pending" });
+    }
+
+    const remaining = () =>
+      [...results.values()].filter((r) => r.status === "pending").length;
+
+    while (remaining() > 0 && Date.now() < deadline) {
+      const waitTime = Math.min(20, Math.ceil((deadline - Date.now()) / 1000));
+      if (waitTime <= 0) break;
+
+      const msgResp = await sqs
+        .send(
+          new ReceiveMessageCommand({
+            QueueUrl: NOTIFICATION_QUEUE_URL,
+            MaxNumberOfMessages: 10,
+            WaitTimeSeconds: waitTime,
+          })
+        )
+        .catch(() => ({ Messages: [] }));
+
+      if (!msgResp.Messages?.length) continue;
+
+      for (const msg of msgResp.Messages) {
+        try {
+          const body = JSON.parse(msg.Body);
+          const fname = body.filename;
+
+          if (results.has(fname) && results.get(fname).status === "pending") {
+            results.set(fname, {
+              status: body.status,
+              reason: body.reason,
+              s3_key: body.s3_key,
+            });
+            // 対象の通知なので削除
+            await sqs
+              .send(
+                new DeleteMessageCommand({
+                  QueueUrl: NOTIFICATION_QUEUE_URL,
+                  ReceiptHandle: msg.ReceiptHandle,
+                })
+              )
+              .catch(() => {});
+          }
+          // 対象外の通知は削除しない (VisibilityTimeout後にキューに戻る)
+        } catch {
+          // パース失敗は無視
+        }
+      }
+    }
+
+    // 結果フォーマット
+    const lines = [`=== Plan Wait Result (${proj}) ===`];
+    let doneCount = 0;
+    let failedCount = 0;
+    let pendingCount = 0;
+
+    for (const [fname, result] of results) {
+      if (result.status === "done") {
+        lines.push(`  ${fname}: done (s3://${BUCKET}/${result.s3_key})`);
+        doneCount++;
+      } else if (result.status === "failed") {
+        lines.push(
+          `  ${fname}: failed (reason: ${result.reason ?? "unknown"}) (s3://${BUCKET}/${result.s3_key})`
+        );
+        failedCount++;
+      } else {
+        lines.push(`  ${fname}: pending (timeout - まだ完了していません)`);
+        pendingCount++;
+      }
+    }
+
+    const total = filenames.length;
+    lines.push("");
+    lines.push(
+      `完了: ${doneCount}/${total}, 失敗: ${failedCount}/${total}, 未完了: ${pendingCount}/${total}`
+    );
+
+    return { content: [{ type: "text", text: lines.join("\n") }] };
   }
 );
 

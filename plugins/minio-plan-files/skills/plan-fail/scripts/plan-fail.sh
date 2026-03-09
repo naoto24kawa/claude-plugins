@@ -70,5 +70,16 @@ log "S3: processing/ → failed/ に移動 (project: ${PROJECT}, 理由: ${reaso
 s3 mv "s3://${BUCKET}/${processing_key}" "s3://${BUCKET}/${failed_key}" \
   >&2 || die "S3 の移動に失敗しました"
 
+# ========== 失敗通知 ==========
+SQS_ENDPOINT="${PLAN_SQS_ENDPOINT:-http://${HOST}:9324}"
+NOTIFICATION_QUEUE_URL="${PLAN_NOTIFICATION_QUEUE_URL:-${SQS_ENDPOINT}/000000000000/plan-notifications}"
+REGION="${PLAN_AWS_REGION:-us-east-1}"
+
+log "通知送信: ${filename} → failed (理由: ${reason})"
+aws --endpoint-url "$SQS_ENDPOINT" --region "$REGION" sqs send-message \
+  --queue-url "$NOTIFICATION_QUEUE_URL" \
+  --message-body "{\"filename\":\"${filename}\",\"project\":\"${PROJECT}\",\"status\":\"failed\",\"reason\":\"${reason}\",\"s3_key\":\"${failed_key}\",\"timestamp\":\"$(date -u '+%Y-%m-%dT%H:%M:%SZ')\"}" \
+  >/dev/null 2>&1 || log "WARN: 通知送信に失敗しました (処理自体は記録済み)"
+
 log "失敗記録: ${filename} (理由: ${reason})"
 log "再投入するには: plan-status.sh retry"

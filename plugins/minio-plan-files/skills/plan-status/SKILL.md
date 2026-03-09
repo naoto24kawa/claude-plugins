@@ -67,5 +67,6 @@ sqssl get-queue-attributes \
 
 - 投入: `plan-submit` (pending/ にアップロード + キュー送信)
 - 取得: `plan-fetch` (pending/ → processing/)
-- 完了: `plan-done` (processing/ → done/)
-- 失敗: `plan-fail` (processing/ → failed/)
+- 完了: `plan-done` (processing/ → done/ + 完了通知送信)
+- 失敗: `plan-fail` (processing/ → failed/ + 失敗通知送信)
+- 待機: `plan-wait` (Dispatcher側で完了/失敗をリアルタイム検知)

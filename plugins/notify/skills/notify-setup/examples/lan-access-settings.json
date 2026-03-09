@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "NOTIFY_HOST=192.168.1.100 <NOTIFY_SH_PATH>"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "NOTIFY_HOST=192.168.1.100 <NOTIFY_SH_PATH>"
+          }
+        ]
+      }
+    ]
+  }
+}

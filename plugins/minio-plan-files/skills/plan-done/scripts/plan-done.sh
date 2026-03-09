@@ -81,4 +81,15 @@ log "S3: processing/ → done/ に移動 (project: ${PROJECT})"
 s3 mv "s3://${BUCKET}/${processing_key}" "s3://${BUCKET}/${done_key}" \
   >&2 || die "S3 の移動に失敗しました"
 
+# ========== 完了通知 ==========
+SQS_ENDPOINT="${PLAN_SQS_ENDPOINT:-http://${HOST}:9324}"
+NOTIFICATION_QUEUE_URL="${PLAN_NOTIFICATION_QUEUE_URL:-${SQS_ENDPOINT}/000000000000/plan-notifications}"
+REGION="${PLAN_AWS_REGION:-us-east-1}"
+
+log "通知送信: ${filename} → done"
+aws --endpoint-url "$SQS_ENDPOINT" --region "$REGION" sqs send-message \
+  --queue-url "$NOTIFICATION_QUEUE_URL" \
+  --message-body "{\"filename\":\"${filename}\",\"project\":\"${PROJECT}\",\"status\":\"done\",\"reason\":null,\"s3_key\":\"${done_key}\",\"timestamp\":\"$(date -u '+%Y-%m-%dT%H:%M:%SZ')\"}" \
+  >/dev/null 2>&1 || log "WARN: 通知送信に失敗しました (処理自体は完了済み)"
+
 log "完了: ${filename}"

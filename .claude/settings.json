@@ -6,10 +6,5 @@
         "repo": "naoto24kawa/claude-plugins"
       }
     }
-  },
-  "enabledPlugins": {
-    "review@naoto24kawa-claude-plugins": false,
-    "claude@naoto24kawa-claude-plugins": true,
-    "notion@naoto24kawa-claude-plugins": false
   }
 }
