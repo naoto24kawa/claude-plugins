@@ -46,37 +46,53 @@ Read the overview file and architecture file specified in your task instructions
 Write to the output path specified in your task instructions.
 
 ```markdown
+---
+type: business-rules
+title: "ビジネスルール・バリデーション"
+area: system
+tags: [business-rules]
+doc_status: draft
+created: {TODAY}
+updated: {TODAY}
+related: []
+---
+
 # ビジネスルール・バリデーション
 
-## 1. 定数・設定値
+## 定数・設定値
 | 定数名 | 値 | 用途(推定) | 定義箇所 |
 |--------|---|-------------|---------|
 
-## 2. ステータス遷移
+## ステータス遷移
 (Per major entity, Mermaid stateDiagram)
 
-### 2.1 {entity name} のステータス遷移
+### {entity name} のステータス遷移
 (Mermaid stateDiagram-v2)
 - Transition condition descriptions
 
-## 3. バリデーションルール
+## バリデーションルール
 
-### 3.1 {feature/entity name}
+### {feature/entity name}
 | フィールド | ルール | エラーメッセージ | 定義箇所 |
 |-----------|--------|----------------|---------|
 
-## 4. 権限・アクセス制御
+## 権限・アクセス制御
 | 操作 | 必要な権限/ロール | 条件 | 定義箇所 |
 |------|------------------|------|---------|
 
-## 5. 計算ロジック
+## 計算ロジック
 (Describe formulas and conditions concretely)
 
-## 6. 暗黙のビジネスルール
+## 暗黙のビジネスルール
 (Rules inferred from if-statements etc. that are not documented)
 | ルール | 推定理由 | コード箇所 |
 |--------|---------|-----------|
 ```
+
+**Frontmatter Rules:**
+- Replace `{TODAY}` with the current date in YYYY-MM-DD format
+- `area` should be `system` (this is a system-wide document)
+- Number-prefixed section headings (e.g., `## 1. xxx`, `### 2.1 xxx`) are NOT used; use plain `## xxx`, `### xxx` instead
 
 **Quality Standards:**
 - Hardcoded magic numbers are especially important. Extract all of them

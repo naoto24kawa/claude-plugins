@@ -215,10 +215,15 @@ jobs:
             const typeSections = {
               feature: ['概要', '機能一覧'],
               api: ['エンドポイント一覧', '共通仕様'],
-              'data-model': ['テーブル定義', 'リレーション'],
+              'data-model': ['ER図', 'エンティティ詳細'],
               screen: ['概要', '画面一覧'],
               batch: ['概要', 'ジョブ一覧'],
-              integration: ['概要', '連携先一覧']
+              integration: ['概要', '連携先一覧'],
+              overview: ['プロジェクトの目的', '技術スタック'],
+              architecture: ['アーキテクチャパターン', 'モジュール一覧'],
+              usecase: ['概要', 'アクター'],
+              'business-rules': ['定数・設定値', 'バリデーションルール'],
+              'non-functional': ['パフォーマンス', 'セキュリティ']
             };
 
             const warnings = [];
