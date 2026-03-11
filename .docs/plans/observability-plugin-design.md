@@ -15,21 +15,24 @@
 
 ```
 plugins/observability/
-├── skills/
-│   ├── setup/       # 初回セットアップスキル
-│   │   ├── SKILL.md
-│   │   ├── reference/
-│   │   │   ├── pattern-a.md       # AWS x 単一アプリ
-│   │   │   ├── pattern-b.md       # AWS x マイクロサービス
-│   │   │   ├── pattern-c.md       # CF x 単一アプリ
-│   │   │   ├── pattern-d.md       # CF x マイクロサービス
-│   │   │   └── pino-otel-setup.md # Pino/OTel導入リファレンス
-│   │   └── templates/
-│   │       └── observability-design.md  # 設計ドキュメントテンプレート
-│   └── observability-audit/       # 継続的な監査スキル
-│       ├── SKILL.md
-│       └── reference/
-│           └── audit-checklist.md  # 検査項目の詳細定義
+├── README.md                              # プラグインREADME (開発者向け)
+└── skills/
+    ├── setup/                             # 初回セットアップスキル
+    │   ├── SKILL.md
+    │   ├── reference/
+    │   │   ├── pattern-a.md               # AWS x 単一アプリ
+    │   │   ├── pattern-b.md               # AWS x マイクロサービス
+    │   │   ├── pattern-c.md               # CF x 単一アプリ
+    │   │   ├── pattern-d.md               # CF x マイクロサービス
+    │   │   ├── pino-otel-setup.md         # Pino/OTel導入リファレンス
+    │   │   ├── repair-log-schema.md       # RepairLog JSON + DB設計 + アラート閾値
+    │   │   └── repair-ai-prompt.md        # 修復AI SYSTEM_PROMPT + 承認フロー
+    │   └── templates/
+    │       └── observability-design.md    # 設計ドキュメントテンプレート
+    └── observability-audit/               # 継続的な監査スキル
+        ├── SKILL.md
+        └── reference/
+            └── audit-checklist.md         # 検査項目の詳細定義
 ```
 
 ## スキル1: setup

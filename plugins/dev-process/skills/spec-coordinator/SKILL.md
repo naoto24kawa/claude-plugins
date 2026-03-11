@@ -1,7 +1,8 @@
 ---
 name: spec-coordinator
 description: This skill should be used when the user asks to "仕様書を生成して", "specを作って", "仕様書を作成", "コードベースから仕様書", "リポジトリの仕様書を生成", "specification generation", "generate specs", "generate documentation from code", "reverse engineer specifications", "create spec documents from codebase", "仕様書の自動生成", "spec-coordinatorを使って". Orchestrates multi-phase specification document generation from codebases using 9 specialized sub-agents, producing system overview, architecture, data model, API specification, use cases, business rules, and non-functional requirements documents with consistency checking.
-allowed-tools: ["Task", "Bash", "Read", "Write"]
+allowed-tools: [Task, Bash, Read, Write, AskUserQuestion]
+user-invocable: true
 ---
 
 # Specification Document Generation Coordinator
@@ -23,7 +24,7 @@ This coordinator does not perform code analysis directly. Instead, dispatch spec
 Determine the output directory at the start of execution:
 
 1. If the user specifies a custom directory, use it
-2. Otherwise, use the default: `.docs/specs/`
+2. Otherwise, use the default: `docs/specs/`
 
 Create the output directory if it does not exist before launching any agents.
 
@@ -110,3 +111,9 @@ Consult **`../../references/phase-mapping.md`** for the full phase agent table (
 Example: "spec-phase3-datamodel を使って `{OUTPUT_DIR}/02-data-model.md` を再生成して"
 
 For incremental updates based on PR/branch diffs, use the `spec-update` skill instead.
+
+## リファレンスファイル
+
+- **`../../references/phase-mapping.md`** - Phase別エージェント一覧 (前提条件、出力先、プロンプト形式)
+- **`../../references/frontmatter-schema.md`** - docs/specs frontmatter の必須/オプションフィールド定義、doc_status 遷移ルール
+- **`../../references/spec-template.md`** - type 別の仕様ドキュメントテンプレート (各エージェントが出力時に参照)

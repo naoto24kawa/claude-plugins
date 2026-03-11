@@ -46,5 +46,5 @@ Git(スナップショット)
 ## 設計上の注意点
 
 - Workers TracingはOTLPエクスポートでAxiomに流す構成
-- Workers Tracing自体は2026年3月時点でオープンベータのため、本番投入前に安定性を確認する
+- Workers Tracing自体は2026年3月時点でオープンベータのため、本番投入前に安定性を確認する <!-- 最終確認: 2026-03 -->
 - 修復履歴ストアはSupabase(PostgreSQL)。Cloudflare WorkersからHTTPS経由で接続する

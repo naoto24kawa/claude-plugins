@@ -19,6 +19,7 @@ Dev Process Rules セクションに以下が含まれているか:
 - [ ] コミットメッセージ規約
 - [ ] PR ルール
 - [ ] docs/specs ルール
+- [ ] Notion 連携ルール (Notion を使用している場合)
 - [ ] 言語使い分け
 
 ## Actions 有効性チェック

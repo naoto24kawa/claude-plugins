@@ -84,4 +84,4 @@ Pino は Workers 環境では transport を使わず、stdout に出力する。
 ### Workers Tracing + Axiom OTLP エクスポート
 
 Workers Tracing API でスパンを作成し、Axiom の OTLP エンドポイントにエクスポートする。
-2026年3月時点でオープンベータ。本番投入前に安定性を確認すること。
+2026年3月時点でオープンベータ。本番投入前に安定性を確認すること。 <!-- 最終確認: 2026-03 -->

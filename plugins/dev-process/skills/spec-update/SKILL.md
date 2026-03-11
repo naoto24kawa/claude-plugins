@@ -1,7 +1,8 @@
 ---
 name: spec-update
 description: This skill should be used when the user asks to "PRの差分を仕様書に反映して", "spec-updateを実行して", "仕様書を差分更新して", "update specs from PR", "#51 の変更を仕様書に反映", "仕様書をPRに合わせて更新", "specを差分更新", "ブランチの差分から仕様書を更新", "仕様書を部分更新して", "incremental spec update". Analyzes PR or branch diffs to determine which specification phases are affected, then re-executes only those phase agents for incremental spec updates.
-allowed-tools: ["Task", "Bash", "Read", "Write"]
+allowed-tools: [Task, Bash, Read, Write, AskUserQuestion]
+user-invocable: true
 ---
 
 # Incremental Specification Update from PR/Branch Diffs
@@ -23,7 +24,7 @@ This skill does not perform code analysis directly. Instead, it retrieves diffs,
 
 Before starting, verify that specification documents already exist:
 
-1. Check that `.docs/specs/` (or the user-specified output directory) exists
+1. Check that `docs/specs/` (or the user-specified output directory) exists
 2. Check that `_context.md` and `00-overview.md` exist in the output directory
 3. If either is missing, inform the user: "仕様書がまだ生成されていません。先に `spec-coordinator` で全体生成を実行してください。"
 4. Stop execution if prerequisites are not met
@@ -33,7 +34,7 @@ Before starting, verify that specification documents already exist:
 Use the same output directory as spec-coordinator:
 
 1. If the user specifies a custom directory, use it
-2. Otherwise, use the default: `.docs/specs/`
+2. Otherwise, use the default: `docs/specs/`
 
 ## Input Resolution
 

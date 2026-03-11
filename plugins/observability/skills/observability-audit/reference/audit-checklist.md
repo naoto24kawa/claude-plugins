@@ -19,9 +19,10 @@
 
 ### LOG-003: severity 統一
 
-- 検査方法: ログ呼び出し箇所の level 指定を Grep
+- 検査方法: `console.log` / `console.error` の残存を Grep し、Pino の severity level (info/warn/error/fatal) の一貫性を確認
 - OK: info/warn/error/fatal が統一的に使用されている
 - WARN: console.log/console.error が混在
+- NG: ログ出力が存在しない、または severity レベルの使い分けがない
 - 修正提案: Pino の logger インスタンスに統一
 
 ### TRACE-001: OpenTelemetry SDK 導入
@@ -51,12 +52,14 @@
 
 - 検査方法: HTTP クライアント呼び出しで W3C Trace Context ヘッダを伝播しているか確認
 - OK: OTel の HTTP instrumentation が有効
+- WARN: OTel auto-instrumentation に依存しているが、手動 HTTP クライアント呼び出しが一部存在する
 - NG: 手動 HTTP 呼び出しで context が失われている
 
 ### TRACE-005: 分散トレース収集設定 (repair_input: distributed_trace の場合)
 
 - 検査方法: OTel エクスポーター設定を確認 (X-Ray / Axiom OTLP)
 - OK: エクスポーター設定が存在
+- WARN: エクスポーター設定はあるがエンドポイントが未設定またはダミー値
 - NG: エクスポーター未設定
 
 ## 設計原則チェック
@@ -78,5 +81,5 @@
 
 - 検査方法: repair_history_rag: true なら DB 接続設定を検索
 - OK: PostgreSQL / Supabase の接続設定が存在
-- WARN: 設計段階(接続設定は後で追加予定)
-- NG: repair_history_rag: true だが接続設定なし
+- WARN: repair_history_rag: true だが接続設定なし(設計段階として段階的改善を促す)
+- NG: repair_history_rag: false に設定すべきなのに true のまま放置されている

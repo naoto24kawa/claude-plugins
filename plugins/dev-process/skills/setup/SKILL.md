@@ -156,7 +156,7 @@ area ラベルはプロジェクト固有のため、AskUserQuestion でユー�
 
 次のステップ:
 1. 生成物を確認してコミットしてください
-2. docs/specs/ の初期コンテンツを作成するには spec-sync を実行してください
+2. docs/specs/ の初期コンテンツを作成するには spec-coordinator を実行してください
 3. プロセスの健全性を確認するには process-audit を実行してください
 ```
 

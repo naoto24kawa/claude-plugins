@@ -78,6 +78,8 @@ git log --oneline -50
 
 ### Step 5: レポート出力
 
+以下のフォーマットでレポートをユーザーに表示する (ファイル保存はしない)。
+
 ```markdown
 # Dev Process Audit Report
 

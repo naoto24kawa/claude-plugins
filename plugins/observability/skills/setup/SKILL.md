@@ -1,6 +1,6 @@
 ---
 name: setup
-description: This skill should be used when the user asks to "観測系のセットアップをしたい", "observabilityを設定したい", "ログ/トレース設計を始めたい", "自己修復システムの観測系を構成したい", "observability setupを実行したい", "パターンA/B/C/Dを選びたい", "Pino/OTelの導入方針を決めたい". プロジェクト初期にインフラ(AWS/CF)とアーキテクチャ(単一/マイクロ)を選択し、4パターンから観測系設計を確定して .docs/observability-design.md に出力する初回セットアップスキル。
+description: This skill should be used when the user asks to "観測系のセットアップをしたい", "observabilityを設定したい", "setup observability", "configure logging and tracing", "ログ/トレース設計を始めたい", "自己修復システムの観測系を構成したい", "observability setupを実行したい", "パターンA/B/C/Dを選びたい", "select observability pattern", "Pino/OTelの導入方針を決めたい". Interactively selects infrastructure (AWS/CF) and architecture (single/microservices) to determine one of 4 observability patterns, then outputs .docs/observability-design.md.
 allowed-tools: [Read, Write, Glob, Grep, AskUserQuestion]
 user-invocable: true
 ---
@@ -53,7 +53,7 @@ AI自己修復システムの観測系構成ガイドに基づく4パターン�
 決定したパターンの詳細を `./reference/pattern-{a,b,c,d}.md` から読み込んで提示する。
 構成図とツール構成を表示し、認識が合っているか確認を取る。
 
-### Step 3: 3差分の設計確定
+### Step 3: 設計差分の確定 (trace_id / repair_input / repair_key)
 
 パターンごとのデフォルト値を提示し、各項目でデフォルト採用またはカスタマイズを確認する。
 
@@ -109,14 +109,20 @@ AI自己修復システムの観測系構成ガイドに基づく4パターン�
 出力後の案内:
 - 設計ドキュメントの保存先パスを表示する
 - `observability-audit` で設計との整合性を検査できることを案内する
-- Pino/OTel の導入手順が必要な場合は `./reference/pino-otel-setup.md` を参照するよう案内する
+- 実装時の参照先を案内する:
+  - Pino/OTel 導入手順 → `./reference/pino-otel-setup.md`
+  - RepairLog スキーマ・DB設計・アラート閾値 → `./reference/repair-log-schema.md`
+  - 修復AI SYSTEM_PROMPT テンプレート・承認フロー → `./reference/repair-ai-prompt.md`
 
 ## reference ファイル
 
 | ファイル | 内容 | 読み込みタイミング |
 |---------|------|------------------|
+| `./templates/observability-design.md` | 設計ドキュメントのテンプレート | Step 5 でテンプレートとして使用 |
 | `./reference/pattern-a.md` | AWS x 単一アプリ: 構成図、ツール、注意点 | Step 2 でパターンA選択時 |
 | `./reference/pattern-b.md` | AWS x マイクロサービス: 構成図、ツール、注意点 | Step 2 でパターンB選択時 |
 | `./reference/pattern-c.md` | CF x 単一アプリ: 構成図、ツール、注意点 | Step 2 でパターンC選択時 |
 | `./reference/pattern-d.md` | CF x マイクロサービス: 構成図、ツール、注意点 | Step 2 でパターンD選択時 |
 | `./reference/pino-otel-setup.md` | Pino/OTel 導入手順のリファレンス | Step 5 の案内時、必要に応じて |
+| `./reference/repair-log-schema.md` | RepairLog JSON構造、DB設計、アラート閾値 | Step 5 の案内時、必要に応じて |
+| `./reference/repair-ai-prompt.md` | 修復AI SYSTEM_PROMPT テンプレート、承認フロー | Step 5 の案内時、必要に応じて |

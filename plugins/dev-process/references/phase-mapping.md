@@ -1,6 +1,6 @@
 # Phase Agent Reference
 
-Shared reference for all spec plugin skills. Lists each phase agent with its prerequisites and output.
+Shared reference for all dev-process spec skills. Lists each phase agent with its prerequisites and output.
 
 ## Phase Mapping Table
 

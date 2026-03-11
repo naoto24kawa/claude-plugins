@@ -54,14 +54,14 @@ Affected phases: 2, 4, 5, 6, 7
 - 変更ファイル数: 19件
 - 実行Phase: Phase 0, 1, 2, 4, 5, 6, 7, 8
 - 更新されたドキュメント:
-  - .docs/specs/_context.md (Phase 0)
-  - .docs/specs/00-overview.md (Phase 1)
-  - .docs/specs/01-architecture.md (Phase 2)
-  - .docs/specs/03-api-specification.md (Phase 4)
-  - .docs/specs/04-usecases/ (Phase 5)
-  - .docs/specs/05-business-rules.md (Phase 6)
-  - .docs/specs/06-non-functional.md (Phase 7)
-  - .docs/specs/_index.md (Phase 8)
+  - docs/specs/_context.md (Phase 0)
+  - docs/specs/00-overview.md (Phase 1)
+  - docs/specs/01-architecture.md (Phase 2)
+  - docs/specs/03-api-specification.md (Phase 4)
+  - docs/specs/04-usecases/ (Phase 5)
+  - docs/specs/05-business-rules.md (Phase 6)
+  - docs/specs/06-non-functional.md (Phase 7)
+  - docs/specs/_index.md (Phase 8)
 
-.docs/specs/_index.md で整合性チェック結果を確認してください。
+docs/specs/_index.md で整合性チェック結果を確認してください。
 ```

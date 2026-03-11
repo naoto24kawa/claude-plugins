@@ -1,6 +1,6 @@
 ---
 name: observability-audit
-description: This skill should be used when the user asks to "観測系の設定を監査したい", "observability audit", "ログ設計に沿ってるか確認したい", "observability-auditを実行したい", "OTelの導入状況をチェックしたい", "設計ドキュメントとコードの整合性を確認したい", "Pino設定を検証したい". .docs/observability-design.md の設計判断を基準にコードを検査し、OK/WARN/NG のレポートと具体的な修正提案を出力する継続的監査スキル。
+description: This skill should be used when the user asks to "観測系の設定を監査したい", "observability audit", "audit observability", "check observability compliance", "ログ設計に沿ってるか確認したい", "observability-auditを実行したい", "OTelの導入状況をチェックしたい", "設計ドキュメントとコードの整合性を確認したい", "Pino設定を検証したい", "run observability audit". Inspects code against .docs/observability-design.md design decisions, producing OK/WARN/NG report with actionable fix proposals.
 allowed-tools: [Read, Glob, Grep]
 user-invocable: true
 ---
@@ -13,7 +13,7 @@ user-invocable: true
 
 - `setup` で `.docs/observability-design.md` が生成済みであること
 - ファイルが存在しない場合、「先に `setup` を実行して設計を確定してください」と案内して終了する
-- 非Node.jsプロジェクト(package.json が存在しない)の場合、LOG-001/TRACE-001 等のパッケージチェックをスキップし、代替の検査方法(import文の直接検索等)にフォールバックする
+- 非Node.jsプロジェクト(package.json が存在しない)の場合、LOG-001/TRACE-001 等のパッケージチェックを WARN とし、備考に「package.json なし - 手動確認を推奨」と記載する。可能であれば import 文(`import pino` / `from opentelemetry`)の直接検索で補完する
 
 ## ワークフロー
 
@@ -30,6 +30,7 @@ user-invocable: true
 | `repair_input` | error_log / distributed_trace | TRACE-005 の実行条件 |
 | `repair_key` | component / service_chain | レポートに記録 |
 | `git_snapshot` | true / false | DESIGN-002 の実行条件 |
+| `repair_actions` | immediate / approval / proposal_only の各配列 | DESIGN-001 の検査対象 |
 | `repair_history_rag` | true / false | DESIGN-003 の実行条件 |
 
 パターン名を表示する: 「パターン X (infrastructure x architecture) で監査します」
@@ -46,7 +47,7 @@ user-invocable: true
 | TRACE-001 | OTel SDK 導入 | Glob: `**/package.json` → `"@opentelemetry"` を Grep |
 | TRACE-002 | OTel SDK 初期化 | Grep: `NodeSDK` または `registerInstrumentations` を検索 |
 
-検査対象ファイルが見つからない場合(package.json がない等)、その項目を WARN とし、備考に「検査対象ファイルなし」と記載する。手動確認を推奨する。
+検査対象ファイルが見つからない場合(package.json がない等)、その項目を WARN とし、備考に「検査対象ファイルなし」と記載する。手動確認を案内する。
 
 ### Step 3: コード検査 (パターン依存)
 
