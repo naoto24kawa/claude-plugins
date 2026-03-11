@@ -1,6 +1,6 @@
 # Claude Code Plugin Marketplace
 
-Claude Code用のプラグインマーケットプレース。6つのプラグインで Issue自動処理、プラン共有、通知、観測系設計、開発プロセス基盤、プラグイン開発支援を提供する。
+Claude Code用のプラグインマーケットプレース。7つのプラグインで Issue自動処理、プラン共有、通知、観測系設計、開発プロセス基盤、プラグイン開発支援、アクセシビリティ検査を提供する。
 
 ## クイックスタート
 
@@ -21,6 +21,7 @@ Claude Code用のプラグインマーケットプレース。6つのプラグ�
 /plugin install observability@naoto24kawa-claude-plugins
 /plugin install dev-process@naoto24kawa-claude-plugins
 /plugin install plugin-dev@naoto24kawa-claude-plugins
+/plugin install accessibility@naoto24kawa-claude-plugins
 ```
 
 ## プラグイン一覧
@@ -100,6 +101,14 @@ AI自己修復システムの観測系設計セットアップと継続監査。
 **エージェント (2つ):** plugindev-syntax-fixer、plugindev-workflow-debugger
 
 Stop Hookによるスキルエラーの自動検知を含む。
+
+### accessibility (v1.0.0)
+
+WCAG 2.2 Level A/AA/AAA 対応の Web アクセシビリティ静的コードレビュー。
+
+**エージェント (1つ):** a11y-reviewer (HTML/JSX/TSX/Vue/Svelte/CSSのa11y検査 + 修正案提示)
+
+詳細: [plugins/accessibility/README.md](./plugins/accessibility/README.md)
 
 ## 開発ガイド
 
