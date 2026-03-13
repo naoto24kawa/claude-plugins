@@ -60,6 +60,7 @@ send_notification() {
 
   if [ "$http_code" != "201" ]; then
     log "ERROR: notification failed (HTTP ${http_code})"
+    # Exit 0 intentionally: hook must not fail when server is down (hooks.json auto-execution)
     exit 0
   fi
 

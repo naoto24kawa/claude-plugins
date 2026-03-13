@@ -1,6 +1,7 @@
 ---
 name: notify-setup
 description: This skill should be used when the user asks to "test notifications", "configure LAN notifications", "change NOTIFY_HOST", "check notification server", "通知テスト", "LAN通知設定", "通知サーバー確認", "NOTIFY_HOST変更", "通知の疎通確認", "migrate notify hooks", "旧フック設定を削除", or needs to verify, configure LAN access, or migrate legacy hook settings for the notify plugin.
+allowed-tools: ["Bash", "Read", "Grep", "Glob"]
 ---
 
 # Notification Setup Skill
