@@ -77,7 +77,7 @@ Fired after a tool finishes execution.
   "hooks": {
     "Stop": [
       {
-        "matcher": "",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",

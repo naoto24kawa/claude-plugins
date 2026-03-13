@@ -6,11 +6,9 @@
 #   <path>/notify.sh
 #   NOTIFY_HOST=192.168.1.100 <path>/notify.sh
 #
-# Supported hook events:
+# Supported hook events (registered via hooks.json):
 #   Stop         - sends last_assistant_message as notification
 #   Notification - sends message/title from Claude's internal notifications
-#   PreToolUse   - placeholder (logged only)
-#   PostToolUse  - placeholder (logged only)
 #
 # Environment variables:
 #   NOTIFY_HOST         - Server host (default: localhost)
@@ -18,7 +16,9 @@
 #   NOTIFY_LOG          - Log file path (default: /tmp/notify-hook.log)
 #   CLAUDE_PROJECT_DIR  - Set by Claude Code, used as notification title
 
-set -euo pipefail
+# Hook must not fail when auto-executed via hooks.json; trap all errors to exit 0
+trap 'exit 0' ERR
+set -uo pipefail
 
 NOTIFY_HOST="${NOTIFY_HOST:-localhost}"
 NOTIFY_PORT="${NOTIFY_PORT:-23000}"
@@ -60,7 +60,7 @@ send_notification() {
 
   if [ "$http_code" != "201" ]; then
     log "ERROR: notification failed (HTTP ${http_code})"
-    # Exit 0 intentionally: hook must not fail when server is down (hooks.json auto-execution)
+    echo "Warning: notification failed (HTTP ${http_code}) - check ${LOG_FILE} for details" >&2
     exit 0
   fi
 

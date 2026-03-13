@@ -49,7 +49,15 @@ echo '{"hook_event_name":"Notification","message":"Permission needed","title":"T
   CLAUDE_PROJECT_DIR="$PWD" <NOTIFY_SH_PATH>
 ```
 
-Confirm the notifications appear on the dashboard at `http://<HOST>:23000`.
+Verify by checking the log file:
+
+```bash
+tail -5 /tmp/notify-hook.log
+```
+
+`OK` indicates success. `ERROR` indicates failure (check server status).
+
+Also confirm the notifications appear on the dashboard at `http://<HOST>:23000`.
 
 ### Step 3: LAN Configuration (Optional)
 
@@ -101,7 +109,7 @@ If the user previously ran `notify-setup` (v1.x), they may have notify hooks in 
 **Detection:** Check if the target project's settings files contain `notify.sh` in hook commands:
 
 ```bash
-grep -r "notify.sh" <TARGET_PROJECT>/.claude/settings*.json 2>/dev/null
+grep -l "notify.sh" <TARGET_PROJECT>/.claude/settings.json <TARGET_PROJECT>/.claude/settings.local.json 2>/dev/null
 ```
 
 If found, guide the user to remove the `notify.sh` entries from the `hooks` object in those files. The hooks.json in this plugin now handles registration automatically.
