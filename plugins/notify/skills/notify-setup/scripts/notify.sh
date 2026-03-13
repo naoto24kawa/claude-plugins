@@ -60,8 +60,7 @@ send_notification() {
 
   if [ "$http_code" != "201" ]; then
     log "ERROR: notification failed (HTTP ${http_code})"
-    echo "Failed to send notification (HTTP ${http_code})" >&2
-    exit 1
+    exit 0
   fi
 
   log "OK"
