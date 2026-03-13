@@ -1,130 +1,40 @@
 ---
 name: notify-setup
-description: This skill should be used when the user asks to "setup notifications", "integrate notify", "add notification hooks", "connect to notification server", "notify setup", "configure notify hooks", "add Stop hook", "add Notification hook", "セットアップ", "通知の導入", "他のプロジェクトに導入", "通知を設定", "hookを追加", "入力待ち通知", "ask通知", or needs to configure Claude Code hooks to send notifications to the simple-notify-tools server.
+description: This skill should be used when the user asks to "test notifications", "configure LAN notifications", "change NOTIFY_HOST", "check notification server", "通知テスト", "LAN通知設定", "通知サーバー確認", "NOTIFY_HOST変更", "通知の疎通確認", "migrate notify hooks", "旧フック設定を削除", or needs to verify, configure LAN access, or migrate legacy hook settings for the notify plugin.
 ---
 
 # Notification Setup Skill
 
-Configure Claude Code hooks to send notifications to the simple-notify-tools server.
+Test notifications, configure LAN access, and migrate legacy hook settings.
 
-## Skill Base Directory
-
-This skill bundles `scripts/notify.sh`. Resolve the absolute path from this skill's base directory.
-
-```
-<SKILL_BASE_DIR>/scripts/notify.sh
-```
+> **Note:** Stop + Notification hooks are automatically registered via `hooks/hooks.json` when this plugin is installed. This skill is for additional configuration and troubleshooting only.
 
 ## How notify.sh Works
 
 `notify.sh` is a hook-dedicated script. It reads stdin JSON from Claude Code hook events, extracts the relevant message, and sends a notification to the server. No arguments are needed.
 
 Supported events:
-- **Stop** - extracts `last_assistant_message` (most common)
-- **Notification** - extracts `message` and `title`
-- **PreToolUse / PostToolUse** - logged only, no notification sent
+- **Stop** - extracts `last_assistant_message` (task completion)
+- **Notification** - extracts `message` and `title` (input prompts)
 
 ## Execution Steps
 
-Execute these steps in order:
-
-### Step 1: Verify Prerequisites
-
-**Required tools:** `curl`, `jq` (notify.sh depends on jq for JSON parsing)
+### Step 1: Server Health Check
 
 ```bash
-command -v curl >/dev/null 2>&1 && echo "curl: OK" || echo "curl: MISSING"
-command -v jq >/dev/null 2>&1 && echo "jq: OK" || echo "jq: MISSING - install with 'brew install jq' or 'apt install jq'"
 curl -sf http://<HOST>:23000/api/health
 ```
 
 - Default HOST is `localhost`.
 - If the server is not running, prompt the user to start it or provide the host/port.
 
-### Step 2: Resolve notify.sh Path
+### Step 2: Send Test Notifications
 
-The script is bundled at `<SKILL_BASE_DIR>/scripts/notify.sh`.
-Use the absolute path provided by "Base directory for this skill" context.
+Resolve the notify.sh path from this skill's base directory:
 
-Example: If base directory is `/home/user/simple-notify-tools/.claude/skills/notify-setup`, then:
 ```
-/home/user/simple-notify-tools/.claude/skills/notify-setup/scripts/notify.sh
+<SKILL_BASE_DIR>/scripts/notify.sh
 ```
-
-Verify the script exists and is executable:
-```bash
-test -x <SKILL_BASE_DIR>/scripts/notify.sh && echo "OK"
-```
-
-### Step 3: Ask Which Hooks to Enable
-
-Prompt the user which hooks to enable via AskUserQuestion:
-
-| Hook | Description |
-|------|-------------|
-| **Stop** (default) | Notifies on task completion |
-| **Notification** | Notifies on input prompts (permission prompt, idle, AskUserQuestion) |
-
-**Question example:**
-- "どのタイミングで通知を受け取りたいですか?"
-- Options:
-  1. "Stop のみ (タスク完了時)" - default, most common
-  2. "Stop + Notification (タスク完了 + 入力待ち)" - recommended for unattended operation
-  3. "Notification のみ (入力待ちのみ)" - for users who only care about prompts
-
-### Step 4: Ask Configuration Level
-
-Prompt the user which configuration level to use via AskUserQuestion:
-
-| Level | File | Description |
-|-------|------|-------------|
-| **Project Local** (default) | `settings.local.json` | Personal only. Not tracked by git. |
-| **Project** | `settings.json` | Shared with team. Tracked by git. |
-
-**Question example:**
-- "設定をどのレベルに書き込みますか?"
-- Options:
-  1. "プロジェクトローカル (推奨)" - settings.local.json に書き込む。個人のみに適用、git管理されない。
-  2. "プロジェクト" - settings.json に書き込む。チーム全員に適用、gitで共有される。
-
-### Step 5: Write Hook to Settings File
-
-Add selected hooks to the settings file chosen in Step 4.
-
-| Level | File |
-|-------|------|
-| Project Local | `<TARGET_PROJECT>/.claude/settings.local.json` |
-| Project | `<TARGET_PROJECT>/.claude/settings.json` |
-
-**Hook command template:**
-```
-<NOTIFY_SH_PATH>
-```
-
-`notify.sh` reads stdin JSON automatically and extracts the message. No arguments needed.
-
-**Single hook block pattern** (same structure for each event type):
-```json
-{
-  "matcher": "",
-  "hooks": [
-    {
-      "type": "command",
-      "command": "<NOTIFY_SH_PATH>"
-    }
-  ]
-}
-```
-
-Add this block under each selected event key (`Stop`, `Notification`) in the `hooks` object. Replace `<NOTIFY_SH_PATH>` with the absolute path resolved in Step 2.
-
-See `examples/per-project-settings.json` for a complete Stop + Notification configuration. For LAN access, see `examples/lan-access-settings.json`.
-
-**Important**: If the target settings file already has hooks, merge the new hooks into the existing `hooks` object. Do not overwrite other hooks.
-
-### Step 6: Test
-
-Send test notifications for each enabled hook:
 
 **Stop event:**
 ```bash
@@ -132,7 +42,7 @@ echo '{"hook_event_name":"Stop","last_assistant_message":"Setup test - notificat
   CLAUDE_PROJECT_DIR="$PWD" <NOTIFY_SH_PATH>
 ```
 
-**Notification event (if enabled):**
+**Notification event:**
 ```bash
 echo '{"hook_event_name":"Notification","message":"Permission needed","title":"Tool approval","notification_type":"permission_prompt"}' | \
   CLAUDE_PROJECT_DIR="$PWD" <NOTIFY_SH_PATH>
@@ -140,13 +50,40 @@ echo '{"hook_event_name":"Notification","message":"Permission needed","title":"T
 
 Confirm the notifications appear on the dashboard at `http://<HOST>:23000`.
 
-## LAN Access
+### Step 3: LAN Configuration (Optional)
 
-For notifications across machines, prepend `NOTIFY_HOST=<IP>` to the hook command:
+For notifications across machines, the user needs to override `NOTIFY_HOST` in the hook command. Guide them to edit `.claude/settings.local.json` of the **target project** to override the plugin hook:
 
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "NOTIFY_HOST=<IP> <NOTIFY_SH_PATH>"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "NOTIFY_HOST=<IP> <NOTIFY_SH_PATH>"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
-NOTIFY_HOST=192.168.1.100 <NOTIFY_SH_PATH>
-```
+
+Replace `<IP>` with the server's LAN IP and `<NOTIFY_SH_PATH>` with the absolute path to notify.sh.
 
 ### notify.sh Environment Variables
 
@@ -156,9 +93,20 @@ NOTIFY_HOST=192.168.1.100 <NOTIFY_SH_PATH>
 | `NOTIFY_PORT` | 23000 | Server port |
 | `NOTIFY_LOG` | /tmp/notify-hook.log | Log file path |
 
+### Step 4: Migrate Legacy Hook Settings (If Needed)
+
+If the user previously ran `notify-setup` (v1.x), they may have notify hooks in their project's `.claude/settings.json` or `.claude/settings.local.json`. These will cause **duplicate notifications** alongside the new hooks.json.
+
+**Detection:** Check if the target project's settings files contain `notify.sh` in hook commands:
+
+```bash
+grep -r "notify.sh" <TARGET_PROJECT>/.claude/settings*.json 2>/dev/null
+```
+
+If found, guide the user to remove the `notify.sh` entries from the `hooks` object in those files. The hooks.json in this plugin now handles registration automatically.
+
 ## Additional Resources
 
 - **`references/api-reference.md`** - API endpoints and request/response formats
 - **`references/hook-events.md`** - Per-event stdin JSON fields and integration patterns
 - **`references/ai-summarization.md`** - AI message summarization setup
-- **`examples/`** - Working hook configuration examples
