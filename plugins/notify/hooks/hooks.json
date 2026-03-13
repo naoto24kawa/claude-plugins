@@ -1,0 +1,27 @@
+{
+  "description": "Sends notifications on Stop and Notification hook events via notify.sh",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/skills/notify-setup/scripts/notify.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/skills/notify-setup/scripts/notify.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
