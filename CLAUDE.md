@@ -12,7 +12,7 @@ Claude Code プラグインマーケットプレース。7つのプラグイン�
 |-----------|-----------|--------------|----------|
 | automation | 1.0.0 | agents:3, commands:3 | productivity |
 | minio-plan-files | 2.2.0 | skills:7 | productivity |
-| notify | 1.2.0 | skills:1 | productivity |
+| notify | 2.0.0 | skills:1, hooks:1 | productivity |
 | observability | 1.0.0 | skills:2 | productivity |
 | dev-process | 2.0.0 | skills:5, agents:9 | productivity |
 | plugin-dev | 1.0.0 | skills:2, agents:2, hooks:1 | development |
@@ -27,7 +27,7 @@ Claude Code プラグインマーケットプレース。7つのプラグイン�
 └── plugins/
     ├── automation/             # agents/, commands/
     ├── minio-plan-files/       # skills/ (7スキル: minio-setup, plan-submit/fetch/done/fail/wait/status)
-    ├── notify/                 # skills/notify-setup/
+    ├── notify/                 # skills/notify-setup/, hooks/hooks.json
     ├── observability/          # skills/setup/, skills/observability-audit/
     │                           # reference/, templates/ は各スキル配下
     ├── dev-process/            # skills/ (5), agents/ (9: Phase 0-8), references/

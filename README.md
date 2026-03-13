@@ -53,12 +53,14 @@ MinIO (S3互換) + ElasticMQ (SQS互換) によるAIエージェント間プラ�
 | plan-wait | Dispatcher: plan完了待機 | `/skill minio-plan-files:plan-wait` |
 | plan-status | ステータス確認 & retry | `/skill minio-plan-files:plan-status` |
 
-### notify (v1.2.0)
+### notify (v2.0.0)
 
-タスク完了・入力待ち通知 (simple-notify-tools連携)。Stop/Notification Hookを設定する。
+タスク完了・入力待ち通知 (simple-notify-tools連携)。インストールするだけで Stop/Notification Hook が自動有効化される。
+
+**Hooks (1つ):** Stop + Notification イベントで notify.sh を自動実行
 
 **スキル (1つ):**
-- `/skill notify:notify-setup` - Hook設定 (プロジェクト or プロジェクトローカル)
+- `/skill notify:notify-setup` - 通知テスト、LAN設定、旧設定マイグレーション
 
 ### observability (v1.0.0)
 
