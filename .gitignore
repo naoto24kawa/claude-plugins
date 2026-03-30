@@ -60,3 +60,6 @@ build/
 tmp/
 temp/
 
+# Plan files (session-local working documents)
+.docs/plans/
+
