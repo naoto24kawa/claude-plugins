@@ -113,3 +113,13 @@ Write to `{OUTPUT_DIR}/_index.md` (no frontmatter - internal index file):
 - Mermaid sequenceDiagrams show only the main flow. Supplement branches in text
 - Create the output directory if it does not exist
 - Use kebab-case for file names (e.g., UC-001-user-registration.md)
+
+**Confidence Guidelines:**
+- Only create use cases for flows with confirmed entry points (routes, CLI commands, event handlers)
+- Sequence diagrams must reflect actual code call chains, not assumed architecture
+- If a flow's alternative/exception path cannot be confirmed from code, omit it rather than speculate
+
+**False Extraction Patterns (do NOT include these):**
+- CRUD operations as separate use cases when they are simple REST resource endpoints with no business logic (summarize as a single "Resource Management" use case instead)
+- Admin/backoffice operations inferred from database tables but with no UI or API evidence
+- Background jobs or cron tasks as user-facing use cases (document under a separate "System Operations" section if needed)
