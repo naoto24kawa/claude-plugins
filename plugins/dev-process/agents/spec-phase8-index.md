@@ -114,3 +114,8 @@ Write to the index file path specified in your task instructions.
 - Retrieve branch name and commit hash using git commands
 - Record all corrections made during consistency check in the "整合性チェック結果" section
 - The estimation list serves as a guide for sections the user should review carefully
+
+**Confidence-Based Consistency Checks:**
+- If the same item appears in multiple documents with different confidence levels, align to the lowest confidence (e.g., if Phase 1 states a feature as confirmed but Phase 5 has no corresponding use case, re-evaluate whether the feature truly exists)
+- Flag documents where the ratio of `⚠️ 推定` items exceeds 50% of total items; this indicates the source code may lack sufficient evidence for that phase's analysis
+- In the estimation list ("推定事項一覧"), group items by confidence impact: items affecting multiple documents first
