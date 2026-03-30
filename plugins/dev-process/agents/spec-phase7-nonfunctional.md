@@ -122,3 +122,14 @@ related: []
 - Include specific values from configuration files (timeout seconds, retry counts, etc.)
 - Use `⚠️ 推定` marks appropriately
 - This document is fact-based description only; do NOT include improvement proposals
+
+**Confidence Guidelines:**
+- Only document implementations confirmed by actual code (middleware registration, configuration files, dependency usage)
+- Do not infer security measures from the presence of a dependency alone; verify it is actually imported and used
+- For `⚠️ 未検出` items, verify absence by searching for common implementation patterns (at least 3 search terms per category) before marking
+
+**False Extraction Patterns (do NOT include these):**
+- Dependencies listed in package.json but never imported in source code as "implemented" measures
+- Example/sample configuration files (e.g., .env.example) as actual security configurations
+- Development-only tools (e.g., nodemon, ts-node-dev) as production deployment infrastructure
+- Test-only security configurations (e.g., CORS allow-all in test setup) as production security measures

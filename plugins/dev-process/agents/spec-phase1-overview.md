@@ -91,3 +91,14 @@ related: []
 - Wrap Mermaid diagrams in ``` mermaid blocks
 - Exhaustively check routing definitions and controller lists for the feature list
 - Limit the glossary to domain-specific terms (exclude general programming terms)
+
+**Confidence Guidelines:**
+- Only include features confirmed by routing definitions, exports, or test coverage
+- Do not include features inferred solely from file/directory names without code evidence
+- If unsure whether something is a feature or an internal utility, omit it from the feature list
+
+**False Extraction Patterns (do NOT include these):**
+- Build/dev tooling (linters, formatters, bundler configs) as "features"
+- Test utilities and fixtures as system components
+- Deprecated code behind feature flags or commented out
+- Third-party library internals exposed through re-exports
