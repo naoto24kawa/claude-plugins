@@ -1,13 +1,13 @@
 ---
-name: ecc-patterns
+name: affaan-m-patterns
 description: >
   This skill should be used when the user asks to
-  "eccパターンをレビューしたい",
+  "affaan-mパターンをレビューしたい",
   "everything-claude-codeのパターンを確認",
   "affaan-mのパターンを適用したい",
-  "eccパターンの適用状況を確認",
+  "affaan-mパターンの適用状況を確認",
   "パターンNを適用して",
-  "ecc-patternsを実行",
+  "affaan-m-patternsを実行",
   "取り込みパターンの一覧を見せて".
   Reviews and applies design patterns extracted from affaan-m/everything-claude-code
   to plugins in this repository.
@@ -15,7 +15,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion]
 user-invocable: true
 ---
 
-# ECC Patterns - everything-claude-code 設計パターン管理
+# affaan-m Patterns - everything-claude-code 設計パターン管理
 
 [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) から抽出した10個の設計パターンのレビューと適用を管理する。
 
@@ -50,7 +50,7 @@ user-invocable: true
 3. 以下の形式でレポートを出力する:
 
 ```
-## ECC パターン適用状況
+## affaan-m パターン適用状況
 
 | # | パターン | 状態 | 備考 |
 |---|---------|------|------|
