@@ -129,3 +129,14 @@ related: []
 - Extract concrete request/response examples from test code when possible
 - For GraphQL, use a schema-based description
 - Use `⚠️ 推定` marks appropriately
+
+**Confidence Guidelines:**
+- Only document endpoints confirmed by routing definitions (router.get, app.post, @Controller decorators, etc.)
+- Request/response types must be confirmed by handler signatures, validation schemas, or test assertions
+- Do not guess authentication requirements; only document middleware actually applied to routes
+
+**False Extraction Patterns (do NOT include these):**
+- Health check endpoints (/health, /ready) as business API endpoints (list them separately under "共通仕様")
+- Framework-generated debug endpoints (e.g., Next.js /_next/, Swagger UI routes)
+- Internal RPC or inter-service communication as public API
+- Stale OpenAPI definitions that don't match actual routing code
