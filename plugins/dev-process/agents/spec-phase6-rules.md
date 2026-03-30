@@ -100,3 +100,15 @@ related: []
 - Include estimated reasoning for "why this rule exists"
 - Use Mermaid stateDiagram-v2 for state transitions, wrapped in ``` mermaid blocks
 - Use `⚠️ 推定` marks appropriately
+
+**Confidence Guidelines:**
+- Only document rules where the business intent is clear from variable names, comments, test names, or domain context
+- Constants without clear business meaning (e.g., buffer sizes, retry counts) belong in non-functional requirements (Phase 7), not here
+- If a validation rule's purpose is ambiguous, check test code for assertion messages that explain intent
+
+**False Extraction Patterns (do NOT include these):**
+- Framework-generated validation (e.g., ORM-level NOT NULL constraints without explicit business reason) as business rules
+- Type system constraints (TypeScript type narrowing, enum exhaustiveness checks) as business validation
+- Infrastructure constants (port numbers, connection pool sizes, timeout values) as business constants
+- Library default configuration values as project-specific business rules
+- Guard clauses for null/undefined that are defensive programming, not business logic
