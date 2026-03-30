@@ -27,6 +27,7 @@
 | spec-update | `/skill dev-process:spec-update` | PR/ブランチ差分から仕様書を部分更新 |
 | spec-drift | `/skill dev-process:spec-drift` | 仕様とコードの乖離を検出 |
 | process-audit | `/skill dev-process:process-audit` | プロセス全体の健全性を監査 |
+| ecc-patterns | `/skill dev-process:ecc-patterns` | everything-claude-code パターンのレビューと適用 |
 
 ## エージェント (9体)
 
@@ -70,12 +71,14 @@ dev-process/
 │   │       └── example-pr-update.md
 │   ├── spec-drift/             # 仕様-コード乖離検出
 │   │   └── SKILL.md
-│   └── process-audit/          # プロセス健全性監査
-│       ├── SKILL.md
-│       └── checklists/
-│           ├── infra-health.md
-│           ├── traceability.md
-│           └── spec-coverage.md
+│   ├── process-audit/          # プロセス健全性監査
+│   │   ├── SKILL.md
+│   │   └── checklists/
+│   │       ├── infra-health.md
+│   │       ├── traceability.md
+│   │       └── spec-coverage.md
+│   └── ecc-patterns/           # everything-claude-code パターン管理
+│       └── SKILL.md
 ├── agents/                     # 9つの仕様生成エージェント
 │   ├── spec-phase0-context.md
 │   ├── spec-phase1-overview.md
