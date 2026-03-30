@@ -101,3 +101,14 @@ related_tables: []
 - Detect and document common patterns: soft delete, timestamps, UUID primary keys
 - For projects without a DB (CLI tools, etc.), document configuration file or state management structures
 - Wrap Mermaid erDiagram in ``` mermaid blocks
+
+**Confidence Guidelines:**
+- Prioritize migration files and schema definitions over TypeScript interfaces
+- If a type definition exists but no corresponding migration or DB query references it, it may be a DTO, not a persisted entity. Mark with `⚠️ 推定` or omit
+- Do not document relationships not confirmed by foreign keys, JOIN queries, or ORM relation decorators
+
+**False Extraction Patterns (do NOT include these):**
+- In-memory data structures (caches, session stores) as persisted entities
+- Request/Response DTOs as database entities
+- Configuration objects or environment variable types as data models
+- Test fixture factory types as real entities
