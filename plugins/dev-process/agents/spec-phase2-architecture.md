@@ -94,3 +94,14 @@ related: []
 - Use `⚠️ 推定` marks appropriately
 - Wrap Mermaid diagrams in ``` mermaid blocks
 - Module granularity is directory-level by default, but single-file modules are possible
+
+**Confidence Guidelines:**
+- Only document dependencies confirmed by import/require statements or DI configuration
+- Do not infer architectural patterns from directory names alone; verify with actual code flow
+- If a layer boundary is ambiguous (e.g., service calling another service directly), document the ambiguity rather than guessing the intended pattern
+
+**False Extraction Patterns (do NOT include these):**
+- node_modules or vendor directory structure as project modules
+- Generated code directories (e.g., .next/, dist/, build/) as architectural layers
+- Type-only imports as runtime dependencies
+- Dev dependencies (test frameworks, linters) as system modules
