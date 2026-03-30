@@ -54,8 +54,8 @@
     },
     {
       "name": "dev-process",
-      "description": "Development process infrastructure and specification management plugin. Sets up CLAUDE.md rules, Issue/PR templates, GitHub Actions quality gates. Orchestrates 9 specialized sub-agents for spec generation, incremental updates, drift detection, and process auditing.",
-      "version": "2.1.0",
+      "description": "Development process infrastructure and specification management plugin. Sets up CLAUDE.md rules, Issue/PR templates, GitHub Actions quality gates. Orchestrates 9 specialized sub-agents for spec generation, incremental updates, drift detection, and process auditing. Includes ECC pattern review and application workflow.",
+      "version": "2.2.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"
