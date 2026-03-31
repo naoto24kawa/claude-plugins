@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "5.1.0",
-  "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, notification, development process infrastructure, accessibility review, and Issue-to-PR automation plugins for development workflows",
+  "version": "5.2.0",
+  "description": "Code review, Claude Code configuration review, Notion integration, GitHub workflow automation, remote Chrome control, notification, development process infrastructure, accessibility review, Issue-to-PR automation, and virtual consulting team plugins for development workflows",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
@@ -84,6 +84,17 @@
       },
       "source": "./plugins/accessibility",
       "category": "development"
+    },
+    {
+      "name": "consulting",
+      "description": "Virtual consulting team with 7 specialized advisors for software product decisions. Covers legal, pricing, tech architecture, security, marketing, product/UX, and finance — supporting both individual developers and enterprise teams.",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/consulting",
+      "category": "productivity"
     }
   ]
 }

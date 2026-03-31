@@ -1,6 +1,6 @@
 # Claude Code Plugin Marketplace
 
-Claude Code用のプラグインマーケットプレース。7つのプラグインで Issue自動処理、プラン共有、通知、観測系設計、開発プロセス基盤、プラグイン開発支援、アクセシビリティ検査を提供する。
+Claude Code用のプラグインマーケットプレース。8つのプラグインで Issue自動処理、プラン共有、通知、観測系設計、開発プロセス基盤、プラグイン開発支援、アクセシビリティ検査、仮想コンサルチームを提供する。
 
 ## クイックスタート
 
@@ -22,6 +22,7 @@ Claude Code用のプラグインマーケットプレース。7つのプラグ�
 /plugin install dev-process@naoto24kawa-claude-plugins
 /plugin install plugin-dev@naoto24kawa-claude-plugins
 /plugin install accessibility@naoto24kawa-claude-plugins
+/plugin install consulting@naoto24kawa-claude-plugins
 ```
 
 ## プラグイン一覧
@@ -111,6 +112,24 @@ WCAG 2.2 Level A/AA/AAA 対応の Web アクセシビリティ静的コードレ
 **エージェント (1つ):** a11y-reviewer (HTML/JSX/TSX/Vue/Svelte/CSSのa11y検査 + 修正案提示)
 
 詳細: [plugins/accessibility/README.md](./plugins/accessibility/README.md)
+
+### consulting (v1.0.0)
+
+ソフトウェアプロダクトの意思決定を支援する仮想コンサルチーム。個人開発から企業開発まで対応。
+
+**エージェント (7つ):**
+
+| エージェント | 領域 | 活用例 |
+|-------------|------|--------|
+| legal-advisor | 法務・契約 | 利用規約、NDA、OSSライセンス |
+| pricing-strategist | 価格・収益 | 料金設計、マネタイズ戦略 |
+| tech-architect | 技術選定 | ライブラリ採用、アーキテクチャ判断 |
+| security-advisor | セキュリティ | 個人情報管理、コンプライアンス |
+| marketing-advisor | マーケ・GTM | 集客戦略、ポジショニング |
+| product-advisor | UX・プロダクト | MVP設計、機能優先度 |
+| finance-advisor | 財務・資金 | コスト管理、ROI算出 |
+
+詳細: [plugins/consulting/README.md](./plugins/consulting/README.md)
 
 ## 開発ガイド
 
