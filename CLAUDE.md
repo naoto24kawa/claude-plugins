@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## リポジトリの役割
 
-Claude Code プラグインマーケットプレース。7つのプラグインを `plugins/` 配下に格納する。
+Claude Code プラグインマーケットプレース。8つのプラグインを `plugins/` 配下に格納する。
 
 ## プラグイン構成 (信頼できるソース: `.claude-plugin/marketplace.json`)
 
@@ -17,6 +17,7 @@ Claude Code プラグインマーケットプレース。7つのプラグイン�
 | dev-process | 2.2.0 | skills:6, agents:9 | productivity |
 | plugin-dev | 1.0.0 | skills:2, agents:2, hooks:1 | development |
 | accessibility | 1.0.0 | agents:1 | development |
+| consulting | 1.0.0 | agents:7 | productivity |
 
 ## ディレクトリ構造
 
@@ -32,7 +33,8 @@ Claude Code プラグインマーケットプレース。7つのプラグイン�
     │                           # reference/, templates/ は各スキル配下
     ├── dev-process/            # skills/ (5), agents/ (9: Phase 0-8), references/
     ├── plugin-dev/             # skills/ (2), agents/ (2), hooks/hooks.json
-    └── accessibility/          # agents/a11y-reviewer, references/wcag-rules
+    ├── accessibility/          # agents/a11y-reviewer, references/wcag-rules
+    └── consulting/             # agents/ (7: legal, pricing, tech, security, marketing, product, finance)
 ```
 
 ## 編集ルール
