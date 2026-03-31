@@ -14,7 +14,7 @@ Claude Code プラグインマーケットプレース。8つのプラグイン�
 | minio-plan-files | 2.2.0 | skills:7 | productivity |
 | notify | 2.0.0 | skills:1, hooks:1 | productivity |
 | observability | 1.0.0 | skills:2 | productivity |
-| dev-process | 2.2.0 | skills:6, agents:9 | productivity |
+| dev-process | 2.3.0 | skills:7, agents:9 | productivity |
 | plugin-dev | 1.0.0 | skills:2, agents:2, hooks:1 | development |
 | accessibility | 1.0.0 | agents:1 | development |
 | consulting | 1.0.0 | agents:7 | productivity |

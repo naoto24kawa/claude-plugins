@@ -28,6 +28,7 @@
 | spec-drift | `/skill dev-process:spec-drift` | 仕様とコードの乖離を検出 |
 | process-audit | `/skill dev-process:process-audit` | プロセス全体の健全性を監査 |
 | affaan-m-patterns | `/skill dev-process:affaan-m-patterns` | everything-claude-code パターンのレビューと適用 |
+| security-review-context | (自動発火) | セキュリティレビューの差分ベース実行を補助 |
 
 ## エージェント (9体)
 
@@ -77,8 +78,13 @@ dev-process/
 │   │       ├── infra-health.md
 │   │       ├── traceability.md
 │   │       └── spec-coverage.md
-│   └── affaan-m-patterns/      # everything-claude-code パターン管理
-│       └── SKILL.md
+│   ├── affaan-m-patterns/      # everything-claude-code パターン管理
+│   │   └── SKILL.md
+│   └── security-review-context/  # セキュリティレビュー差分ベース補助
+│       ├── SKILL.md
+│       └── references/
+│           ├── dismissed-patterns.md
+│           └── cloudflare-workers-security.md
 ├── agents/                     # 9つの仕様生成エージェント
 │   ├── spec-phase0-context.md
 │   ├── spec-phase1-overview.md
