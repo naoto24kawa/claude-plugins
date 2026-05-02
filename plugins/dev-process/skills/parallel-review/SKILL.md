@@ -1,5 +1,5 @@
 ---
-name: parallel-expert-review
+name: parallel-review
 description: This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "expert review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", "keep reviewing until no issues", "iterative code review", "review this until it's clean", or wants to run multiple rounds of parallel specialist code review until all findings reach zero.
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
 ---
