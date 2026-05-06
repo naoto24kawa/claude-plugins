@@ -305,11 +305,11 @@ EOF
   # 解消済み問題の Close
   # ✅ 解消に分類された各問題について:
   # 1. 前回サイクルファイルの該当 finding の `github_issue` フィールドを読み取る
-  # 2. `gh issue view {NNN} --json state --jq .state` で open 状態を確認する
+  # 2. `gh issue view <NNN> --json state --jq .state` で open 状態を確認する
   # 3. open の場合のみ gh issue close を実行する
-  ISSUE_STATE=$(gh issue view {NNN} --json state --jq .state 2>/dev/null)
+  ISSUE_STATE=$(gh issue view <NNN> --json state --jq .state 2>/dev/null)
   if [ "$ISSUE_STATE" = "OPEN" ]; then
-    gh issue close {NNN} --comment "サイクル {CYCLE_ID} で解消を確認。"
+    gh issue close <NNN> --comment "サイクル {CYCLE_ID} で解消を確認。"
   fi
 
 else
