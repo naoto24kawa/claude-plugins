@@ -20,17 +20,6 @@
       "category": "productivity"
     },
     {
-      "name": "plugin-dev",
-      "description": "Plugin development tools for diagnosing and fixing skill errors, validating plugin structure, and improving skill quality. Includes Stop hook for automatic error detection and specialized agents for syntax fixing, workflow debugging, and quality improvement.",
-      "version": "1.0.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/plugin-dev",
-      "category": "development"
-    },
-    {
       "name": "site-explorer",
       "description": "任意の Web アプリに対して探索的テストを実行し、バグ・UI 不具合を自動検出して GitHub Issue に登録する汎用 QA エージェント",
       "version": "1.0.0",
