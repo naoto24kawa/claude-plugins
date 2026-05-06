@@ -18,6 +18,7 @@ Claude Code プラグインマーケットプレース。8つのプラグイン�
 | plugin-dev | 1.0.0 | skills:2, agents:2, hooks:1 | development |
 | accessibility | 1.0.0 | agents:1 | development |
 | consulting | 1.0.0 | agents:7 | productivity |
+| site-explorer | 1.0.0 | agents:1, commands:1 | productivity |
 
 ## ディレクトリ構造
 
