@@ -32,3 +32,13 @@ email/password ログイン（/login ページ）
 
 ## Notes
 - その他特記事項（CAPTCHA 手順・特殊なナビゲーションなど）
+
+---
+
+## .env に追加するキー（**Git 管理外・`.gitignore` 必須**）
+
+```
+SITE_EXPLORER_EMAIL=test@example.com
+SITE_EXPLORER_PASSWORD=YourPassword123!
+SITE_EXPLORER_TURNSTILE_BYPASS_TOKEN=  # 任意: CAPTCHA バイパストークン（staging 等）
+```
