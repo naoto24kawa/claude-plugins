@@ -62,9 +62,12 @@ tools: ["Bash", "Read", "Write", "Glob", "mcp__playwright__browser_navigate", "m
 `.env` を `Bash` でパースして認証情報を取得する:
 
 ```bash
-EMAIL=$(grep -E '^SITE_EXPLORER_EMAIL=' .env 2>/dev/null | head -1 | cut -d= -f2-)
-PASSWORD=$(grep -E '^SITE_EXPLORER_PASSWORD=' .env 2>/dev/null | head -1 | cut -d= -f2-)
-TURNSTILE=$(grep -E '^SITE_EXPLORER_TURNSTILE_BYPASS_TOKEN=' .env 2>/dev/null | head -1 | cut -d= -f2-)
+# worktree 環境でも正しくプロジェクトルートを参照する
+PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+ENV_FILE="$PROJECT_ROOT/.env"
+EMAIL=$(grep -E '^SITE_EXPLORER_EMAIL=' "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2-)
+PASSWORD=$(grep -E '^SITE_EXPLORER_PASSWORD=' "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2-)
+TURNSTILE=$(grep -E '^SITE_EXPLORER_TURNSTILE_BYPASS_TOKEN=' "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2-)
 ```
 
 **認証情報チェック**: `EMAIL` または `PASSWORD` が空で、かつ `Auth Method` が `none` または `public` でない場合は即時 abort する:
@@ -85,9 +88,10 @@ URL が 0 件の場合は `.site-explorer.md` の `Environments` テーブル先
 
 ### 0-4. サイクル ID の生成
 
-```
-CYCLE_ID = YYYYMMDD-HHMMSS（実行開始時刻）
-CYCLE_FILE = .docs/explorer-cycles/{CYCLE_ID}.md
+```bash
+CYCLE_ID=$(date +%Y%m%d-%H%M%S)
+PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+CYCLE_FILE="$PROJECT_ROOT/.docs/explorer-cycles/${CYCLE_ID}.md"
 ```
 
 ### 0-5. 前回サイクルの読み込み
@@ -304,12 +308,12 @@ EOF
 
   # 解消済み問題の Close
   # ✅ 解消に分類された各問題について:
-  # 1. 前回サイクルファイルの該当 finding の `github_issue` フィールドを読み取る
-  # 2. `gh issue view <NNN> --json state --jq .state` で open 状態を確認する
+  # 1. 前回サイクルファイルの該当 finding の `github_issue` フィールドから ISSUE_NUM を読み取る
+  # 2. `gh issue view "$ISSUE_NUM" --json state --jq .state` で open 状態を確認する（戻り値は小文字 "open"）
   # 3. open の場合のみ gh issue close を実行する
-  ISSUE_STATE=$(gh issue view <NNN> --json state --jq .state 2>/dev/null)
-  if [ "$ISSUE_STATE" = "OPEN" ]; then
-    gh issue close <NNN> --comment "サイクル {CYCLE_ID} で解消を確認。"
+  ISSUE_STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state 2>/dev/null)
+  if [ "$ISSUE_STATE" = "open" ]; then   # gh CLI は小文字で返す
+    gh issue close "$ISSUE_NUM" --comment "サイクル ${CYCLE_ID} で解消を確認。"
   fi
 
 else
