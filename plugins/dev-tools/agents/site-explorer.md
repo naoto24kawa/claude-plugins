@@ -281,40 +281,42 @@ if gh auth status 2>/dev/null; then
   gh issue list --search "[site-explorer] {タイトル}" --state open --json number,title
 
   # 新規・初回問題の Issue 化
-  gh issue create \
-    --title "[site-explorer] {タイトル}" \
-    --label "bug,site-explorer" \
-    --body "$(cat <<'EOF'
+  # --body-file を使ってシェル展開を回避する
+  TMPBODY=$(mktemp)
+  cat > "$TMPBODY" << ISSUE_BODY_EOF
 ## 概要
-{概要}
+${ISSUE_SUMMARY}
 
 ## 再現手順
-{steps}
+${ISSUE_STEPS}
 
 ## 期待する動作
-{expected}
+${ISSUE_EXPECTED}
 
 ## 実際の動作
-{actual}
+${ISSUE_ACTUAL}
 
 ## 付帯情報
-- **フェーズ**: {phase}
-- **重大度**: {severity}
-- **対象 URL**: {url}
-- **サイクル ID**: {cycle_id}
-- **コンソールエラー**: {console_errors（あれば）}
-EOF
-)"
+- **フェーズ**: ${ISSUE_PHASE}
+- **重大度**: ${ISSUE_SEVERITY}
+- **対象 URL**: ${ISSUE_URL}
+- **サイクル ID**: ${CYCLE_ID}
+- **コンソールエラー**: ${ISSUE_CONSOLE_ERRORS}
+ISSUE_BODY_EOF
+  gh issue create \
+    --title "[site-explorer] ${ISSUE_TITLE}" \
+    --label "bug,site-explorer" \
+    --body-file "$TMPBODY"
+  rm -f "$TMPBODY"
 
   # 解消済み問題の Close
-  # ✅ 解消に分類された各問題について:
-  # 1. 前回サイクルファイルの該当 finding の `github_issue` フィールドから ISSUE_NUM を読み取る
-  # 2. `gh issue view "$ISSUE_NUM" --json state --jq .state` で open 状態を確認する（戻り値は小文字 "open"）
-  # 3. open の場合のみ gh issue close を実行する
-  ISSUE_STATE=$(gh issue view "$ISSUE_NUM" --json state --jq .state 2>/dev/null)
-  if [ "$ISSUE_STATE" = "open" ]; then   # gh CLI は小文字で返す
-    gh issue close "$ISSUE_NUM" --comment "サイクル ${CYCLE_ID} で解消を確認。"
-  fi
+  # ✅ 解消に分類された各問題について、前回サイクルファイルの github_issue フィールドを読み取りループする
+  while IFS= read -r issue_num; do
+    ISSUE_STATE=$(gh issue view "$issue_num" --json state --jq .state 2>/dev/null)
+    if [ "$ISSUE_STATE" = "open" ]; then   # gh CLI は小文字で返す
+      gh issue close "$issue_num" --comment "サイクル ${CYCLE_ID} で解消を確認。"
+    fi
+  done < <(grep 'github_issue:' "$PREV_CYCLE_FILE" 2>/dev/null | grep -oE '[0-9]+' | head -50)
 
 else
   echo "⚠️ gh CLI 未認証。Issue 化をスキップします。"

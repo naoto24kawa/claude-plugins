@@ -1,7 +1,7 @@
 ---
 description: 指定した Web アプリ URL を探索的にテストし、バグ・UI 不具合を自動検出して GitHub Issue に登録する
 argument-hint: '[https://url] ["追加指示"]'
-allowed-tools: Agent
+allowed-tools: [Agent]
 ---
 
 ## Usage

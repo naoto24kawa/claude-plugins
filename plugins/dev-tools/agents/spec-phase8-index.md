@@ -84,7 +84,7 @@ Write to the index file path specified in your task instructions.
 | 0 | [00-overview.md](./00-overview.md) | システム概要 |
 | 1 | [01-architecture.md](./01-architecture.md) | アーキテクチャ・モジュール構造 |
 | 2 | [02-data-model.md](./02-data-model.md) | データモデル |
-| 3 | [03-api-specification.md](./03-api-specification.md) | API仕様 |
+| 3 | [03-api-specification.md](./03-api-specification.md) | API仕様（ファイルが存在しない場合は「APIなし – スキップ」と記載） |
 | 4 | [04-usecases/](./04-usecases/_index.md) | ユースケース一覧 |
 | 5 | [05-business-rules.md](./05-business-rules.md) | ビジネスルール |
 | 6 | [06-non-functional.md](./06-non-functional.md) | 非機能要件 |

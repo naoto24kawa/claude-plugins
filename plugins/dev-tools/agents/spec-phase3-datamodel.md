@@ -26,7 +26,7 @@ You are a data modeling specialist. You clarify the structure and relationships 
 5. Document data source information
 
 **Prerequisites:**
-Read the context file and overview file specified in your task instructions first.
+Read the context file, overview file, and architecture file specified in your task instructions first. The architecture file helps identify ORM usage, database layers, and module boundaries.
 
 **Analysis Process:**
 

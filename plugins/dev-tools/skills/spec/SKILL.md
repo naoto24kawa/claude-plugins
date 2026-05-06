@@ -159,9 +159,7 @@ frontmatter の `type`, `area`, `doc_status` を抽出して構造を把握す�
 
 **Step 3: 未文書化の機能領域の検出**
 
-```bash
-ls -d src/*/  app/*/  lib/*/  packages/*/  2>/dev/null
-```
+Glob ツールで `src/*`、`app/*`、`lib/*`、`packages/*` 等のパターンを検索してトップレベルのディレクトリ一覧を取得する。
 
 各ディレクトリの機能領域を推定し、仕様の `area` 一覧と照合して未文書化領域を検出する。
 
@@ -173,7 +171,8 @@ ls -d src/*/  app/*/  lib/*/  packages/*/  2>/dev/null
 
 **Step 5: レポート出力**
 
-ファイル保存はせずユーザーに表示する:
+レポートを `{OUTPUT_DIR}/_drift-report.md` に保存し、パスをユーザーに通知する。大規模リポジトリでは乖離件数が多くなるためインライン表示はしない。
+ユーザーが「画面に表示して」と明示した場合のみインライン出力する。
 
 ```markdown
 # Spec Drift Report
