@@ -42,17 +42,6 @@
       "category": "development"
     },
     {
-      "name": "consulting",
-      "description": "Virtual consulting team with 7 specialized advisors for software product decisions. Covers legal, pricing, tech architecture, security, marketing, product/UX, and finance — supporting both individual developers and enterprise teams.",
-      "version": "1.0.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/consulting",
-      "category": "productivity"
-    },
-    {
       "name": "site-explorer",
       "description": "任意の Web アプリに対して探索的テストを実行し、バグ・UI 不具合を自動検出して GitHub Issue に登録する汎用 QA エージェント",
       "version": "1.0.0",
