@@ -1,5 +1,0 @@
-{
-  "name": "spec",
-  "version": "1.0.0",
-  "description": "Specification document generation, incremental update, and drift detection for codebases. Orchestrates 9 specialized sub-agents to produce system overview, architecture, data model, API, use cases, business rules, and non-functional requirements documents."
-}

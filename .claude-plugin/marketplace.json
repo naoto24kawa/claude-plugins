@@ -1,44 +1,22 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "5.2.0",
-  "description": "Development process infrastructure, specification document generation, and exploratory QA testing plugins for development workflows",
+  "version": "6.0.0",
+  "description": "All-in-one development toolset: development process infrastructure, specification document generation, and exploratory QA testing",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
   },
   "plugins": [
     {
-      "name": "dev-process",
-      "description": "Development process infrastructure plugin. Sets up CLAUDE.md rules, Issue/PR templates, GitHub Actions quality gates. Includes ECC pattern review, security review context, parallel expert review cycle, and process audit.",
-      "version": "2.4.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/dev-process",
-      "category": "productivity"
-    },
-    {
-      "name": "spec",
-      "description": "Specification document generation, incremental update, and drift detection for codebases. Orchestrates 9 specialized sub-agents to produce system overview, architecture, data model, API, use cases, business rules, and non-functional requirements documents.",
+      "name": "dev-tools",
+      "description": "All-in-one development toolset. Includes: (1) dev-process — CLAUDE.md rules, Issue/PR templates, GitHub Actions quality gates, parallel expert review cycle; (2) spec — specification document generation, incremental update, and drift detection via 9 specialized sub-agents; (3) site-explorer — exploratory QA testing for any web app with automatic bug detection and GitHub Issue registration.",
       "version": "1.0.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"
       },
-      "source": "./plugins/spec",
-      "category": "productivity"
-    },
-    {
-      "name": "site-explorer",
-      "description": "任意の Web アプリに対して探索的テストを実行し、バグ・UI 不具合を自動検出して GitHub Issue に登録する汎用 QA エージェント",
-      "version": "1.0.0",
-      "author": {
-        "name": "naoto24kawa",
-        "email": "naoto24kawa@gmail.com"
-      },
-      "source": "./plugins/site-explorer",
+      "source": "./plugins/dev-tools",
       "category": "productivity"
     }
   ]
