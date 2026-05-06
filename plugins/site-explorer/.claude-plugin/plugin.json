@@ -1,0 +1,6 @@
+{
+  "name": "site-explorer",
+  "version": "1.0.0",
+  "description": "任意の Web アプリに対して探索的テストを実行し、バグ・UI 不具合を自動検出して GitHub Issue に登録する",
+  "author": "naoto24kawa"
+}
