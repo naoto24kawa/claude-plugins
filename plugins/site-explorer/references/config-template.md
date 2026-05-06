@@ -40,5 +40,6 @@ email/password ログイン（/login ページ）
 ```
 SITE_EXPLORER_EMAIL=test@example.com
 SITE_EXPLORER_PASSWORD=YourPassword123!
-SITE_EXPLORER_TURNSTILE_BYPASS_TOKEN=  # 任意: CAPTCHA バイパストークン（staging 等）
+# 任意: CAPTCHA バイパストークン（staging 等）
+SITE_EXPLORER_TURNSTILE_BYPASS_TOKEN=
 ```

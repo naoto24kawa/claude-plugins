@@ -71,6 +71,8 @@ TURNSTILE=$(grep -E '^SITE_EXPLORER_TURNSTILE_BYPASS_TOKEN=' .env 2>/dev/null | 
 
 > ❌ 認証情報未設定。`.env` に `SITE_EXPLORER_EMAIL` と `SITE_EXPLORER_PASSWORD` を設定してください。
 
+> **注**: 引数解析（0-3）で確定した URL の全てが `Auth Restrictions` でスキップ対象の場合、認証情報が未設定でも abort しない。Phase 1-1 でスキップ判定を行う。
+
 ### 0-3. 引数の解析
 
 タスク説明の引数を空白で分割し:
@@ -123,6 +125,8 @@ CYCLE_FILE = .docs/explorer-cycles/{CYCLE_ID}.md
 API="<対象 API ベース URL>"
 curl -sf "$API/health" && echo "✅ API health OK" || echo "❌ API health NG"
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$API/dashboard")
+# ログイン失敗後に実行している場合、/dashboard の 401 は「正常動作」でなく「ログイン失敗の結果」
+# である可能性がある。Phase 1 のスキップ/失敗状況とあわせてレポートに記載すること。
 [ "$STATUS" = "401" ] && echo "✅ 未認証 401 OK" || echo "⚠️ ステータス: $STATUS"
 ```
 
@@ -260,31 +264,23 @@ skipped_phases: []
 
 ### 5-4. GitHub Issue 化
 
-```bash
-# gh CLI 利用可能チェック
-gh auth status 2>/dev/null || { echo "⚠️ gh CLI 未認証。Issue 化をスキップします。"; }
-```
+> **前提**: これらの `gh` コマンドはターゲットリポジトリのルートディレクトリで実行すること（`git remote` で正しいリポジトリが推論されるよう）。リポジトリが不明な場合は `gh repo view --json name,owner` で確認する。
 
-認証済みの場合のみ以下を実行する:
-
-**ラベルの準備:**
 ```bash
-gh label list | grep -q "site-explorer" || \
-  gh label create "site-explorer" --color "#0075ca" --description "site-explorer エージェントが自動検出"
-```
+if gh auth status 2>/dev/null; then
+  # ラベルの準備
+  gh label list | grep -q "site-explorer" || \
+    gh label create "site-explorer" --color "#0075ca" --description "site-explorer エージェントが自動検出"
 
-**重複チェック（継続問題のスキップ）:**
-🔁 継続に分類された問題は前回サイクルで既に Issue 化済みのためスキップする:
-```bash
-gh issue list --search "[site-explorer] {タイトル}" --state open --json number,title
-```
+  # 重複チェック（継続問題のスキップ）
+  # 🔁 継続に分類された問題は前回サイクルで既に Issue 化済みのためスキップする
+  gh issue list --search "[site-explorer] {タイトル}" --state open --json number,title
 
-**新規・初回問題の Issue 化:**
-```bash
-gh issue create \
-  --title "[site-explorer] {タイトル}" \
-  --label "bug,site-explorer" \
-  --body "$(cat <<'EOF'
+  # 新規・初回問題の Issue 化
+  gh issue create \
+    --title "[site-explorer] {タイトル}" \
+    --label "bug,site-explorer" \
+    --body "$(cat <<'EOF'
 ## 概要
 {概要}
 
@@ -305,18 +301,27 @@ gh issue create \
 - **コンソールエラー**: {console_errors（あれば）}
 EOF
 )"
-```
 
-**解消済み問題の Close:**
-```bash
-gh issue close {NNN} --comment "サイクル {CYCLE_ID} で解消を確認。"
+  # 解消済み問題の Close
+  # ✅ 解消に分類された各問題について:
+  # 1. 前回サイクルファイルの該当 finding の `github_issue` フィールドを読み取る
+  # 2. `gh issue view {NNN} --json state --jq .state` で open 状態を確認する
+  # 3. open の場合のみ gh issue close を実行する
+  ISSUE_STATE=$(gh issue view {NNN} --json state --jq .state 2>/dev/null)
+  if [ "$ISSUE_STATE" = "OPEN" ]; then
+    gh issue close {NNN} --comment "サイクル {CYCLE_ID} で解消を確認。"
+  fi
+
+else
+  echo "⚠️ gh CLI 未認証。Issue 化をスキップします。"
+fi
 ```
 
 発行された Issue 番号を記録し、サイクルファイルの該当 finding に `github_issue: #NNN` を追記する。
 
 ### 5-5. Actions ファイルの作成
 
-未解消の Issue が 1 件以上ある場合、`Write` で以下を作成する:
+🔴 新規 または 🔁 継続に分類された Issue（新規作成または前回から継続している問題）が 1 件以上ある場合、`Write` で以下を作成する:
 
 `.docs/actions/next-session-site-explorer-{CYCLE_ID}.md`:
 ```markdown
