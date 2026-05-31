@@ -7,6 +7,11 @@ import {
   sortText, DEFAULT_SORT_OPTIONS,
   toKatakana, toHiragana,
 } from '../utils/text.js';
+import {
+  encodeBase64, decodeBase64,
+  encodeHTMLEntities, decodeHTMLEntities,
+  uuencode, uudecode,
+} from '../utils/encode.js';
 
 describe('text utils', () => {
   test('toUpperCase', () => expect(toUpperCase('hello')).toBe('HELLO'));
@@ -24,4 +29,19 @@ describe('text utils', () => {
   test('sortText', () => expect(sortText('b\na', DEFAULT_SORT_OPTIONS)).toBe('a\nb'));
   test('toKatakana', () => expect(toKatakana('あいう')).toBe('アイウ'));
   test('toHiragana', () => expect(toHiragana('アイウ')).toBe('あいう'));
+});
+
+describe('encode utils', () => {
+  test('base64 round-trip', () => {
+    expect(encodeBase64('hello')).toBe('aGVsbG8=');
+    expect(decodeBase64('aGVsbG8=')).toBe('hello');
+  });
+  test('html-entity round-trip', () => {
+    expect(encodeHTMLEntities('<b>')).toBe('&lt;b&gt;');
+    expect(decodeHTMLEntities('&lt;b&gt;')).toBe('<b>');
+  });
+  test('uuencode round-trip', () => {
+    const encoded = uuencode('hello');
+    expect(uudecode(encoded)).toBe('hello');
+  });
 });
