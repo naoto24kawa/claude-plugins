@@ -91,7 +91,7 @@ export function minifyHtml(html: string): string {
 
 // ---- YAML ----
 function getIndent(line: string): number {
-  return line.match(/^(\s*)/)?.[1].length ?? 0;
+  return (line.match(/^(\s*)/)?.[1] ?? '').length;
 }
 
 function parseYamlValue(val: string): unknown {
