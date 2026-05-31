@@ -16,6 +16,8 @@ import {
   formatJSON, minifyJSON, formatXml, formatHtml, minifyHtml,
   yamlToJson, jsonToYaml, simpleXmlToJson, tomlToJson,
 } from '../utils/format.js';
+import { atbash, caesarEncrypt } from '../utils/crypto.js';
+import { generateUUIDv4, generateULID } from '../utils/generate.js';
 
 describe('text utils', () => {
   test('toUpperCase', () => expect(toUpperCase('hello')).toBe('HELLO'));
@@ -69,5 +71,21 @@ describe('format utils', () => {
   test('tomlToJson', () => {
     const result = JSON.parse(tomlToJson('name = "Alice"\nage = 30'));
     expect(result).toEqual({ name: 'Alice', age: 30 });
+  });
+});
+
+describe('crypto utils', () => {
+  test('atbash', () => expect(atbash('abc')).toBe('zyx'));
+  test('atbash is its own inverse', () => expect(atbash(atbash('Hello'))).toBe('Hello'));
+  test('caesarEncrypt shift 3', () => expect(caesarEncrypt('abc', 3)).toBe('def'));
+  test('caesarEncrypt wraps', () => expect(caesarEncrypt('xyz', 3)).toBe('abc'));
+});
+
+describe('generate utils', () => {
+  test('generateUUIDv4 format', () => {
+    expect(generateUUIDv4()).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  });
+  test('generateULID length', () => {
+    expect(generateULID()).toHaveLength(26);
   });
 });
