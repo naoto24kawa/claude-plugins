@@ -12,6 +12,10 @@ import {
   encodeHTMLEntities, decodeHTMLEntities,
   uuencode, uudecode,
 } from '../utils/encode.js';
+import {
+  formatJSON, minifyJSON, formatXml, formatHtml, minifyHtml,
+  yamlToJson, jsonToYaml, simpleXmlToJson, tomlToJson,
+} from '../utils/format.js';
 
 describe('text utils', () => {
   test('toUpperCase', () => expect(toUpperCase('hello')).toBe('HELLO'));
@@ -43,5 +47,27 @@ describe('encode utils', () => {
   test('uuencode round-trip', () => {
     const encoded = uuencode('hello');
     expect(uudecode(encoded)).toBe('hello');
+  });
+});
+
+describe('format utils', () => {
+  test('formatJSON', () => expect(formatJSON('{"a":1}', 2)).toContain('"a": 1'));
+  test('formatJSON throws on invalid', () => expect(() => formatJSON('{bad}', 2)).toThrow());
+  test('minifyJSON', () => expect(minifyJSON('{ "a": 1 }')).toBe('{"a":1}'));
+  test('formatXml', () => expect(formatXml('<a><b>1</b></a>')).toContain('  <b>1</b>'));
+  test('formatHtml', () => expect(formatHtml('<div><p>hi</p></div>')).toContain('  <p>hi</p>'));
+  test('minifyHtml', () => expect(minifyHtml('<div>  <p>hi</p>  </div>')).not.toContain('  '));
+  test('yaml-to-json round-trip', () => {
+    const json = yamlToJson('name: Alice\nage: 30');
+    expect(JSON.parse(json)).toEqual({ name: 'Alice', age: 30 });
+  });
+  test('json-to-yaml', () => expect(jsonToYaml('{"name":"Alice"}')).toContain('name: Alice'));
+  test('simpleXmlToJson', () => {
+    const result = JSON.parse(simpleXmlToJson('<root><item>1</item></root>'));
+    expect(result).toHaveProperty('root');
+  });
+  test('tomlToJson', () => {
+    const result = JSON.parse(tomlToJson('name = "Alice"\nage = 30'));
+    expect(result).toEqual({ name: 'Alice', age: 30 });
   });
 });
