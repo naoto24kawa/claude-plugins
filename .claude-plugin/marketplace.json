@@ -18,6 +18,17 @@
       },
       "source": "./plugins/dev-tools",
       "category": "productivity"
+    },
+    {
+      "name": "elchika-tools",
+      "description": "Local MCP server exposing 34 Elchika Tools utilities. Text transform, encode/decode, format, crypto, and generate tools — all running locally, no data leaves your machine.",
+      "version": "1.0.0",
+      "author": {
+        "name": "naoto24kawa",
+        "email": "naoto24kawa@gmail.com"
+      },
+      "source": "./plugins/elchika-tools",
+      "category": "productivity"
     }
   ]
 }

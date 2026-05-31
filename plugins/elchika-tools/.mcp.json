@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "elchika-tools": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "cd '${PLUGIN_DIR}/mcp-server' && [ -d node_modules ] || npm install --silent && npx tsx src/index.ts"
+      ]
+    }
+  }
+}
