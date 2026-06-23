@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
 
 # Parallel Expert Review Cycle
 
-5名の専門レビュアーを並行ディスパッチし、指摘が 0 件になるまでラウンドを繰り返すレビュー手法。
+7名の専門レビュアーを並行ディスパッチし、指摘が 0 件になるまでラウンドを繰り返すレビュー手法。
 セッションスコープの偽陽性レジストリにより、同じ誤判定が繰り返しエスカレートされることを防ぐ。
 
 ## 自律実行の原則
@@ -22,11 +22,13 @@ allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
 
 ```
 Round N
-  ├─ Specialist #1 (Security)     → finding or LGTM
-  ├─ Specialist #2 (Core Logic)   → finding or LGTM
-  ├─ Specialist #3 (Tests)        → finding or LGTM
-  ├─ Specialist #4 (Domain)       → finding or LGTM
-  └─ Specialist #5 (Fresh Eyes)   → finding or LGTM
+  ├─ Specialist #1 (Security)          → finding or LGTM
+  ├─ Specialist #2 (Core Logic)        → finding or LGTM
+  ├─ Specialist #3 (Tests)             → finding or LGTM
+  ├─ Specialist #4 (Domain)            → finding or LGTM
+  ├─ Specialist #5 (Fresh Eyes)        → finding or LGTM
+  ├─ Specialist #6 (Quality+Security)  → finding or LGTM  ※ sentinel フロー
+  └─ Specialist #7 (Structure)         → finding or LGTM  ※ sprawlens CLI
          ↓
   FP Registry 照合 → 既知FP は即棄却
          ↓
@@ -57,17 +59,26 @@ touch "$REVIEW_DIR/fp-registry.md"
 
 ### ロール構成
 
-各ラウンドで以下の5ロールをディスパッチする。プロジェクトの特性に応じて Domain ロールをカスタマイズすること。
+各ラウンドで以下の7ロールをディスパッチする。プロジェクトの特性に応じて Domain ロールをカスタマイズすること。
 
-| # | ロール | フォーカス |
-|---|--------|-----------|
-| 1 | Security | 注入・パストラバーサル・情報漏洩 |
-| 2 | Core Logic | ビジネスロジック・データ整合性 |
-| 3 | Tests | テスト隔離・カバレッジ・アサーション |
-| 4 | Domain | CLI/API/DB など対象固有の品質 |
-| 5 | Fresh Eyes | 先入観なしの総合チェック |
+| # | ロール | フォーカス | 実装方法 |
+|---|--------|-----------|---------|
+| 1 | Security | 注入・パストラバーサル・情報漏洩 | Agent（コード読解） |
+| 2 | Core Logic | ビジネスロジック・データ整合性 | Agent（コード読解） |
+| 3 | Tests | テスト隔離・カバレッジ・アサーション | Agent（コード読解） |
+| 4 | Domain | CLI/API/DB など対象固有の品質 | Agent（コード読解） |
+| 5 | Fresh Eyes | 先入観なしの総合チェック | Agent（コード読解） |
+| 6 | Quality+Security | quality/security レンズ + 3票検証 | `sentinel` スキルフロー |
+| 7 | Structure | import グラフ構造劣化（循環依存・ハブ肥大化） | `sprawlens` CLI |
+
+**#6/#7 の注意点:**
+- #6 は `sentinel` スキルの実行フロー（review-request.json 生成 → サブエージェント × 2 → verify × 3票）を適用する。3票で confirmed となった finding のみを `[ISSUE]` として報告する
+- #7 は `sprawlens` CLI を Bash で実行し、Blocking 条件（cycleCount +2以上等）を満たす場合のみ `[ISSUE]` として報告する。Warning のみの場合は LGTM 扱い
+- #6/#7 には外部ツールが必要。未インストール時は「前提ツールが見つかりません」と報告して LGTM とし、ループを止めない
 
 > **Fresh Eyes の注意**: Fresh Eyes には「修正済み事項」を渡さない。修正済みのはずの問題が再浮上する場合、修正が不完全な可能性があるため。FP レジストリは渡す（確認済みの偽陽性は除外する）。
+
+> **#7 Structure の注意**: #7 には `file_list` の代わりに `BASE_SHA` と `HEAD_SHA` を渡す。sprawlens はリポジトリ全体を解析するため特定ファイルを指定しない。修正後は必ず再計測して構造が改善したことを確認してから LGTM を返すこと。
 
 
 ロール別のフォーカスエリアとプロンプトテンプレートは `references/specialist-roles.md` を参照。
@@ -76,11 +87,12 @@ touch "$REVIEW_DIR/fp-registry.md"
 
 各スペシャリストのプロンプトに必ず含めること:
 
-1. **レビュー対象ファイル一覧** — 絶対パスで指定
+1. **レビュー対象ファイル一覧** — 絶対パスで指定（#7 は不要。代わりに BASE_SHA / HEAD_SHA を渡す）
 2. **修正済み事項** — 重複報告を防ぐため、前ラウンドまでに修正した内容を列挙
 3. **設計上の事実** — 意図的な設計判断（「これは仕様」と分かっているもの）
 4. **FP レジストリの内容** — `cat "$REVIEW_DIR/fp-registry.md"` で読み込んでプロンプトに展開
 5. **報告フォーマット** — 問題がなければ「LGTM」。問題がある場合のみ `[ISSUE] ファイル:行 / 確信度 / 問題 / 修正案` の形式
+6. **（#6/#7 のみ）外部ツールパス** — `CODE_SENTINEL_ROOT` / `sprawlens` CLI のパスを明記すること
 
 ### 確信度フィルタ
 
@@ -183,10 +195,12 @@ FP レジストリは「偽陽性が上がってくる前に止める」プロ�
 - **未知 FP** → Checker も Specialist と同じコードを読んで同じ誤りをしうる（効果薄い）
 - **真のバグ** → Specialist が正しく報告（Checker は単なるラグ）
 
-### なぜ 5 名か
+### なぜ 7 名か
 
-専門分化が効く最小構成。同じロールを 2 名にしても偽陽性が増えるだけ。
-Fresh Eyes を 2〜3 名にする方が ROI が高い（盲点の発見に有効）。
+5名（#1〜#5）はコード読解ベースの専門分化。#6/#7 は外部ツール駆動の観点を追加する。
+- **#6 Quality+Security**: コード読解ベースの #1 Security と異なり、静的解析ルールを機械的に適用する。3票検証で偽陽性を事前除去するため FP レジストリへの昇格が少ない
+- **#7 Structure**: 差分レビューでは見えない大域的な構造劣化を捉える唯一のロール。Blocking 閾値を超えた場合のみ修正ループに乗せることでノイズを抑制する
+- Fresh Eyes を 2〜3 名にする方が ROI が高い（盲点の発見に有効）
 
 ### FP レジストリの寿命
 
