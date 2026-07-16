@@ -1,185 +1,60 @@
-# Claude Code Plugin Marketplace
+# agent-toolkit
 
-Claude Code用のプラグインマーケットプレース。8つのプラグインで Issue自動処理、プラン共有、通知、観測系設計、開発プロセス基盤、プラグイン開発支援、アクセシビリティ検査、仮想コンサルチームを提供する。
+エージェント横断のスキル集（[skills.sh](https://www.skills.sh/) 互換）＋ Claude Code プラグインマーケットプレース。
 
-## クイックスタート
+| 役割 | 対象エージェント | インストール方法 |
+|------|----------------|----------------|
+| **Skills** (`skills/`) | Claude Code, Codex, Cursor ほか [skills CLI](https://github.com/vercel-labs/skills) 対応エージェント | `npx skills add naoto24kawa/agent-toolkit -g` |
+| **Plugins** (`plugins/`) | Claude Code 専用（hooks / commands / agents / MCP） | `/plugin marketplace add naoto24kawa/agent-toolkit` |
 
-### 前提条件
+## Skills
 
-- [Claude Code](https://claude.com/code) がインストールされていること
+`npx skills add naoto24kawa/agent-toolkit -g` で全スキルをインストール（`--skill <name>` で個別選択）。
 
-### インストール
+| スキル | 概要 |
+|--------|------|
+| `parallel-review-cycle` | 専門家並行レビューを指摘ゼロまで反復するレビューサイクル |
+| `agent-team` | TEAM モードの Role Contract（役割定義）と dev-cycle 連携 |
+| `sentinel` | 品質＋セキュリティレビュー（3-vote 偽陽性フィルタ付き） |
+| `watch-sentinel` | オープン PR への sentinel レビュー適用 |
+| `watch-sprawl` | オープン PR への構造（import graph）分析 |
+| `watch-sprawlens-update` | mizchi/sprawlens の上流更新チェック |
+| `standards-audit` | naoto24kawa/standards 準拠チェック |
+| `documenting-verification` | 動作検証の実行と再現可能な検証資料の作成 |
+
+### 更新の反映
+
+正本はこのリポジトリの `skills/`。各マシンへは skills CLI で配布する。
 
 ```bash
-# マーケットプレースを追加
-/plugin marketplace add naoto24kawa/claude-plugins
-
-# 必要なプラグインをインストール
-/plugin install automation@naoto24kawa-claude-plugins
-/plugin install minio-plan-files@naoto24kawa-claude-plugins
-/plugin install notify@naoto24kawa-claude-plugins
-/plugin install observability@naoto24kawa-claude-plugins
-/plugin install dev-process@naoto24kawa-claude-plugins
-/plugin install plugin-dev@naoto24kawa-claude-plugins
-/plugin install accessibility@naoto24kawa-claude-plugins
-/plugin install consulting@naoto24kawa-claude-plugins
+# スキルを編集して push したあと、各マシンで
+npx skills update -g
 ```
 
-## プラグイン一覧
+`~/.agents/skills/` 配下を直接編集しない（`skills update` で上書きされる）。
 
-### automation (v1.0.0)
+## Plugins（Claude Code 専用）
 
-GitHub Issueの自動分類・実装・PR作成ワークフロー。
-
-**コマンド (3つ):**
-- `/automation:digest-issues` - Issue自動分類・実装・PR作成
-- `/automation:plan-issue` - Issue検討・実装計画作成
-- `/automation:setup-automation` - 設定ファイルセットアップ
-
-**エージェント (3つ):** browser-check、digest-worker、pr-screenshots
-
-### minio-plan-files (v2.2.0)
-
-MinIO (S3互換) + ElasticMQ (SQS互換) によるAIエージェント間プラン共有キュー。
-
-**スキル (7つ):**
-
-| スキル | 役割 | コマンド |
-|--------|------|---------|
-| minio-setup | 初回セットアップ | `/skill minio-plan-files:minio-setup` |
-| plan-submit | Dispatcher: planをキューに投入 | `/skill minio-plan-files:plan-submit` |
-| plan-fetch | Agent: planを取得 | `/skill minio-plan-files:plan-fetch` |
-| plan-done | Agent: plan完了 | `/skill minio-plan-files:plan-done` |
-| plan-fail | Agent: plan失敗 | `/skill minio-plan-files:plan-fail` |
-| plan-wait | Dispatcher: plan完了待機 | `/skill minio-plan-files:plan-wait` |
-| plan-status | ステータス確認 & retry | `/skill minio-plan-files:plan-status` |
-
-### notify (v2.0.0)
-
-タスク完了・入力待ち通知 (simple-notify-tools連携)。インストールするだけで Stop/Notification Hook が自動有効化される。
-
-**Hooks (1つ):** Stop + Notification イベントで notify.sh を自動実行
-
-**スキル (1つ):**
-- `/skill notify:notify-setup` - 通知テスト、LAN設定、旧設定マイグレーション
-
-### observability (v1.0.0)
-
-AI自己修復システムの観測系設計セットアップと継続監査。
-
-インフラ (AWS/Cloudflare) x アーキテクチャ (単一/マイクロサービス) の4パターンから選択し、設計確定と継続検査を行う。
-
-**スキル (2つ):**
-- `/skill observability:setup` - パターン選択 -> 設計確定 -> `.docs/observability-design.md` 出力
-- `/skill observability:observability-audit` - 設計ドキュメント基準のコード検査 (11項目、OK/WARN/NG)
-
-詳細: [plugins/observability/README.md](./plugins/observability/README.md)
-
-### dev-process (v2.0.0)
-
-開発プロセス基盤 + 仕様生成/更新/乖離検出/監査。
-
-**スキル (5つ):**
-
-| スキル | コマンド | 用途 |
-|--------|---------|------|
-| setup | `/skill dev-process:dev-process-setup` | CLAUDE.md規約・テンプレート・Actions導入 |
-| spec-coordinator | `/skill dev-process:spec-coordinator` | コードベースから仕様書を全体生成 (9エージェント) |
-| spec-update | `/skill dev-process:spec-update` | PR/ブランチ差分から仕様書を部分更新 |
-| spec-drift | `/skill dev-process:spec-drift` | 仕様とコードの乖離を検出 |
-| process-audit | `/skill dev-process:process-audit` | プロセス全体の健全性をA-Fスコアで監査 |
-
-推奨ワークフロー: `setup -> spec-coordinator -> process-audit` (初回) / `spec-update -> spec-drift` (日常)
-
-詳細: [plugins/dev-process/README.md](./plugins/dev-process/README.md)
-
-### plugin-dev (v1.0.0)
-
-プラグイン開発のエラー自動検知・診断・修正。
-
-**スキル (2つ):**
-- `/skill plugin-dev:setup` - 導入確認・動作ガイド
-- `/skill plugin-dev:skill-improver` - スキルエラー診断・修正
-
-**エージェント (2つ):** plugindev-syntax-fixer、plugindev-workflow-debugger
-
-Stop Hookによるスキルエラーの自動検知を含む。
-
-### accessibility (v1.0.0)
-
-WCAG 2.2 Level A/AA/AAA 対応の Web アクセシビリティ静的コードレビュー。
-
-**エージェント (1つ):** a11y-reviewer (HTML/JSX/TSX/Vue/Svelte/CSSのa11y検査 + 修正案提示)
-
-詳細: [plugins/accessibility/README.md](./plugins/accessibility/README.md)
-
-### consulting (v1.0.0)
-
-ソフトウェアプロダクトの意思決定を支援する仮想コンサルチーム。個人開発から企業開発まで対応。
-
-**エージェント (7つ):**
-
-| エージェント | 領域 | 活用例 |
-|-------------|------|--------|
-| legal-advisor | 法務・契約 | 利用規約、NDA、OSSライセンス |
-| pricing-strategist | 価格・収益 | 料金設計、マネタイズ戦略 |
-| tech-architect | 技術選定 | ライブラリ採用、アーキテクチャ判断 |
-| security-advisor | セキュリティ | 個人情報管理、コンプライアンス |
-| marketing-advisor | マーケ・GTM | 集客戦略、ポジショニング |
-| product-advisor | UX・プロダクト | MVP設計、機能優先度 |
-| finance-advisor | 財務・資金 | コスト管理、ROI算出 |
-
-詳細: [plugins/consulting/README.md](./plugins/consulting/README.md)
-
-## 開発ガイド
-
-### プラグインの追加
-
-1. `plugins/<プラグイン名>/` ディレクトリを作成
-2. コンポーネントを配置: `skills/`、`agents/`、`commands/`、`hooks/` (必要なもののみ)
-3. `.claude-plugin/marketplace.json` の `plugins` 配列にエントリを追加
-
-```json
-{
-  "name": "plugin-name",
-  "description": "Plugin description",
-  "version": "1.0.0",
-  "author": { "name": "...", "email": "..." },
-  "source": "./plugins/plugin-name",
-  "category": "productivity"
-}
+```bash
+/plugin marketplace add naoto24kawa/agent-toolkit
+/plugin install dev-tools@naoto24kawa-claude-plugins
+/plugin install elchika-tools@naoto24kawa-claude-plugins
 ```
 
-### スキルの追加
+> マーケットプレース名は既存インストールとの互換性維持のため `naoto24kawa-claude-plugins` のまま。
 
-1. `plugins/<プラグイン名>/skills/<スキル名>/SKILL.md` を作成 (YAML frontmatter必須)
-2. Progressive Disclosure パターンに従い詳細を `reference/` に分離
-3. スキルは `source` ディレクトリから自動検出される
+### dev-tools (v1.0.0)
 
-### エージェントの追加
+開発プロセス基盤のオールインワン。
 
-1. `plugins/<プラグイン名>/agents/<エージェント名>.md` を作成 (YAML frontmatter必須)
-2. エージェントは `source` ディレクトリの `agents/` から自動検出される
+- **spec** — 9つのサブエージェント（Phase 0-8）による仕様書生成・差分更新・乖離検出
+- **site-explorer** — Web アプリの探索的 QA テストと GitHub Issue 自動登録
+- **skills** — `parallel-review-cycle`（`skills/` 側が正本、プラグインへは同期コピー）
 
-### コマンドの追加
+### elchika-tools (v1.0.0)
 
-1. `plugins/<プラグイン名>/commands/<コマンド名>.md` を作成
-2. コマンドは `source` ディレクトリの `commands/` から自動検出される
+ローカル MCP サーバー。テキスト変換・エンコード/デコード・フォーマット・暗号・生成系の34ユーティリティ。データは外部送信されない。
 
-### 品質基準
+## ライセンス
 
-- スキル名: gerund形式またはケバブケース
-- Description: トリガーワード含有、1024文字以内、三人称形式
-- SKILL.md: 500行以下 (Progressive Disclosure)
-- 外部ファイル参照: 1階層まで
-- 同一プラグイン内で用語・形式を統一
-
-## 参照
-
-- [CLAUDE.md](./CLAUDE.md) - AI向けプロジェクトコンテキスト
-- [Plugin Marketplace](https://code.claude.com/docs/en/plugin-marketplaces) - 公式ドキュメント
-- [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) - スキル作成ベストプラクティス
-
-## コントリビューション
-
-問題や改善提案は GitHub Issues / Pull Requests へ。
+MIT
