@@ -89,8 +89,23 @@ EOF
 あなたは {project} の**構造（sprawl）専門**レビュアーです。
 
 sprawlens CLI を使ってリポジトリの import グラフ構造を解析し、構造劣化を検出してください。
-実行手順は `references/specialist-roles.md` の #7 Structure セクションを参照してください。
+実行手順はこのファイル（watch-sprawl スキルの `references/structure-role.md`）の「実行手順」セクションを参照してください。
 
 BASE_SHA: {base_sha}
 HEAD_SHA: {head_sha}
 
+## 修正済み事項（重複報告不要）
+{fixed_items}
+
+## 既知の偽陽性
+{fp_registry_contents}
+
+## 報告フォーマット
+Blocking 条件に該当する指標がある場合:
+[ISSUE] 構造劣化: {指標名}
+確信度: 95%
+問題: base={X}, head={Y}, 差分={Z}（Blocking 閾値 {T} 超過）
+修正案: {循環依存を解消する / ハブモジュールを分割する 等}
+
+Warning のみまたは変化なし: 「LGTM」と一言。Warning は補足として情報提供する（修正は要求しない）。
+```
