@@ -1,6 +1,6 @@
 ---
 name: parallel-review-cycle
-description: This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "expert review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", "keep reviewing until no issues", "iterative code review", "review this until it's clean", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "詳細レベルの点検", "altitude check".
+description: This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "詳細レベルの点検", "altitude check".
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
 ---
 
@@ -94,7 +94,7 @@ touch "$REVIEW_DIR/fp-registry.md"
 
 スペシャリストには「**確信度 80% 以上の問題のみ報告**」を明示する。これにより低品質な指摘のノイズを減らす。
 
-あわせて `~/.claude/references/agent-output-principles.md` の **scope フィルタ**を各プロンプトに含める——flag（correctness・セキュリティ・明示要件に影響。文章仕様では誤実装・誤運用・収束不能に至る欠陥を含む）と optional（それ以外）を分離報告させる。**サイクル継続判定・LGTM 相当の判定は flag のみ**で行う（確信度は severity/scope と直交——100%確信のスタイル指摘で収束を妨げない）。optional は修正不要だが、記録は正本の記録先規定に従い**ディスクへ残す**（コード変更なら `INSPECTION_STATUS` 併記、それ以外はレビュー成果物、無ければ対象ルートの `.docs/reviews/`）。チャットの最終レポートには要約のみ載せる。
+あわせて `references/agent-output-principles.md`（同スキル内）の **scope フィルタ**を各プロンプトに含める——flag（correctness・セキュリティ・明示要件に影響。文章仕様では誤実装・誤運用・収束不能に至る欠陥を含む）と optional（それ以外）を分離報告させる。**サイクル継続判定・LGTM 相当の判定は flag のみ**で行う（確信度は severity/scope と直交——100%確信のスタイル指摘で収束を妨げない）。optional は修正不要だが、記録は正本の記録先規定に従い**ディスクへ残す**（コード変更なら `INSPECTION_STATUS` 併記、それ以外はレビュー成果物、無ければ対象ルートの `.docs/reviews/`）。チャットの最終レポートには要約のみ載せる。
 
 ## ステップ 3: 結果を収集し FP レジストリと照合する
 

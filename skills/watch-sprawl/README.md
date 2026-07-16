@@ -49,6 +49,8 @@ node ~/projects/mizchi/sprawlens/packages/cli/dist/index.js --version
 
 ## 計測指標と閾値
 
+正本は `references/structure-role.md`（以下は参考の抜粋）。
+
 | 指標 | Warning | Blocking |
 |---|---|---|
 | cycleCount（循環依存） | +1以上増加 | +2以上増加 |
@@ -58,5 +60,5 @@ node ~/projects/mizchi/sprawlens/packages/cli/dist/index.js --version
 
 ## 注意
 
-- `watch-review` / `watch-issue` と同一 worktree で同時実行しない（`gh pr checkout` が HEAD を切り替えるため互いの作業を破壊する）
+- 他の watch-* スキル（`watch-sentinel` 等、`gh pr checkout` を行うもの）と同一 worktree で同時実行しない（HEAD を切り替えるため互いの作業を破壊する）
 - sprawlens を更新した場合は再ビルドが必要

@@ -44,7 +44,7 @@ sentinel_root: ~/projects/naoto24kawa/code-sentinel  # ビルド済みリポジ�
 
 `sentinel_root` のリポジトリがビルド済みであること（`dist/cli/main.js` が存在する）。`sentinel` スキル（単発レビュー）が利用可能であること。
 
-**このスキルは `gh pr checkout` を行わない。** sentinel は `git show <sha>:<path>` で PR の差分内容を読むため HEAD を切り替えない。したがって watch-review / watch-issue 等と同一 worktree で同時に実行しても作業を破壊しない。
+**このスキルは `gh pr checkout` を行わない。** sentinel は `git show <sha>:<path>` で PR の差分内容を読むため HEAD を切り替えない。したがって他の watch-* スキル等と同一 worktree で同時に実行しても作業を破壊しない。
 
 ---
 
@@ -114,7 +114,7 @@ gh pr edit {N} --add-label "watch:sentinel:active"
 
 ### Review（sentinel スキルへ委譲）
 
-> **parallel-review-cycle との関係**: このステップは `parallel-review-cycle` の `#6 Quality+Security` スペシャリストと同一のロール定義（`references/specialist-roles.md #6`）を実行する。実装の正本は `sentinel` スキル（`~/.agents/skills/sentinel/SKILL.md`）であり、watch-sentinel は sentinel スキルへの委譲を維持する。parallel-review-cycle では同じロールを Agent として実行する。
+> **sentinel スキルとの関係**: このステップのロール定義の正本は同リポの `sentinel` スキル（インストール先は `~/.agents/skills/sentinel/`）であり、watch-sentinel は sentinel スキルへの委譲を維持する。
 
 PR ごとに専用の workDir を用意し、前回成果物が混ざらないよう作り直す（ledger は workDir 単位で蓄積するため、PR をまたいで再利用すると指摘が混在する）。
 
@@ -137,7 +137,7 @@ sentinel は review-request 生成 → quality/security サブエージェント
 **sentinel の起動結果で分岐する**（REPORT ファイルの有無で判定しないこと。対象ファイル0件で正常スキップした場合もレポートは生成されないため）:
 
 - **正常完了**（ingest まで到達。対象ファイル0件で `no files to patrol` と正常スキップした場合を含む）→ そのまま Comment へ進む。
-- **失敗**（Skill 起動エラー・サブエージェント失敗・ingest 失敗等でレビューを完了できなかった）→ `watch:sentinel:active` を外し、**`watch:sentinel:checked` は付けず**、任意で PR にエラー旨をコメントして、この PR をスキップし次の Pick へ進む（**Comment / Update 節は実行しない**）。checked を付けないことで次回 Pick の再試行対象に残す（watch-review の失敗時挙動と同じ）。
+- **失敗**（Skill 起動エラー・サブエージェント失敗・ingest 失敗等でレビューを完了できなかった）→ `watch:sentinel:active` を外し、**`watch:sentinel:checked` は付けず**、任意で PR にエラー旨をコメントして、この PR をスキップし次の Pick へ進む（**Comment / Update 節は実行しない**）。checked を付けないことで次回 Pick の再試行対象に残す。
 
 ```bash
 # 失敗時のみ: active を外す（checked は付けない = 再 Pick 対象に残す）

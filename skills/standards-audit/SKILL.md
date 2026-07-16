@@ -8,7 +8,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 プロジェクトの現在状態を standards と比較し、ギャップを報告する。**修正はしない — 比較と結果出力のみ。**
 
-Standards 正本: `/Users/nishikawa/projects/naoto24kawa/standards/`
+Standards 正本: ローカル checkout（例: `~/projects/naoto24kawa/standards/`）。存在しなければ `gh repo clone naoto24kawa/standards <一時ディレクトリ>` で取得したコピーを使う。
 
 ---
 

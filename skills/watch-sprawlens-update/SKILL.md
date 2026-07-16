@@ -10,7 +10,7 @@ metadata:
 
 ## 概要
 
-`~/projects/mizchi/sprawlens` の upstream（origin/main）に新しいコミットがあるか確認し、あれば内容を報告する。
+`~/projects/mizchi/sprawlens` の upstream（origin/main）に新しいコミットがあるか確認し、あれば内容を報告する。checkout が無ければ `git clone https://github.com/mizchi/sprawlens ~/projects/mizchi/sprawlens` で用意する。
 
 ## Workflow
 

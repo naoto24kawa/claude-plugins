@@ -36,7 +36,7 @@ sprawlens はローカルビルド済みのものを使う。バイナリは以�
 
 スキル内での呼び出しはすべて `node ~/projects/mizchi/sprawlens/packages/cli/dist/index.js` で行う。
 
-**このスキルは watch-review / watch-issue と同一の worktree で同時実行しない。** `gh pr checkout` が HEAD を切り替えるため、同一 worktree での並行実行は互いの作業を破壊する。専用の worktree か別の作業ディレクトリで起動すること。
+**このスキルは他の watch-* スキル（`gh pr checkout` を行うもの）と同一の worktree で同時実行しない。** `gh pr checkout` が HEAD を切り替えるため、同一 worktree での並行実行は互いの作業を破壊する。専用の worktree か別の作業ディレクトリで起動すること。
 
 ---
 
@@ -160,13 +160,13 @@ HEAD_SNAP=$(ls .codesprawl/snapshots/${HEAD_SHA}*.json 2>/dev/null | head -1)
 
 ### Analyze
 
-> **parallel-review-cycle との関係**: この Analyze ステップは `parallel-review-cycle` の `#7 Structure` スペシャリストと同一のロール定義（`references/specialist-roles.md #7`）を使用する。差分計算スクリプト・判定基準・Blocking/Warning 閾値は specialist-roles.md #7 が正本。
+> ロール定義・差分計算スクリプト・判定基準・Blocking/Warning 閾値の正本は同スキル内の `references/structure-role.md`。
 
-specialist-roles.md の `#7 Structure — 実行手順` に従い、BASE_SHA と HEAD_SHA の差分 JSON を取得する。具体的には:
+`references/structure-role.md` の実行手順に従い、BASE_SHA と HEAD_SHA の差分 JSON を取得する。具体的には:
 
 1. sprawlens collect/analyze を実行してスナップショットを採取する
-2. specialist-roles.md #7 の Python スクリプトで差分 JSON を計算する
-3. 同 #7 の判定基準（Blocking/Warning 閾値テーブル）で評価する
+2. `references/structure-role.md` の Python スクリプトで差分 JSON を計算する
+3. 同ファイルの判定基準（Blocking/Warning 閾値テーブル）で評価する
 
 出力 JSON に `error` キーが存在する場合は「スナップショットが取得できませんでした」と PR にコメントして Update に進む。
 
@@ -230,5 +230,5 @@ gh pr edit {N} \
 - Approve・Changes Requested を付ける → 付けない
 - 自動マージする → しない
 - 絶対値で異常判定する → 必ず差分（diff）で判定する。大きなリポジトリの絶対値は常に大きい
-- watch-review / watch-issue と同一 worktree で同時起動する → `gh pr checkout` が競合して互いの作業を破壊する
+- 他の watch-* スキルと同一 worktree で同時起動する → `gh pr checkout` が競合して互いの作業を破壊する
 - base に `baseRefOid`（base ブランチの tip）を直接使う → main が PR 分岐後に進むと head の祖先でなくなり base スナップショットに到達できず毎回空振りする。必ず merge-base に解決してから collect する

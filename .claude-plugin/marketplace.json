@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "dev-tools",
-      "description": "All-in-one development toolset. Includes: (1) dev-process — CLAUDE.md rules, Issue/PR templates, GitHub Actions quality gates, parallel expert review cycle; (2) spec — specification document generation, incremental update, and drift detection via 9 specialized sub-agents; (3) site-explorer — exploratory QA testing for any web app with automatic bug detection and GitHub Issue registration.",
+      "description": "Development toolset. Includes: (1) spec — specification document generation, incremental update, and drift detection via 9 specialized sub-agents; (2) site-explorer — exploratory QA testing for any web app with automatic bug detection and GitHub Issue registration; (3) parallel-review-cycle skill — iterative parallel specialist review until zero findings.",
       "version": "1.0.0",
       "author": {
         "name": "naoto24kawa",

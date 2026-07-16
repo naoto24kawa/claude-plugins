@@ -18,7 +18,7 @@ Ambiguity Hunter と同一（レビュー対象に CLAUDE.md / 設計書 / ス�
 
 ## scope フィルタ（flag / optional の判定）
 
-`~/.claude/references/agent-output-principles.md` に従う。
+`references/agent-output-principles.md`（同スキル内）に従う。
 - **flag**: 委譲済みの機構詳細が原則文書に二重化していて**ドリフト・正本の上書きが起きうる**もの／固有語彙のせいで委譲先を持たない読者が誤運用に至るもの（＝correctness 相当）
 - **optional**: 圧縮すれば読みやすくなるが誤運用には至らないもの（冗長・altitude の好み）
 
