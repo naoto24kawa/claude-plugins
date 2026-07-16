@@ -21,6 +21,7 @@
 | `watch-sprawlens-update` | mizchi/sprawlens の上流更新チェック |
 | `standards-audit` | naoto24kawa/standards 準拠チェック |
 | `documenting-verification` | 動作検証の実行と再現可能な検証資料の作成 |
+| `tmux-manager` | tmux の状況可視化と残留掃除（human-gate 付き） |
 
 ### 更新の反映
 
@@ -43,12 +44,13 @@ npx skills update -g
 
 > マーケットプレース名は既存インストールとの互換性維持のため `naoto24kawa-claude-plugins` のまま。
 
-### dev-tools (v1.0.0)
+### dev-tools (v1.2.0)
 
 開発プロセス基盤のオールインワン。
 
 - **spec** — 9つのサブエージェント（Phase 0-8）による仕様書生成・差分更新・乖離検出
 - **site-explorer** — Web アプリの探索的 QA テストと GitHub Issue 自動登録
+- **tmux-manager** — tmux の可視化・残留掃除エージェント（`claude --agent` 起動用。手順の正本は `skills/tmux-manager`）
 - **skills** — `parallel-review-cycle`（`skills/` 側が正本、プラグインへは同期コピー）
 
 ### elchika-tools (v1.0.0)
