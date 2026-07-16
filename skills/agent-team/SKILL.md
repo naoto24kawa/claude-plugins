@@ -1,6 +1,6 @@
 ---
 name: agent-team
-description: TEAM モードの Role Contract（役割定義）と dev-cycle 連携を提供する。実装↔検証↔記録のように役割分担して対話的に協調させたいとき、複数エージェントの責務・入出力・完了条件・禁止事項を定義するために使う。トリガー: 「チームで進めたい」「役割分担して協調」「agent team」「TEAM モード」「/agent-team」。
+description: 'TEAM モードの Role Contract（役割定義）と dev-cycle 連携を提供する。実装↔検証↔記録のように役割分担して対話的に協調させたいとき、複数エージェントの責務・入出力・完了条件・禁止事項を定義するために使う。トリガー: 「チームで進めたい」「役割分担して協調」「agent team」「TEAM モード」「/agent-team」。'
 ---
 
 # Agent Team Mode
