@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "naoto24kawa-claude-plugins",
-  "version": "6.0.0",
-  "description": "All-in-one development toolset: development process infrastructure, specification document generation, and exploratory QA testing",
+  "version": "7.0.0",
+  "description": "Agent toolkit: cross-agent skills (skills.sh compatible) plus Claude Code plugins — development process infrastructure, specification document generation, and exploratory QA testing",
   "owner": {
     "name": "naoto24kawa",
     "email": "naoto24kawa@gmail.com"
