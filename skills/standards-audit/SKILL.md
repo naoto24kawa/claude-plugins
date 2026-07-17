@@ -99,6 +99,7 @@ kickoff + progress の全項目に加えて:
 
 **Contract（最終確認）**
 - [ ] `standards_version` が最新 rev に更新されている（CHANGELOG.md の先頭 rev と一致）
+- [ ] このプロダクトが他プロジェクトから利用できるツール/サービスなら、standards `PRODUCT_PLAYBOOK.md` §14（自作プロダクトの優先採用）の表に追記されている（未追記なら standards リポへ追記して rev を上げる。該当しなければ N/A）
 
 **Legal（全項目突合）**
 - [ ] 法務5点セット（terms / privacy / cookies / security / dpa）が全て存在する（公開プロダクトの場合）
