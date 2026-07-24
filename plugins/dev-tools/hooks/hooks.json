@@ -1,0 +1,17 @@
+{
+  "description": "agmsg reliability v0 — surface messages this agent sent that remain unread (visibility only; no auto-recovery)",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/agmsg-unread-check.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
