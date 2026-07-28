@@ -8,6 +8,8 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 プロジェクトの現在状態を standards と比較し、ギャップを報告する。**修正はしない — 比較と結果出力のみ。**
 
+**検査項目の正本は standards `AUDIT.md`。この skill はチェックリストの実体を持たない。** この skill が担うのは「フェーズに応じた絞り込み」「N/A の判定」「レポート形式」の 3 つだけ。検査の中身を複製すると standards の更新ごとに追随が必要になり、rev ごとに陳腐化する（実際 rev.38 で `.docs/` 層構成が変わり rev.39 で `plans/` の命名規約が加わった際、複製していたチェックリストがそれらを検査しない状態になった）。
+
 Standards 正本: ローカル checkout（例: `~/projects/naoto24kawa/standards/`）。存在しなければ `gh repo clone naoto24kawa/standards <一時ディレクトリ>` で取得したコピーを使う。
 
 ---
@@ -24,9 +26,16 @@ Standards 正本: ローカル checkout（例: `~/projects/naoto24kawa/standards
 
 ---
 
-## ステップ 2: プロジェクト状態を収集する
+## ステップ 2: 正本とプロジェクト状態を読む
 
-以下を読む（存在しないファイルは「未作成」として記録する）:
+**正本を先に読む**（これを省くと検査項目が古いまま実行される）:
+
+```
+<standards>/AUDIT.md          # 検査項目の正本。「実行方法」節を必ず読む
+<standards>/CHANGELOG.md      # 最新 rev の確認（先頭エントリ）
+```
+
+続いてプロジェクト側を読む（存在しないファイルは「未作成」として記録する）:
 
 ```
 README.md
@@ -37,122 +46,70 @@ pnpm-workspace.yaml  または  package.json
 .github/workflows/ci.yml
 .github/workflows/deploy.yml
 .github/PULL_REQUEST_TEMPLATE.md
+.docs/                       # 層構成の検査対象（DOCS_OPS §3）
 design-tokens.css のコピー先（`find . -name "index.css" -path "*/apps/*/src/*"` で探す）
 apps/docs/src/content/docs/legal/  または  src/content/docs/legal/  （legal ディレクトリ）
 ```
 
 ---
 
-## ステップ 3: フェーズ別チェックリストを評価する
+## ステップ 3: AUDIT.md の該当セクションを実行する
 
-各項目を ✅ PASS / ⚠️ WARN / ❌ FAIL で評価する。
+`AUDIT.md` の「チェック項目」から、フェーズに応じたセクションを実行する。
 
-### kickoff チェックリスト
+| フェーズ | 実行する `AUDIT.md` のセクション |
+|---------|--------------------------------|
+| `kickoff` | 構成・ツーリング（PROJECT_RULES）／ドキュメント（DOCS_OPS / AI_FIRST）／UI・デザイン（DESIGN — UI を持つ場合）／公開プロダクト追加分（PRODUCT_PLAYBOOK — 公開予定の場合） |
+| `progress` | kickoff の全セクション ＋ アーキテクチャ（ARCHITECTURE） |
+| `done` | progress の全セクション ＋ セキュリティ・コンプライアンス機能一覧（アプリ層／GDPR／開示・インシデント対応）＋ 公開プロダクト追加分の全項目 |
 
-**Contract（AI_FIRST.md §4 準拠）**
-- [ ] `AGENTS.md` または `CLAUDE.md` が存在する
-- [ ] `standards_version` フィールドがあり `YYYY-MM-DD (rev.N)` 形式
-- [ ] dev 起動コマンドと URL が記載されている（UI を持つ場合）
-- [ ] `dev-data-safety: local | shared` が明記されている（UI を持つ場合）
-- [ ] routes / 主要ページ一覧が列挙されている（UI を持つ場合）
-- [ ] Key Commands（test / check / deploy）が記載されている
+### 実行時の規律（`AUDIT.md`「実行方法」節が正本 — MUST）
 
-**Stack & CI（PROJECT_RULES.md + templates 準拠）**
-- [ ] `biome.json` が存在する
-- [ ] `.gitignore` が存在する
-- [ ] `.github/workflows/ci.yml` が存在する
-- [ ] `.github/workflows/deploy.yml` が存在し `<DEPLOY_COMMAND>` プレースホルダーが置き換え済み
-- [ ] `.github/PULL_REQUEST_TEMPLATE.md` が存在し証跡マトリクスが 6 列（`light` / `dark` / `console` / `a11y tree` / `keyboard` を含む）
+- **パスの読み替え**: `<SRC>` は `apps/*/src packages/*/src`、`<I18N_DIR>` は `apps/web/src/i18n/locales`。i18n なしのプロジェクトは i18n チェックを N/A とする。
+- **空走ガード（全検出系コマンド対象）**: 検査対象が 1 ファイル以上存在することを `ls` 等で先に確認する。空ディレクトリ・glob 不一致への検査成功はサイレント故障。
+- **self-test（全検出系コマンド対象）**: 実行前に既知の違反 fixture で 1 件ヒットすることを確認する。**0 件の検査結果は self-test 通過後のみ「準拠」と報告できる。**
+- **コマンドは `AUDIT.md` のコードブロックが正本。この skill にコマンドを複製しない。**
 
-**Design（DESIGN.md §2 準拠）**
-- [ ] `design-tokens.css` が `apps/web/src/index.css`（または同等パス）にコピー済み
+### N/A の判定
 
-**Docs（DOCS_OPS.md §1 準拠）**
-- [ ] `README.md` が存在する（`templates/README.template.md` からコピー済み）
-- [ ] README の `<owner>` / `<repo>` / `<project>` / `<一行説明>` プレースホルダーが残っていない
-- [ ] standards バッジの日付文字列が `standards_version` と一致している
-- [ ] webhook / 認証機能があれば `SECURITY.md` が `templates/SECURITY.md` からリポルートにコピー済み（`<your-email>` / `<owner>` / `<repo>` / `<N>（応答時間）` が実値済みであること）
-
-**Legal（templates/legal/ checklist 準拠）**
-- [ ] `legal/` ディレクトリが存在する（公開プロダクトの場合）
-- [ ] `<product>` / `<your-domain>` / `mk_` プレースホルダーが残っていない
-
----
-
-### progress チェックリスト
-
-kickoff の全項目に加えて:
-
-**Architecture（ARCHITECTURE.md 準拠）**
-- [ ] `pnpm-workspace.yaml` が存在し `apps/` + `packages/` 構造になっている
-- [ ] `apps/` 配下にビジネスロジックが混在していない（`packages/` に切り出し済みか）
-
-**Design（DESIGN.md §3 準拠）**
-- [ ] CSS ファイルに raw `oklch(` / `hsl(` が直書きされていない（`design-tokens.css` 以外）
-- [ ] `text-` / `bg-` 等の Tailwind カラークラスに生パレット値（`text-zinc-900` 等）が直書きされていない — `text-foreground` 等のトークン参照を使う
-
----
-
-### done チェックリスト
-
-kickoff + progress の全項目に加えて:
-
-**Contract（最終確認）**
-- [ ] `standards_version` が最新 rev に更新されている（CHANGELOG.md の先頭 rev と一致）
-- [ ] このプロダクトが他プロジェクトから利用できるツール/サービスなら、standards `PRODUCT_PLAYBOOK.md` §14（自作プロダクトの優先採用）の表に追記されている（未追記なら standards リポへ追記して rev を上げる。該当しなければ N/A）
-
-**Legal（全項目突合）**
-- [ ] 法務5点セット（terms / privacy / cookies / security / dpa）が全て存在する（公開プロダクトの場合）
-- [ ] `security.mdx` のプレースホルダー（API Key プレフィックス・桁数・暗号パラメータ）が実装値に更新済み
-- [ ] データ保持期間が実装定数と一致している
-
-**Docs（DOCS_OPS.md 準拠）**
-- [ ] `README.md` が存在しプロダクト名・概要・起動手順を含む
-- [ ] webhook / 認証機能があれば Security Notes セクションが README にある
-- [ ] webhook / 認証機能があれば `SECURITY.md` がリポルートに存在し `<your-email>` / `<owner>` / `<repo>` / `<N>（応答時間）` が実値済み
-
-**Security（AUDIT.md セキュリティ機能一覧 準拠）**
-
-各項目は N/A 条件に該当する場合は N/A として報告する。grep は `apps/api/src/` 配下を対象とする（パスはプロジェクトに応じて読み替える）。
-
-- [ ] JWT 短命アクセストークン設定が存在する（`grep -rn "expiresIn\|exp:" apps/api/src/`）— **N/A: 認証なし・OAuth のみ**
-- [ ] refresh token が httpOnly Cookie に保管されている（`grep -rn "httpOnly" apps/api/src/` がヒットする）— **N/A: 認証なし・OAuth のみ**
-- [ ] localStorage への token 保存がない（`grep -rn "localStorage" apps/web/src/ | grep -i "token\|refresh\|access"` がヒットしない）— **N/A: 認証なし**
-- [ ] Webhook HMAC-SHA256 署名検証が実装されている（`grep -rn "HMAC\|timingSafeEqual\|sha256" apps/api/src/`）— **N/A: Webhook 機能なし**
-- [ ] SSRF 防止のプライベート IP ブロックが実装されている（`grep -rn "10\.\|172\.\|192\.168\|169\.254" apps/api/src/`）— **N/A: アウトバウンド HTTP なし**
-- [ ] パスワードが PBKDF2-SHA-512 でハッシュ化されている（`grep -rn "pbkdf2\|PBKDF2\|SubtleCrypto" apps/api/src/` がヒットする）— **N/A: 認証なし・OAuth のみ**
-- [ ] レートリミット binding が wrangler 設定に存在する（`grep -rn "RATE_LIMITER\|RateLimiter" wrangler*.toml apps/api/src/`）— **N/A: 認証なし**
-- [ ] GDPR: アカウント削除ルート `/account/delete` が存在する（`grep -rn "account/delete\|account\.delete" apps/api/src/`）— **N/A: 個人データなし**
-- [ ] GDPR: 同意バージョン管理が実装されている（`grep -rn "TERMS_VERSION\|termsAgreedAt" apps/` がヒットする）— **N/A: 個人データなし**
-- [ ] `security.mdx` のインフラ認証テーブルが ARCHITECTURE.md §1 の正本と一致している（目視確認）— **N/A: security.mdx なし**
+`AUDIT.md` の各項目が定める N/A 条件（「認証なし」「Webhook 機能なし」「個人データなし」等）に該当する場合は N/A として報告する。**判定の根拠を備考に書く**（「認証なしのため」等）。根拠のない N/A は WARN として扱う。
 
 ---
 
 ## ステップ 4: ヘルスレポートを出力する
 
-以下のフォーマットで出力する:
+ドメイン名は `AUDIT.md` のセクション名に合わせる（対応を追えるようにするため）。
 
 ```
 ## Standards Health Report  [kickoff | progress | done]
 standards_version（参照）: <CHANGELOG.md の最新 rev>
 プロジェクト standards_version: <AGENTS.md / CLAUDE.md の値 or 未記載>
+実行セクション: <ステップ 3 の表に従って実行したセクション名>
 
-| ドメイン      | 状態 | ギャップ                                        |
-|--------------|------|-------------------------------------------------|
-| Contract     | ❌   | dev-data-safety 宣言なし、routes 未記載          |
-| Stack & CI   | ⚠️   | deploy.yml に <DEPLOY_COMMAND> が残っている       |
-| Design       | ✅   |                                                 |
-| Legal        | ❌   | <product> プレースホルダーが 3 箇所残っている     |
-| Security     | ⚠️   | SSRF 防止未確認（アウトバウンド HTTP あり）       |
+| ドメイン            | 状態 | ギャップ                                      |
+|--------------------|------|-----------------------------------------------|
+| 構成・ツーリング      | ⚠️   | deploy.yml に <DEPLOY_COMMAND> が残っている     |
+| アーキテクチャ        | ✅   |                                               |
+| UI・デザイン         | ✅   |                                               |
+| ドキュメント          | ❌   | .docs/ に PROJECT_GOAL.md がない（DOCS_OPS §3） |
+| セキュリティ          | ⚠️   | SSRF 防止未確認（アウトバウンド HTTP あり）      |
+| 公開プロダクト        | ❌   | <product> プレースホルダーが 3 箇所残っている    |
 
 ### 要対応（❌ FAIL）
 1. ...
 
 ### 確認推奨（⚠️ WARN）
 1. ...
+
+### self-test の結果
+検出系チェックのうち 0 件だった項目について、self-test を通過したかを記載する。
+未実施の項目は「未検証」と明記し、準拠とは報告しない。
 ```
 
 状態の定義:
-- ✅ PASS: チェック項目がすべて満たされている（N/A 含む）
-- ⚠️ WARN: 軽微な未対応（プレースホルダー1箇所等）または「UI を持つ場合のみ」の項目が未確認
-- ❌ FAIL: 必須項目が未対応
+
+- ✅ PASS: 該当セクションの項目がすべて満たされている（根拠つき N/A を含む）
+- ⚠️ WARN: 軽微な未対応（プレースホルダー 1 箇所等）、条件付き項目が未確認、または self-test 未実施で 0 件だった項目がある
+- ❌ FAIL: MUST 項目が未対応
+
+`standards_version` がプロジェクト側で古い場合は、その差分 rev 数を必ず報告に含める（古い版を前提に準拠していても、現行 standards には準拠していないため）。
