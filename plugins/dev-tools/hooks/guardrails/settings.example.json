@@ -1,0 +1,34 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/guardrails/kill-switch.sh"
+          },
+          {
+            "type": "command",
+            "command": "GUARDRAILS_ALLOW_PATHS=/your/project/.docs:/other/project/.docs/actions python3 ${CLAUDE_PLUGIN_ROOT}/hooks/guardrails/path-allowlist.py"
+          },
+          {
+            "type": "command",
+            "command": "GUARDRAILS_FUSE_LIMIT=10 GUARDRAILS_FUSE_COUNTER=/tmp/guardrails-fuse-count GUARDRAILS_FUSE_TOOL_PATTERN='gh.*issue (create|comment)' python3 ${CLAUDE_PLUGIN_ROOT}/hooks/guardrails/rate-fuse.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "GUARDRAILS_AUDIT_LOG=${HOME}/.config/guardrails/audit.jsonl GUARDRAILS_AUDIT_TOOLS=Edit:Write:MultiEdit:NotebookEdit:Bash python3 ${CLAUDE_PLUGIN_ROOT}/hooks/guardrails/audit-log.py"
+          }
+        ]
+      }
+    ]
+  }
+}
