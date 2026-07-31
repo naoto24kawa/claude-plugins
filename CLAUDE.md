@@ -6,7 +6,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 **agent-toolkit** — 2つの配布物を持つモノレポ:
 
-1. **`skills/`** — エージェント横断スキル（skills.sh / vercel-labs/skills CLI 互換）。Claude Code・Codex 等へ `npx skills add naoto24kawa/agent-toolkit -g` で配布される。**スキルの正本はここ**。`~/.agents/skills/` はインストール先であり編集しない。
+1. **`skills/`** — エージェント横断スキル（skills.sh / vercel-labs/skills CLI 互換）。Claude Code・Codex 等へ `npx skills add elchika-inc/agent-toolkit -g` で配布される。**スキルの正本はここ**。`~/.agents/skills/` はインストール先であり編集しない。
 2. **`plugins/`** — Claude Code プラグインマーケットプレース（`.claude-plugin/marketplace.json` が定義の正本）。
 
 ## ディレクトリ構造

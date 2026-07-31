@@ -1,6 +1,6 @@
 ---
 name: standards-audit
-description: Use when the user wants to check project compliance against naoto24kawa/standards. Triggers include "standards チェック", "standards に準拠しているか", "kickoff チェック", "プロジェクト開始のチェック", "progress チェック", "完了前の最終確認", "done チェック", "standards-audit", "project health", "セットアップ確認", "standards と比較して".
+description: Use when the user wants to check project compliance against elchika-inc/standards. Triggers include "standards チェック", "standards に準拠しているか", "kickoff チェック", "プロジェクト開始のチェック", "progress チェック", "完了前の最終確認", "done チェック", "standards-audit", "project health", "セットアップ確認", "standards と比較して".
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 
@@ -10,7 +10,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 **検査項目の正本は standards `AUDIT.md`。この skill はチェックリストの実体を持たない。** この skill が担うのは「フェーズに応じた絞り込み」「N/A の判定」「レポート形式」の 3 つだけ。検査の中身を複製すると standards の更新ごとに追随が必要になり、rev ごとに陳腐化する（実際 rev.38 で `.docs/` 層構成が変わり rev.39 で `plans/` の命名規約が加わった際、複製していたチェックリストがそれらを検査しない状態になった）。
 
-Standards 正本: ローカル checkout（例: `~/projects/naoto24kawa/standards/`）。存在しなければ `gh repo clone naoto24kawa/standards <一時ディレクトリ>` で取得したコピーを使う。
+Standards 正本: ローカル checkout（例: `~/projects/elchika-inc/standards/`）。存在しなければ `gh repo clone elchika-inc/standards <一時ディレクトリ>` で取得したコピーを使う。
 
 ---
 
