@@ -4,12 +4,12 @@
 
 | 役割 | 対象エージェント | インストール方法 |
 |------|----------------|----------------|
-| **Skills** (`skills/`) | Claude Code, Codex, Cursor ほか [skills CLI](https://github.com/vercel-labs/skills) 対応エージェント | `npx skills add naoto24kawa/agent-toolkit -g` |
-| **Plugins** (`plugins/`) | Claude Code 専用（hooks / commands / agents / MCP） | `/plugin marketplace add naoto24kawa/agent-toolkit` |
+| **Skills** (`skills/`) | Claude Code, Codex, Cursor ほか [skills CLI](https://github.com/vercel-labs/skills) 対応エージェント | `npx skills add elchika-inc/agent-toolkit -g` |
+| **Plugins** (`plugins/`) | Claude Code 専用（hooks / commands / agents / MCP） | `/plugin marketplace add elchika-inc/agent-toolkit` |
 
 ## Skills
 
-`npx skills add naoto24kawa/agent-toolkit -g` で全スキルをインストール（`--skill <name>` で個別選択）。
+`npx skills add elchika-inc/agent-toolkit -g` で全スキルをインストール（`--skill <name>` で個別選択）。
 
 | スキル | 概要 |
 |--------|------|
@@ -19,7 +19,7 @@
 | `watch-sentinel` | オープン PR への sentinel レビュー適用 |
 | `watch-sprawl` | オープン PR への構造（import graph）分析 |
 | `watch-sprawlens-update` | mizchi/sprawlens の上流更新チェック |
-| `standards-audit` | naoto24kawa/standards 準拠チェック |
+| `standards-audit` | elchika-inc/standards 準拠チェック |
 | `documenting-verification` | 動作検証の実行と再現可能な検証資料の作成 |
 | `tmux-manager` | tmux の状況可視化と残留掃除（human-gate 付き） |
 
@@ -37,7 +37,7 @@ npx skills update -g
 ## Plugins（Claude Code 専用）
 
 ```bash
-/plugin marketplace add naoto24kawa/agent-toolkit
+/plugin marketplace add elchika-inc/agent-toolkit
 /plugin install dev-tools@naoto24kawa-claude-plugins
 /plugin install elchika-tools@naoto24kawa-claude-plugins
 ```

@@ -77,7 +77,7 @@ printf '%s\n' \
 ```markdown
 ### 前提: セーフガードチェック
 
-`~/projects/naoto24kawa/standards/skill-patterns/guardrails.md` のパターンをこの順で適用する。
+`~/projects/elchika-inc/standards/skill-patterns/guardrails.md` のパターンをこの順で適用する。
 
 1. **停止チェック**: `$MAIN_ROOT/.claude/watch/STOP` が存在すれば即終了（worktree 同期より先）
 2. **起票上限の初期化**: `MAX_NEW_ISSUES=<N>`（呼び出し引数 `max=N` で上書き可）。カウンタを 0 に初期化

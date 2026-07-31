@@ -30,11 +30,11 @@ Claude Code の PreToolUse / PostToolUse hook として使える汎用ガード�
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/<user>/projects/naoto24kawa/standards/hooks/guardrails/kill-switch.sh"
+            "command": "bash /Users/<user>/projects/elchika-inc/standards/hooks/guardrails/kill-switch.sh"
           },
           {
             "type": "command",
-            "command": "GUARDRAILS_ALLOW_PATHS=/your/project/.docs python3 /Users/<user>/projects/naoto24kawa/standards/hooks/guardrails/path-allowlist.py"
+            "command": "GUARDRAILS_ALLOW_PATHS=/your/project/.docs python3 /Users/<user>/projects/elchika-inc/standards/hooks/guardrails/path-allowlist.py"
           }
         ]
       }
@@ -45,7 +45,7 @@ Claude Code の PreToolUse / PostToolUse hook として使える汎用ガード�
         "hooks": [
           {
             "type": "command",
-            "command": "GUARDRAILS_AUDIT_LOG=${HOME}/.config/guardrails/audit.jsonl python3 /Users/<user>/projects/naoto24kawa/standards/hooks/guardrails/audit-log.py"
+            "command": "GUARDRAILS_AUDIT_LOG=${HOME}/.config/guardrails/audit.jsonl python3 /Users/<user>/projects/elchika-inc/standards/hooks/guardrails/audit-log.py"
           }
         ]
       }
