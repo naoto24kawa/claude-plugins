@@ -44,14 +44,15 @@ npx skills update -g
 
 > マーケットプレース名は既存インストールとの互換性維持のため `naoto24kawa-claude-plugins` のまま。
 
-### dev-tools (v1.3.0)
+### dev-tools (v1.3.1)
 
 開発プロセス基盤のオールインワン。
 
 - **spec** — 9つのサブエージェント（Phase 0-8）による仕様書生成・差分更新・乖離検出
 - **site-explorer** — Web アプリの探索的 QA テストと GitHub Issue 自動登録
 - **tmux-manager** — tmux の可視化・残留掃除エージェント（`claude --agent` 起動用。手順の正本は `skills/tmux-manager`）
-- **agmsg 未読送信フック** — 自分が送って未読で滞留した agmsg メッセージを Stop hook で surface（v0・可視化のみ。`hooks/agmsg-unread-check.sh`）
+- **agmsg 未読送信フック** — 自分が送って未読で滞留した agmsg メッセージを Stop hook で surface（可視化のみ。`hooks/agmsg-unread-check.sh`）
+  - 滞留 age が `AGMSG_UNREAD_STALE_SECS`（既定 300s）〜`AGMSG_UNREAD_MAX_AGE_SECS`（既定 24h）の範囲のものだけ通知する。上限は despawn 済み宛ての永久滞留を落とすためのもので、`0` で無効化できる
 - **skills** — `parallel-review-cycle`（`skills/` 側が正本、プラグインへは同期コピー）
 
 ### elchika-tools (v1.0.0)

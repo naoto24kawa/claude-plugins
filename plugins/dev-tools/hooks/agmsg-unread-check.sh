@@ -18,7 +18,14 @@ set -u
 cat >/dev/null 2>&1 || true
 
 # --- 設定（環境変数で上書き可能） ---
-STALE_SECS="${AGMSG_UNREAD_STALE_SECS:-300}"   # 暫定 300s。ログの age 分布で後決め
+# 滞留 age が [STALE_SECS, MAX_AGE_SECS] の範囲にある未読だけを surface する。
+# 下限: 送信直後の正常な未読を弾く。
+# 上限: despawn 済みの宛先に永久滞留する未読を弾く。宛先が居なくなると read_at は
+#       永久に NULL のままで、「生存確認 / 再送」というアクションが取れない。
+#       v0 計測ログ（7日 15,711行 / 発火1,236回）の age 分布では 1d 超が 82% を
+#       占め、その全件が despawn 済み宛て（team メンバーは自分のみ）だった。
+MAX_AGE_SECS="${AGMSG_UNREAD_MAX_AGE_SECS:-86400}"  # 24h。0 で上限なし
+STALE_SECS="${AGMSG_UNREAD_STALE_SECS:-300}"
 LOG_FILE="${AGMSG_UNREAD_LOG:-$HOME/.claude/agmsg-unread-surfacing.log}"
 AGMSG_DIR="${AGMSG_SKILL_DIR:-$HOME/.agents/skills/agmsg}"
 WHOAMI="$AGMSG_DIR/scripts/whoami.sh"
@@ -26,6 +33,12 @@ STORAGE_LIB="$AGMSG_DIR/scripts/lib/storage.sh"
 
 # 数値でなければ既定へ（不正な env で SQL を壊さない）
 case "$STALE_SECS" in ''|*[!0-9]*) STALE_SECS=300 ;; esac
+case "$MAX_AGE_SECS" in ''|*[!0-9]*) MAX_AGE_SECS=86400 ;; esac
+
+# 上限が下限以下だと抽出窓が空になり、「未読ゼロ」と見分けのつかない無出力になる
+# （＝設定ミスが静かな0件化に化ける）。可視化フックは進行系なので fail-open に倒し、
+# その場合は上限を無効化して従来どおり全件 surface する。
+[ "$MAX_AGE_SECS" -gt "$STALE_SECS" ] || MAX_AGE_SECS=0
 
 # --- 前提が無ければ黙って終了（fail-open） ---
 command -v sqlite3 >/dev/null 2>&1 || exit 0
@@ -73,25 +86,34 @@ done
 
 # --- 未読の自送信を抽出（UTC ISO8601 は辞書順=時刻順） ---
 # 出力: to_agent|n|oldest_age_seconds
+# 上限が有効なとき min(created_at) は「窓の中で最も古いもの」になる。件数・age とも
+# 窓内の値であり、surface する内容とログの値は常に一致する。
+MAX_COND=""
+if [ "$MAX_AGE_SECS" -gt 0 ]; then
+  MAX_COND="AND created_at > strftime('%Y-%m-%dT%H:%M:%SZ','now','-${MAX_AGE_SECS} seconds')"
+fi
+
 SQL="SELECT to_agent, count(*),
        CAST(strftime('%s','now') - strftime('%s', min(created_at)) AS INTEGER)
      FROM messages
      WHERE from_agent IN ($IN_LIST)
        AND read_at IS NULL
        AND created_at < strftime('%Y-%m-%dT%H:%M:%SZ','now','-${STALE_SECS} seconds')
+       $MAX_COND
      GROUP BY to_agent
      ORDER BY 3 DESC;"
 
 ROWS="$(printf '%s\n' "$SQL" | sqlite3 -separator '|' "$DB" 2>/dev/null)" || exit 0
 [ -n "$ROWS" ] || exit 0   # 未読なし → 黙って終了
 
-# --- 人間可読な age 整形 ---
-fmt_age() {
+# --- 人間可読な期間整形 ---
+fmt_dur() {
   local s="$1"
-  if   [ "$s" -ge 3600 ]; then echo "$((s/3600))時間前"
-  elif [ "$s" -ge 60 ];   then echo "$((s/60))分前"
-  else echo "${s}秒前"; fi
+  if   [ "$s" -ge 3600 ]; then echo "$((s/3600))時間"
+  elif [ "$s" -ge 60 ];   then echo "$((s/60))分"
+  else echo "${s}秒"; fi
 }
+fmt_age() { echo "$(fmt_dur "$1")前"; }
 
 NOW_ISO="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 PARTS=""
@@ -107,7 +129,14 @@ EOF
 
 [ -n "$PARTS" ] || exit 0
 
-MSG="⚠ agmsg 未読の送信（${STALE_SECS}s 超）: ${PARTS} — 相手の生存確認 / 再送を検討"
+# 抽出窓を明示する。上限を切った結果として出ていないものがある、と読み手に分かる形。
+if [ "$MAX_AGE_SECS" -gt 0 ]; then
+  WINDOW="滞留 $(fmt_dur "$STALE_SECS")〜$(fmt_dur "$MAX_AGE_SECS")"
+else
+  WINDOW="滞留 $(fmt_dur "$STALE_SECS") 超"
+fi
+
+MSG="⚠ agmsg 未読の送信（${WINDOW}）: ${PARTS} — 相手の生存確認 / 再送を検討"
 
 # 非ブロッキングで surface。decision:block は出さない。jq が無ければ素の stdout。
 if command -v jq >/dev/null 2>&1; then
