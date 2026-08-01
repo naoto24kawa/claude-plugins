@@ -37,9 +37,10 @@ Subagents should return findings as text, not write report files.
 **マーカー行の内側だけ**を `Write` で保存する:
 
 ```
-<PROJECT_ROOT>/.docs/verifications/<対象slug>/report.md
+<PROJECT_ROOT>/.docs/reviews/<対象slug>/report.md
 ```
 
+- **プロジェクトが `.docs/` の層を規定している場合はそれに従う**（DOCS_OPS §3 の排他ルール: 二重の保存先を作らない — 監査の死角になるため）。プロジェクト側の検査が `.docs/reviews/` だけを走査していると、別の場所へ書いた証跡は magic bytes 検査も SHA 検査も受けずに素通りする。
 - マーカー行そのもの、冒頭の `【呼び出し元へ】` 指示行、末尾の evidence パス一覧は**ファイルに含めない**。
 - マーカー間の本文は**要約・省略しない**。そのまま資料になる。
 - `PROJECT_ROOT` は `git rev-parse --show-toplevel 2>/dev/null || pwd` で決める。
@@ -49,7 +50,7 @@ Subagents should return findings as text, not write report files.
 **3. 実体を確認する（検証ゲート）**
 
 ```bash
-ls -la <PROJECT_ROOT>/.docs/verifications/<対象slug>/
+ls -la <PROJECT_ROOT>/.docs/reviews/<対象slug>/
 ```
 
 `report.md` と `evidence/` の実在を目で確認するまで、検証は完了していない。
