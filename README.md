@@ -20,7 +20,9 @@
 | `watch-sprawl` | オープン PR への構造（import graph）分析 |
 | `watch-sprawlens-update` | mizchi/sprawlens の上流更新チェック |
 | `standards-audit` | elchika-inc/standards 準拠チェック |
+| `standards-sweep` | セッション終了前の宙吊り状態の検出（git / 共有状態 / spawn 済みエージェント） |
 | `documenting-verification` | 動作検証の実行と再現可能な検証資料の作成 |
+| `dreaming` | ルール文書の棚卸し（肥大化・陳腐化・overfit の剪定） |
 | `tmux-manager` | tmux の状況可視化と残留掃除（human-gate 付き） |
 
 ### 更新の反映

@@ -9,6 +9,17 @@ This file provides guidance to Claude Code when working with this repository.
 1. **`skills/`** — エージェント横断スキル（skills.sh / vercel-labs/skills CLI 互換）。Claude Code・Codex 等へ `npx skills add elchika-inc/agent-toolkit -g` で配布される。**スキルの正本はここ**。`~/.agents/skills/` はインストール先であり編集しない。
 2. **`plugins/`** — Claude Code プラグインマーケットプレース（`.claude-plugin/marketplace.json` が定義の正本）。
 
+### 4リポジトリ体制での位置づけ
+
+| リポジトリ | 持つもの | 当リポジトリとの関係 |
+|---|---|---|
+| [standards](https://github.com/elchika-inc/standards) | ルール（原則と MUST） | **ルールの中身を複製しない**。skill は絞り込み・判定・レポート形式だけを持ち、検査項目は standards を読む |
+| [templates](https://github.com/elchika-inc/templates) | コピーして使う実体（共通契約・biome.json・legal/ 等） | 直接の依存なし |
+| [ui](https://github.com/elchika-inc/ui) | デザインシステム（コンポーネント・トークン） | 直接の依存なし |
+| **agent-toolkit**（このリポジトリ） | エージェントの道具（skills / plugins / hooks） | ルールを standards が持ち、それを**実行する道具**をここが持つ |
+
+**ルールと道具は対で動く。** standards から実体を引き取ったら、引き取った側が正本になったことを明記し、移管元のパスを参照し続けない（実例: guardrails 一式を standards から引き取った後も、README と PATTERNS.md が `standards/hooks/guardrails/` を指し続けていた — 2026-08-05 に修正）。
+
 ## ディレクトリ構造
 
 ```
