@@ -44,13 +44,14 @@ npx skills update -g
 
 > マーケットプレース名は既存インストールとの互換性維持のため `naoto24kawa-claude-plugins` のまま。
 
-### dev-tools (v1.4.0)
+### dev-tools (v1.5.0)
 
 開発プロセス基盤のオールインワン。
 
 - **spec** — 9つのサブエージェント（Phase 0-8）による仕様書生成・差分更新・乖離検出
 - **site-explorer** — Web アプリの探索的 QA テストと GitHub Issue 自動登録
 - **tmux-manager** — tmux の可視化・残留掃除エージェント（`claude --agent` 起動用。手順の正本は `skills/tmux-manager`）
+- **verification-documenter** — 動作検証を実行して手順・結果・エビデンスを再現可能な資料として残すエージェント（証跡の既定保存先は `.docs/reviews/`）
 - **agmsg 未読送信フック** — 自分が送って未読で滞留した agmsg メッセージを Stop hook で surface（可視化のみ。`hooks/agmsg-unread-check.sh`）
   - 滞留 age が `AGMSG_UNREAD_STALE_SECS`（既定 300s）〜`AGMSG_UNREAD_MAX_AGE_SECS`（既定 24h）の範囲のものだけ通知する。上限は despawn 済み宛ての永久滞留を落とすためのもので、`0` で無効化できる
 - **guardrails** — エージェントの安全装置。`kill-switch`（STOP ファイルで全ツール緊急停止）/ `path-allowlist`（書込先の制限）/ `rate-fuse`（呼び出し回数の上限）/ `audit-log`（実行の記録）と、hook でなくスキル本体へ組み込むときのパターン集（`hooks/guardrails/`）
