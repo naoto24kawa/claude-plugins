@@ -1,6 +1,6 @@
 ---
 name: standards-sweep
-description: 'Use when a work session is wrapping up and the user asks やり残しはないか, スイープして, 残タスク確認, 終了前チェック, session sweep, 宙吊り確認 — or before declaring a multi-agent session (brain / Action Queue / agmsg / worktree 委任を使った作業) complete. Detects leftover state across git, shared state, spawned agents, and self-improvement bookkeeping. For checking repo compliance against standards rules, use standards-audit instead.'
+description: 'Use when a work session is wrapping up and the user asks やり残しはないか, スイープして, 残タスク確認, 終了前チェック, session sweep, 宙吊り確認 — or before declaring a multi-agent session (brain / Action Queue / Orca orchestration / worktree 委任を使った作業) complete. Detects leftover state across git, shared state, spawned agents, and self-improvement bookkeeping. For checking repo compliance against standards rules, use standards-audit instead.'
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 
@@ -16,9 +16,9 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 | チェック | コマンド / 方法 |
 |---|---|
-| 未読メッセージ（委譲先の未処理報告） | `~/.agents/skills/agmsg/scripts/inbox.sh <team> <agent>` |
-| spawn したメンバーの残留 | `~/.agents/skills/agmsg/scripts/team.sh <team>`（自分以外が残っていたら、未完確認 → despawn。codex は watcher 不在のため `--force`） |
-| tmux 孤児ペイン | `tmux list-panes -a -F '#{session_name}:#{window_index}.#{pane_index} #{pane_title}'` で spawn 残骸を目視（詳細調査・掃除は tmux-manager skill） |
+| 未読メッセージ（委譲先の未処理報告） | `orca orchestration inbox`（未 ack の Delivery は `orca orchestration check --ack <delivery_id>` で処理してから閉じる） |
+| dispatch した worker の残留 | `orca orchestration task-list --json`（未完 Task の worker を確認）と `orca worktree ps`（worktree 横断の稼働状況） |
+| worker worktree の撤去漏れ | `orca worktree list`（作業完了済みの worktree は `orca worktree rm` で撤収し、git 側のブランチ残置を確認） |
 | Monitor / background task の残留 | TaskList で残す意図のないタスクを確認し TaskStop（session-length の inbox stream は残してよい） |
 
 ## §2 git / worktree
