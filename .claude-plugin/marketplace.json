@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "dev-tools",
-      "description": "Development toolset. Includes: (1) spec — specification document generation, incremental update, and drift detection via 9 specialized sub-agents; (2) site-explorer — exploratory QA testing for any web app with automatic bug detection and GitHub Issue registration; (3) parallel-review-cycle skill — iterative parallel specialist review until zero findings; (4) tmux-manager — tmux visibility and orphan cleanup with human-gated deletion; (5) agmsg unread-send hook — Stop hook that surfaces agmsg messages this agent sent that remain unread, within a bounded staleness window (visibility only); (6) guardrails — kill-switch / path-allowlist / rate-fuse / audit-log の hook 実装とスキル内パターン集（既定では未配線）; (7) verification-documenter — 網羅列挙→実行→資料化を行う動作検証エージェント（証跡は .docs/reviews/ 配下）.",
-      "version": "1.5.0",
+      "description": "Development toolset. Includes: (1) spec — specification document generation, incremental update, and drift detection via 9 specialized sub-agents; (2) site-explorer — exploratory QA testing for any web app with automatic bug detection and GitHub Issue registration; (3) parallel-review-cycle skill — iterative parallel specialist review until zero findings; (4) guardrails — kill-switch / path-allowlist / rate-fuse / audit-log の hook 実装とスキル内パターン集（既定では未配線）; (5) verification-documenter — 網羅列挙→実行→資料化を行う動作検証エージェント（証跡は .docs/reviews/ 配下）.",
+      "version": "1.6.0",
       "author": {
         "name": "naoto24kawa",
         "email": "naoto24kawa@gmail.com"
