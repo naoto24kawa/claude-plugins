@@ -2,6 +2,8 @@
 name: parallel-review-cycle
 description: 'This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "詳細レベルの点検", "altitude check".'
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
+model: opus
+effort: high
 ---
 
 # Parallel Expert Review Cycle
@@ -9,6 +11,19 @@ allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
 5名の専門レビュアーを並行ディスパッチし、指摘が 0 件になるまでラウンドを繰り返すレビュー手法。
 セッションスコープの偽陽性レジストリにより、同じ誤判定が繰り返しエスカレートされることを防ぐ。
 レビュー対象に文章仕様（CLAUDE.md / `.docs/plans` / スキル定義 / README / 設計書）が含まれる時は、6人目の **Ambiguity Hunter**（未明文化ハンター・詳細 → `references/ambiguity-hunter.md`）と、その対レンズである7人目の **Altitude Checker**（高度検査＝詳細レベルの overfit 検出・詳細 → `references/altitude-checker.md`）も起動する。明文化圧と抽象化圧を対にしてレビューの一方向膨張を防ぐ。
+
+## 実行モデル
+
+レビューは推論の深さが結果を支配するため、**Opus** で実行する。この節がモデル指定の正本であり、
+frontmatter の `model` / `effort` はこの節を Claude Code 上で自動適用するためのショートカットである。
+
+- **オーケストレータ**: frontmatter の `model: opus` / `effort: high` で指定済み。
+- **スペシャリスト**: `Agent` 呼び出しで `model: "opus"` を**明示指定**する。親からの継承に
+  任せない——frontmatter の override はそのターンの残りしか効かず、ユーザーが途中で入力すると
+  セッションのモデルへ戻り、ラウンドごとにレビュー品質が変わって収束判定が信用できなくなる。
+- ユーザーが明示的にモデルを指定した場合はそれに従う。
+- `Agent` 相当を持たない環境（Codex 等。frontmatter の `model` も無視される）では
+  既定モデルで実行してよい。
 
 ## 自律実行の原則
 
@@ -57,6 +72,7 @@ touch "$REVIEW_DIR/fp-registry.md"
 ## ステップ 2: スペシャリストを並行ディスパッチする
 
 `Agent` ツールを使い、各呼び出しを **単一メッセージ内** に並べて同時実行する。
+モデル指定は「実行モデル」節に従う（各 `Agent` 呼び出しで `model` を明示する）。
 ディスパッチ数は **5本**（コードのみ対象の場合）または **7本**（レビュー対象に文章仕様が1つ以上含まれる場合は #6 Ambiguity Hunter と #7 Altitude Checker を追加）。
 
 ### ロール構成

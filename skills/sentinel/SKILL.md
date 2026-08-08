@@ -2,6 +2,8 @@
 name: sentinel
 description: Use when code changes need structured quality + security review with false-positive filtering. Takes a repo path and optional ref (GitHub PR number, git range, HEAD~N, or nothing for latest commit), reviews the diff with quality/security lenses, filters findings via 3-vote verification, and produces a findings report.
 user-invocable: true
+model: opus
+effort: high
 metadata:
   author: nishikawa
   description: ワンショットコードレビュー。PR・main ブランチのコミット・任意の git レンジを quality + security レンズで審査し、3票投票で偽陽性をフィルタリングする。PatrolState を使わず継続巡回の状態に影響しない。
@@ -10,6 +12,20 @@ metadata:
 
 コードのワンショットレビューを実行する。PR だけでなく main ブランチのコミットや任意の git レンジにも使える。
 PatrolState を使わず、指定した差分のみを審査する（継続巡回は `/patrol` を使うこと）。
+
+## 実行モデル
+
+レビューは推論の深さが結果を支配するため、**Opus** で実行する。この節がモデル指定の正本であり、
+frontmatter の `model` / `effort` はこの節を Claude Code 上で自動適用するためのショートカットである。
+
+- **オーケストレータ**: frontmatter の `model: opus` / `effort: high` で指定済み。
+- **サブエージェント**: ステップ 5（quality）・ステップ 6（security）・ステップ 7（verify × 3）の
+  すべてで `model: "opus"` を**明示指定**する。親からの継承に任せない——frontmatter の override は
+  そのターンの残りしか効かず、ユーザーが途中で入力するとセッションのモデルへ戻り、
+  発見と3票判定の質が実行ごとに変わる。
+- ユーザーが明示的にモデルを指定した場合はそれに従う。
+- サブエージェントのモデル指定を持たない環境（Codex 等。frontmatter の `model` も無視される）では
+  既定モデルで実行してよい。
 
 ## 引数
 
@@ -200,6 +216,7 @@ console.log('[sentinel] review-request.json 生成: ' + files.length + ' ファ�
 files が 0 件の場合（差分なし・全削除・全 denylist 除外）は「レビュー対象ファイルなし」と表示して終了する。
 
 > **並行実行**: ステップ 5（quality）とステップ 6（security）は並行起動してよい。**両方が完了した後**にマージを実行すること。
+> **モデル**: サブエージェントのモデル指定は「実行モデル」節に従う。
 
 ### ステップ 5: quality review サブエージェント
 
