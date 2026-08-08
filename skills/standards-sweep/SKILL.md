@@ -39,7 +39,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 |---|---|
 | 残 action・健全性 | `actionctl --repo <checkout> scan`（exit 4 = 部分失敗）と `actionctl --repo <checkout> check`（fail-closed ゲート） |
 | 完了 action の消し込み漏れ | 完了済みが queue に残っていれば `actionctl --repo <checkout> done <file> --completed YYYY-MM-DD` |
-| `deploy_status: pending` | デプロイ済みなら `confirm-deploy`。同じ pending が 3 セッション連続ならユーザーへエスカレーション |
+| `deploy_status: pending` | デプロイ済みなら `confirm-deploy`。エスカレーション条件（連続セッション数）は shared-state README の SessionStart 節を読んで判定する（回数をここに複製しない） |
 | 起票漏れ | 今セッションで生まれた「忘れると手戻りになる」次セッションタスクを `actionctl add` で起票（Git/PR/コードから導けるものは起票しない） |
 
 `actionctl` = `/Users/nishikawa/.agents/shared-state/bin/actionctl`
@@ -52,7 +52,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 | hit 記録漏れ | 今セッションで回避策が役立った risk note に `brainctl hit <URISK-NNN>`（main session が実行。subagent の「URISK-NNN 適用」報告も代理記録） |
 | 学びの note 化漏れ | 横断的・非自明・失われると再発する学びは draft → `brainctl apply`。記事ネタは `brainctl neta-add` |
 | subagent の直接書き込み検査 | `ls -lt ~/.agents/shared-state/brain/ | head` で予期しない更新がないか（隔離契約の検証） |
-| Dream 閾値 | risk note が 80 件超なら Dream（棚卸し）をユーザーへ提案 |
+| Dream 閾値 | 閾値は `grep -A2 'Dream と不可逆操作' ~/.agents/shared-state/README.md`、現在数は `grep -c '^- \[URISK-' ~/.agents/shared-state/brain/INDEX.md` で取得し比較。超過時のみ棚卸しをユーザーへ提案（閾値の数値をここに複製しない） |
 
 `brainctl` = `/Users/nishikawa/.agents/shared-state/bin/brainctl`
 
@@ -70,7 +70,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 |---|---|
 | 学びの受け皿判定 | 横断 → `~/.claude/CLAUDE.md`（ルール文言のみ無承認可・追記前に 3 問チェック）/ リポ固有 → project CLAUDE.md / 一回性 → brain・neta。sensor 化できるものは提案止まり（hook/CI 新設はユーザー承認） |
 | memory 更新 | 新規事実の note 化・陳腐化 note の修正・MEMORY.md index 同期・sitemap の陳腐化確認 |
-| CLAUDE.md 棚卸しトリガー | `wc -l ~/.claude/CLAUDE.md`（150 行超なら棚卸しを提案） |
+| CLAUDE.md 棚卸しトリガー | 行数を `wc -l ~/.claude/CLAUDE.md` で測り、閾値は同ファイルの「棚卸し（Dream）」の記述から読む。超過時のみ棚卸しを提案（行数の閾値をここに複製しない） |
 
 ## 出力フォーマット
 
