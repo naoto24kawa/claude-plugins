@@ -64,6 +64,7 @@ This file provides guidance to Claude Code when working with this repository.
 | skills/parallel-review-cycle | plugins/dev-tools/skills/parallel-review-cycle（同期コピー） |
 | marketplace.json の plugins 配列 | README.md のプラグイン一覧 |
 | ディレクトリ構造変更 | CLAUDE.md のディレクトリ構造セクション |
+| SKILL.md の「実行モデル」節 | 同じ SKILL.md の frontmatter `model` / `effort` |
 
 ## Git ワークフロー
 
