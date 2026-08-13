@@ -10,7 +10,7 @@ autonomy: manual
 
 ## Agent Plugins v1.0.0 とは
 
-Vercel が提案し、Amazon / Cursor / Microsoft / OpenAI / GitHub の TSC が策定したベンダー中立のプラグイン梱包標準。Agent Skills と MCP サーバーを1つのディレクトリに束ねる規約のみを定め、**インストール・配布・マーケットプレース・ポリシー・クライアント固有機能はすべてスコープ外**。
+Vercel が提案し、AWS / Anysphere（Cursor）/ GitHub / Microsoft / OpenAI / Vercel の representatives が協働で策定したベンダー中立のプラグイン梱包標準。初期 TSC は AWS / Cursor / Microsoft / OpenAI / Vercel の Core Maintainers で構成される。Agent Skills と MCP サーバーを1つのディレクトリに束ねる規約のみを定め、**インストール・配布・マーケットプレース・ポリシー・クライアント固有機能はすべてスコープ外**。
 
 ```
 my-plugin/
@@ -51,11 +51,18 @@ Codex v0.145 に当リポジトリの marketplace（`naoto24kawa-claude-plugins`
 
 ## 追随しない理由
 
-1. **読み手がいない。** このリポジトリの出荷経路は skills CLI（`npx skills update -g`）と Claude Code marketplace の2つ。**2026-08-12 時点で Anthropic は TSC に不在**で、Claude Code のネイティブ対応の発表も確認できなかった（サードパーティ CLI が portable→Claude 形式へ変換する旨の二次情報はあるが一次情報は未確認）。**この2点は揮発性が高いので、本 action を実行する際は必ず再確認する。**
+1. **読み手がいない。** このリポジトリの出荷経路は skills CLI（`npx skills update -g`）と Claude Code marketplace の2つ。**2026-08-13 の再確認で、次の3点を実測した。**
+   - Agent Plugins の初期 TSC は AWS / Cursor / Microsoft / OpenAI / Vercel で、Anthropic は TSC にも1.0.0策定の collaborators にも不在だった。
+   - `anthropics/claude-code` の `CHANGELOG.md` に、「Agent Plugins」、`agent-plugins`、プラグインルート直下の `plugin.json` への言及はなく、Claude Code のネイティブ対応は確認できなかった。
+   - `vercel-labs/skills`（skills CLI）は Agent Plugins 形式を採用しておらず、むしろ `.claude-plugin/plugin.json` を Plugin Manifest Discovery に使用している。エコシステム側のツールが現行構成と噛み合っており、追随の緊急性は低い。
+
+   **この3点は揮発性が高いので、本 action を実行する際は必ず再確認する。**
 2. **モノレポの形が合わない。** 仕様は「1プラグイン = 1ディレクトリ + ルート plugin.json」モデル。当リポジトリは2つのプラグイン + トップレベル横断 `skills/` を marketplace.json で束ねた構造で、その束ね方に対応する概念が仕様側に無い。採用するならリポジトリルートではなく `plugins/*` 各ディレクトリ単位。
 3. **同期コストが増える。** `.mcp.json` を `mcp.json` にリネームすると Claude Code が読めなくなるため両方置く＝二重管理。当リポジトリは既に `parallel-review-cycle` の同期コピー規約という手動同期を1本抱えている。
 
 ## 監視トリガー（いずれか1つで本 action を起動する）
+
+**2026-08-13 再確認: 以下3つのトリガーはすべて未達。**
 
 - [ ] Claude Code が Agent Plugins のネイティブ対応を発表した
 - [ ] skills CLI（vercel-labs/skills）がこの形式を採用した ← **Vercel 発案のため最も先に来る可能性が高い**
@@ -65,7 +72,7 @@ Codex v0.145 に当リポジトリの marketplace（`naoto24kawa-claude-plugins`
 
 仕様公式の example リポジトリも「既存の動作するファイルを消さずに `plugin.json` を追加して検証する」加算的アプローチを推奨している。
 
-1. 上記「追随しない理由 1」の2つの事実（Anthropic の TSC 参加状況 / Claude Code のネイティブ対応状況）を再確認する
+1. 上記「追随しない理由 1」の3つの事実（Anthropic の TSC 参加状況 / Claude Code のネイティブ対応状況 / skills CLI の Agent Plugins 形式採用状況）を再確認する
 2. `plugins/dev-tools/plugin.json` を追加（`.claude-plugin/plugin.json` と併存させ、削除しない）
 3. `plugins/elchika-tools/plugin.json` を追加（同上）
 4. `plugins/elchika-tools/mcp.json` を追加（`.mcp.json` と併存。transport type を明示する）
@@ -78,5 +85,7 @@ Codex v0.145 に当リポジトリの marketplace（`naoto24kawa-claude-plugins`
 - https://agent-plugins.org/
 - https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md
 - https://github.com/agentplugins/agent-plugins-example （移行ガイド）
+- https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md
+- https://github.com/vercel-labs/skills
 - https://vercel.com/blog/introducing-agent-plugins
 - https://agent-plugins.org/plugin-authors
