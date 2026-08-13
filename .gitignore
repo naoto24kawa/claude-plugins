@@ -38,6 +38,10 @@ yarn-error.log*
 # Node modules (if any JavaScript tools are added)
 node_modules/
 
+# Python cache
+__pycache__/
+*.pyc
+
 # Environment variables
 .env
 .env.local
