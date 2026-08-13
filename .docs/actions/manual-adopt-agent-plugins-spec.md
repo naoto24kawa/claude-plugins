@@ -37,6 +37,18 @@ my-plugin/
 
 つまり**価値の中心である skills 層はすでに準拠済み**で、不足しているのは薄い封筒（plugin.json）だけ。
 
+### 他エージェント側が実際に何を読むか（2026-08-13 実測）
+
+Codex v0.145 に当リポジトリの marketplace（`naoto24kawa-claude-plugins`）を追加し、`dev-tools` を導入して実測した。
+
+- **読まれた**: `plugins/dev-tools/skills/` のスキルのみ（`dev-tools:parallel-review-cycle` として露出）
+- **読まれなかった**: `agents/`（spec Phase 0-8・site-explorer・verification-documenter）、`commands/`
+- **副作用**: 横断 `skills/` 経由で既に配布済みの `parallel-review-cycle` と二重に見え、スキル枠を圧迫した
+
+上表の「agents / commands / hooks は portable な置き場が存在しない」を、仕様上だけでなく**実装上も**裏付ける結果。Claude 以外のクライアントは現状 skills 層しか消費しないため、agents / commands を portable 化する動機は仕様側にも実装側にも無い。逆に skills 層は Claude 形式のままでも他エージェントへ届いており、この点でも追随の緊急性は低い。
+
+検証後、導入は完全にロールバックした（Codex 側 `config.toml` は導入前と diff ゼロ）。
+
 ## 追随しない理由
 
 1. **読み手がいない。** このリポジトリの出荷経路は skills CLI（`npx skills update -g`）と Claude Code marketplace の2つ。**2026-08-12 時点で Anthropic は TSC に不在**で、Claude Code のネイティブ対応の発表も確認できなかった（サードパーティ CLI が portable→Claude 形式へ変換する旨の二次情報はあるが一次情報は未確認）。**この2点は揮発性が高いので、本 action を実行する際は必ず再確認する。**
