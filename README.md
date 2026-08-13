@@ -46,11 +46,10 @@ npx skills update -g
 
 > マーケットプレース名は既存インストールとの互換性維持のため `naoto24kawa-claude-plugins` のまま。
 
-### dev-tools (v1.6.0)
+### dev-tools (v1.7.0)
 
 開発プロセス基盤のオールインワン。
 
-- **spec** — 9つのサブエージェント（Phase 0-8）による仕様書生成・差分更新・乖離検出
 - **site-explorer** — Web アプリの探索的 QA テストと GitHub Issue 自動登録
 - **verification-documenter** — 動作検証を実行して手順・結果・エビデンスを再現可能な資料として残すエージェント（証跡の既定保存先は `.docs/reviews/`）
 - **guardrails** — エージェントの安全装置。`kill-switch`（STOP ファイルで全ツール緊急停止）/ `path-allowlist`（書込先の制限）/ `rate-fuse`（呼び出し回数の上限）/ `audit-log`（実行の記録）と、hook でなくスキル本体へ組み込むときのパターン集（`hooks/guardrails/`）
@@ -58,6 +57,8 @@ npx skills update -g
 - **skills** — `parallel-review-cycle`（`skills/` 側が正本、プラグインへは同期コピー）
 
 > v1.6.0 で tmux-manager と agmsg 未読送信フックを撤去した（エージェント間連絡の agmsg → Orca orchestration 移行に伴う。standards rev.63）。
+
+> v1.7.0 で spec（文書生成の9エージェントと専用 references）を撤去した。スキル本体は 2026-06-13 に削除済みで、エージェントは起動経路を失ったまま残置されていた。
 
 ### elchika-tools (v1.0.0)
 
