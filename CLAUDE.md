@@ -29,7 +29,7 @@ This file provides guidance to Claude Code when working with this repository.
 ├── skills/                     # エージェント横断スキル（skills CLI が発見する場所）
 │   └── <name>/SKILL.md         # + references/ 等
 └── plugins/
-    ├── dev-tools/              # agents/ (spec Phase 0-8, site-explorer), commands/, skills/
+    ├── dev-tools/              # agents/ (site-explorer, verification-documenter), commands/, skills/
     └── elchika-tools/          # ローカル MCP サーバー (34ツール)
 ```
 
