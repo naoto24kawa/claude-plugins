@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # テストファイルは保証間で共有され、追加のたびに無関係な保証がWARNになるため、
 # 保証台帳の各行について、対応実装の変更のみを同じ保証行の更新と突合する。
+# 導入時はプロジェクトの実パスへ書き換える。既定値は同梱 fixture を指す。
 set -uo pipefail
 
 LEDGER="${LEDGER:-fixtures/guarantees.md}"

@@ -118,7 +118,7 @@ CLI や画面に固有の判定基準はここでは定めない。上記は原�
 
 ## ⑧ 導入手順
 
-1. `scripts/check-guarantees.sh` と `scripts/check-guarantee-cochange.sh` をプロジェクトへコピーし、**両スクリプトの既定値**（`LEDGER` / `TEST_DIR` / `BASE_REF`）をプロジェクトの実パスへ書き換える
+1. `scripts/check-guarantees.sh` と `scripts/check-guarantee-cochange.sh` を **`<リポジトリルート>/scripts/`** へコピーし、既定値（`check-guarantees.sh` は `LEDGER` / `TEST_DIR`、`check-guarantee-cochange.sh` は `LEDGER` / `BASE_REF`）をプロジェクトの実パスへ書き換える。両スクリプトは `ROOT` を自身の置き場所（`$(cd "$script_dir/.." && pwd -P)`）から導出しており、`<リポジトリルート>/scripts/` の 1 階層下に置かないと台帳のパス解決がずれる
 2. 台帳を空で開始する。または指示の情報源（`.docs/plans` の決定・PR rubric・レビュー裁定・risk-registry）から起こす
 3. プロジェクトの `CLAUDE.md` / `AGENTS.md` へ追記トリガーを 1 行加える
 4. PR 前チェックへ checker を配線し、exit code 契約（⑨参照）を明記する
@@ -149,6 +149,14 @@ checker が検査すること:
 - vitest 形式の `describe` / `it` / `test` 宣言をパースする前提
 - テスト索引のファイル名部分にサブディレクトリを含められない
 - ID は `G-` + 3 桁固定
+- `check-guarantee-cochange.sh` は ROOT がリポジトリルートでないとき、追跡済みファイルの変更を検出できず `cochange_warn=0` を返す（silent no-op）。同梱 fixture に対する cochange の実行は、この理由により配線の確認にはならない
+- 両スクリプトは `rg`（ripgrep）と `git` を必須とし、`check-guarantees.sh` は `realpath` にも依存する。bash 3.2（macOS 既定）で動作確認済み。`realpath` が無い環境では fail-closed に倒れるが、全行が「出自の形式が不正」と報告され、原因が読み取れない
+
+### 出力形式
+
+- 出力は最終行の `checked=N broken=N unpinned=N`
+- `checked` は最後まで到達した行だけを数える（`BROKEN` になった行は含まない。したがって `checked + broken` は総行数にならない）
+- `unpinned > 0` は exit 0 のままで PR をブロックしない。pin 未確認は正常にありうる状態であり、潰すときは `guarantee-pin-check` を使う
 
 ### exit code 契約
 
@@ -161,6 +169,8 @@ checker が検査すること:
 ## ⑪ 効果判定 rubric
 
 台帳へ保証を追加する PR で、出自が実際に記入され、その出自が既存の判断の出来事を指しているかを確認する。出自欄が「台帳更新のために作られただけの文書」を指すようになったら、形骸化と判定する。
+
+判定は次に台帳へ保証を追加する PR のレビューで、レビュアーが行う。
 
 ## ⑫ `decision-test-chain` との境界
 
