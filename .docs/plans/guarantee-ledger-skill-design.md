@@ -192,6 +192,8 @@ LEDGER=<tmp> bash scripts/check-guarantees.sh
 
 `skills/guarantee-ledger/scripts/` へ `check-guarantees.sh` と `check-guarantee-cochange.sh` を雛形として同梱する。導入時にプロジェクトへコピーし、`LEDGER` / `TEST_DIR` / `BASE_REF` を合わせる。
 
+あわせて 6 列の **fixture 台帳**を同梱する。雛形 scripts の自己検証に使い、導入者にとっては書式の worked example になる。
+
 スキルへ明記し、解決はしない限界:
 
 - vitest 形式の `describe` / `it` / `test` 宣言をパースする前提
@@ -278,7 +280,7 @@ exit code 契約:
 ### 完了条件
 
 1. `skills/guarantee-ledger/SKILL.md` と `skills/guarantee-pin-check/SKILL.md` が存在し、`npx skills` が両方を発見する（`description` の `: ` によるスキップが起きていない）
-2. 雛形 scripts が同梱され、`LEDGER` を差し替えて manako の台帳に対して実行したとき exit 0 を返す
+2. 雛形 scripts が同梱され、**スキルへ同梱する fixture 台帳**（6 列の worked example）に対して実行したとき exit 0 を返す。manako の現行台帳に対しては、出自付与前は出自検査で `BROKEN` になるため成果物 1 の判定には使わない
 3. manako の台帳が 6 列になり、有効な全行が空でない出自を持つ
 4. manako の `check-guarantees.sh` が出自の空とファイル不在を `BROKEN` として検出する。**mutation で確認する**（出自を 1 行だけ空にして赤、パスを実在しない値にして赤、復元して緑）
 5. manako の全テストが緑であること。件数では判定せず「1 件も減らず全件緑」で判定する
