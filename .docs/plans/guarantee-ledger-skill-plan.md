@@ -35,6 +35,7 @@
 | `skills/guarantee-ledger/fixtures/tests/example.test.ts` | fixture 台帳の `裏付けテスト` が指す先 |
 | `skills/guarantee-ledger/fixtures/decisions/example-design.md` | fixture 台帳の `出自` が指す先 |
 | `skills/guarantee-pin-check/SKILL.md` | pin 確認の Step A〜D、多主体の振り付け、安全規則 |
+| `README.md` | スキル一覧の同期先。`skills/` へのスキル追加・削除は `## Skills` 表と同期させる（`CLAUDE.md` の整合性維持対象表） |
 
 `ROOT` は `check-guarantees.sh` 内で `$(cd "$(dirname "$0")/.." && pwd -P)` として解決される。スクリプトを `skills/guarantee-ledger/scripts/` へ置くと `ROOT` は `skills/guarantee-ledger/` になるため、`fixtures/` 配下の相対パスがそのまま解決できる（実測で確認済みの挙動）。
 
@@ -258,6 +259,8 @@ echo "exit=$?"
 Expected: mutation の痕跡が残っていないこと（`fixtures/guarantees.md` が Step 8 の状態であること）。
 
 - [ ] **Step 12: cochange 雛形が fixture で動くことを確認する**
+
+> **注記（final-review 後に追記）**: `ROOT` は `check-guarantee-cochange.sh` 自身の置き場所から導出される。スキル同梱の配置（`skills/guarantee-ledger/scripts/`）では `ROOT` がリポジトリルート（`agent-toolkit/`）と一致しないため、`git diff --name-only`（リポジトリルート基準）と `git ls-files --others`（cwd 基準）のパス基準が混ざり、追跡済みファイルの変更が永久に一致しない（silent no-op）。したがって以下の実行は **cochange の検出動作そのものの証明ではなく、起動できて台帳を読み取れることの確認に留まる**。実際の配線先（`<プロジェクトルート>/scripts/`）での動作確認は導入時に別途行う。
 
 ```bash
 cd skills/guarantee-ledger
@@ -541,6 +544,18 @@ echo "exit=$?"
 ```
 
 Expected: `SKILL.md` が各ディレクトリ直下に存在すること。
+
+- [ ] **Step 2b: `npx skills` が両スキルを発見することを確認する（final-review 後に追記）**
+
+設計文書の完了条件1「`npx skills` が両方を発見する」は、Step 1 の `rg` による `description:` の引用符確認だけでは判定できない（引用符の目視は「静かにスキップされない書式であること」の確認であり、「skills CLI が実際に発見すること」の確認ではない。主張範囲と実測範囲が一致していなかった）。
+
+```bash
+cd /Users/nishikawa/orca/workspaces/agent-toolkit/guarantee-ledger-skill
+npx --yes skills add . --list
+echo "exit=$?"
+```
+
+Expected: exit 0、出力に `guarantee-ledger` と `guarantee-pin-check` の両方が列挙されること。**`--list` はインストールを行わず副作用が無い。** `-g` や `--skill` を付けた実インストールは実行しない。
 
 - [ ] **Step 3: fixture に対する checker が緑であることを再確認する**
 
