@@ -1,6 +1,6 @@
 ---
 name: parallel-review-cycle
-description: 'This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "詳細レベルの点検", "altitude check".'
+description: 'This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check".'
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent]
 model: opus
 effort: high
@@ -87,7 +87,7 @@ touch "$REVIEW_DIR/fp-registry.md"
 | 4 | Domain | CLI/API/DB など対象固有の品質 |
 | 5 | Fresh Eyes | 先入観なしの総合チェック |
 | 6 | Ambiguity Hunter | 文章仕様の未明文化（暗黙基準・未定義境界・閾値なし主観語・収束条件欠落・重複定義・宙吊り参照・anti-gaming欠落）。**対象に文章仕様が含まれる時のみ起動**。詳細 → `references/ambiguity-hunter.md` |
-| 7 | Altitude Checker | 文章仕様の詳細レベル overfit（固有語彙の漏れ・委譲可能な詳細の常駐・一回性の一般化・right altitude 違反）。**対象に文章仕様が含まれる時のみ起動**（#6 の対レンズ）。詳細 → `references/altitude-checker.md` |
+| 7 | Altitude Checker | 文章仕様の詳細レベル overfit（固有語彙の漏れ・委譲可能な詳細の常駐・一回性の一般化・right altitude 違反・scope excess）。**対象に文章仕様が含まれる時のみ起動**（#6 の対レンズ）。詳細 → `references/altitude-checker.md` |
 
 > **Fresh Eyes の注意**: Fresh Eyes には「修正済み事項」を渡さない。修正済みのはずの問題が再浮上する場合、修正が不完全な可能性があるため。FP レジストリは渡す（確認済みの偽陽性は除外する）。
 
@@ -110,7 +110,7 @@ touch "$REVIEW_DIR/fp-registry.md"
 
 スペシャリストには「**確信度 80% 以上の問題のみ報告**」を明示する。これにより低品質な指摘のノイズを減らす。
 
-あわせて `references/agent-output-principles.md`（同スキル内）の **scope フィルタ**を各プロンプトに含める——flag（correctness・セキュリティ・明示要件に影響。文章仕様では誤実装・誤運用・収束不能に至る欠陥を含む）と optional（それ以外）を分離報告させる。**サイクル継続判定・LGTM 相当の判定は flag のみ**で行う（確信度は severity/scope と直交——100%確信のスタイル指摘で収束を妨げない）。optional は修正不要だが、記録は正本の記録先規定に従い**ディスクへ残す**（コード変更なら `INSPECTION_STATUS` 併記、それ以外はレビュー成果物、無ければ対象ルートの `.docs/reviews/`）。チャットの最終レポートには要約のみ載せる。
+あわせて `references/agent-output-principles.md`（同スキル内）の **scope フィルタ**を各プロンプトに含める——flag（correctness・セキュリティ・明示要件に影響。文章仕様では誤実装・誤運用・収束不能に至る欠陥を含む。**過剰実装は降格理由の欠落のみ flag**——判定条件は同ファイルの scope フィルタが正本）と optional（それ以外）を分離報告させる。**サイクル継続判定・LGTM 相当の判定は flag のみ**で行う（確信度は severity/scope と直交——100%確信のスタイル指摘で収束を妨げない）。optional は修正不要だが、記録は正本の記録先規定に従い**ディスクへ残す**（コード変更なら `INSPECTION_STATUS` 併記、それ以外はレビュー成果物、無ければ対象ルートの `.docs/reviews/`）。チャットの最終レポートには要約のみ載せる。
 
 ## ステップ 3: 結果を収集し FP レジストリと照合する
 
@@ -231,4 +231,4 @@ Fresh Eyes を 2〜3 名にする方が ROI が高い（盲点の発見に有効
 - **`references/specialist-roles.md`** — 5 ロールのフォーカスエリアとプロンプトテンプレート
 - **`references/fp-registry-format.md`** — FP レジストリのエントリフォーマットと照合ルール
 - **`references/ambiguity-hunter.md`** — #6 Ambiguity Hunter（文章仕様の曖昧さ）の7分類・出力・明文化案・起動条件
-- **`references/altitude-checker.md`** — #7 Altitude Checker（詳細レベル overfit）の4分類・出力・移設案・#6 との裁定
+- **`references/altitude-checker.md`** — #7 Altitude Checker（詳細レベル overfit）の5分類・出力・移設案・#6 との裁定
