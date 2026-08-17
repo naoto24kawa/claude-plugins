@@ -26,6 +26,7 @@
 | `dreaming` | ルール文書の棚卸し（肥大化・陳腐化・overfit の剪定） |
 | `guarantee-ledger` | 壊してはいけない約束を宣言する保証台帳の文書規約と雛形 checker |
 | `guarantee-pin-check` | 保証を意図的に壊して裏付けテストが赤くなることを確認する pin 確認手順 |
+| `guarantee-interview` | 出自を持たない振る舞いを人間へ問うて裁定し、保証台帳へ昇格させる手順 |
 
 ### 更新の反映
 
