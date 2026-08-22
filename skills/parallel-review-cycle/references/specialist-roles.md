@@ -1,10 +1,10 @@
 # Specialist Roles
 
-5名のスペシャリストのロール定義とプロンプトテンプレート。
+5〜7 のレンズ（ロール）の定義とプロンプトテンプレート。既定ではレビュアー 1 名がこれらを順に当てる（SKILL.md「実行モデル」）。テンプレートは「1 レンズ分の指示」であり、1 名に渡すときはレンズごとの節として連結する。
 
 **全テンプレート共通の報告規定**（テンプレの「報告フォーマット」に必ず併記する）: `references/agent-output-principles.md`（同スキル内）の scope フィルタに従い、**`[ISSUE]` は flag（correctness・セキュリティ・明示要件に影響）のみ**。optional（それ以外）は `[ISSUE]` 形式で書かず「LGTM／optional: <概要>」と併記する。サイクル継続判定は `[ISSUE]` のみカウントする。
 
-specialist には `Write` ツールを渡し、オーケストレータが解決した絶対パス `{findings_path}` だけへ完全な findings を書かせる。パスの role 部分は `security` / `core-logic` / `tests` / `domain` / `fresh-eyes` / `ambiguity-hunter` / `altitude-checker` のいずれかを使う。findings ファイルの先頭行には `LGTM`、`LGTM／optional: ...`、または `flag N件` の結論を必ず書き、その後に全内容を残す。応答本文は同じ結論と書き込んだパスだけとするが、有効性判定には使わない。オーケストレータはファイルから集約する。
+レビュアーには `Write` ツールを渡し、オーケストレータがレンズごとに解決した絶対パス `{findings_path}` だけへ完全な findings を書かせる（1 名がレンズの数だけファイルを書く）。パスの role 部分は `security` / `core-logic` / `tests` / `domain` / `fresh-eyes` / `ambiguity-hunter` / `altitude-checker` のいずれかを使う。findings ファイルの先頭行には `LGTM`、`LGTM／optional: ...`、または `flag N件` の結論を必ず書き、その後に全内容を残す。応答本文は同じ結論と書き込んだパスだけとするが、有効性判定には使わない。オーケストレータはファイルから集約する。
 
 ## ロール一覧
 
@@ -218,7 +218,7 @@ specialist には `Write` ツールを渡し、オーケストレータが解決
 
 ### ロールの増減
 
-- **指摘が少ない場合**: Tests と Domain を統合し、Fresh Eyes を 2 名に増やすと盲点発見に有効
+- **指摘が少ない場合**: Tests と Domain を統合し、Fresh Eyes を別ラウンドで当て直すと盲点発見に有効
 - **指摘が多い場合**: Domain ロールを 2 つに分割（例: CLI + Server を別ロールに）
 - **偽陽性が多い場合**: 各ロールの「設計上の事実」セクションを充実させる
 
