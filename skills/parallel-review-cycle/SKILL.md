@@ -1,29 +1,27 @@
 ---
 name: parallel-review-cycle
-description: 'This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check".'
+description: 'This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check". Default execution is ONE sub-agent applying the lenses sequentially; launching one agent per lens in parallel happens only when the user explicitly asks for it.'
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, mcp__plugin_ts-review-graph_ts-review-graph__get_minimal_context]
-model: opus
-effort: high
 ---
 
 # Parallel Expert Review Cycle
 
-5名の専門レビュアーを並行ディスパッチし、指摘が 0 件になるまでラウンドを繰り返すレビュー手法。
+5〜7 の専門レンズを **1 名のレビュアーに順に当てさせ**、指摘が 0 件になるまでラウンドを繰り返すレビュー手法。
+レンズ（観点の分離と、レンズごとに独立した findings）が品質を支えており、エージェントの並列起動は支えていない。既定では並列起動しない。
 セッションスコープの偽陽性レジストリにより、同じ誤判定が繰り返しエスカレートされることを防ぐ。
 レビュー対象に文章仕様（CLAUDE.md / `.docs/plans` / スキル定義 / README / 設計書）が含まれる時は、6人目の **Ambiguity Hunter**（未明文化ハンター・詳細 → `references/ambiguity-hunter.md`）と、その対レンズである7人目の **Altitude Checker**（高度検査＝詳細レベルの overfit 検出・詳細 → `references/altitude-checker.md`）も起動する。明文化圧と抽象化圧を対にしてレビューの一方向膨張を防ぐ。
 
 ## 実行モデル
 
-レビューは推論の深さが結果を支配するため、**Opus** で実行する。この節がモデル指定の正本であり、
-frontmatter の `model` / `effort` はこの節を Claude Code 上で自動適用するためのショートカットである。
+この節が実行形態とモデル指定の正本である。
 
-- **オーケストレータ**: frontmatter の `model: opus` / `effort: high` で指定済み。
-- **スペシャリスト**: `Agent` 呼び出しで `model: "opus"` を**明示指定**する。親からの継承に
-  任せない——frontmatter の override はそのターンの残りしか効かず、ユーザーが途中で入力すると
-  セッションのモデルへ戻り、ラウンドごとにレビュー品質が変わって収束判定が信用できなくなる。
-- ユーザーが明示的にモデルを指定した場合はそれに従う。
-- `Agent` 相当を持たない環境（Codex 等。frontmatter の `model` も無視される）では
-  既定モデルで実行してよい。
+- **オーケストレータ**: セッションのモデルのまま（frontmatter で上書きしない）。集約・FP 照合・修正・コミットだけを行い、自分ではレンズを当てない（セッションモデルが高価な場合にトークンを食うため）。
+- **レビュアー**: **サブエージェント 1 名**。`Agent` 呼び出し 1 回で、適用するレンズを全部渡し、順に当てさせる。`model` は**明示指定**する（親からの継承に任せない——ユーザーが途中で入力するとセッションのモデルへ戻り、ラウンドごとにレビュー品質が変わって収束判定が信用できなくなる）。
+  - 既定は `model: "sonnet"`。
+  - 対象がコードで、セキュリティ・データ破壊・課金に影響しうる変更を含むときは `model: "opus"`。
+  - ユーザーが明示的にモデルを指定した場合はそれに従う。
+- **並列起動はしない**。レンズごとに 1 名ずつ同時起動するのは、ユーザーが「並列で」と明示したときだけ（その場合も各呼び出しで `model` を明示する）。理由は「設計原則」節。
+- `Agent` 相当を持たない環境（Codex 等）では、オーケストレータ自身がレンズを順に当ててよい。
 
 ## 自律実行の原則
 
@@ -37,20 +35,20 @@ frontmatter の `model` / `effort` はこの節を Claude Code 上で自動適�
 ## 概要
 
 ```
-Round N
-  ├─ Specialist #1 (Security)     → finding or LGTM
-  ├─ Specialist #2 (Core Logic)   → finding or LGTM
-  ├─ Specialist #3 (Tests)        → finding or LGTM
-  ├─ Specialist #4 (Domain)       → finding or LGTM
-  ├─ Specialist #5 (Fresh Eyes)   → finding or LGTM
-  ├─ Specialist #6 (Ambiguity Hunter) → finding or LGTM  ※対象に文章仕様が含まれる時のみ
-  └─ Specialist #7 (Altitude Checker) → finding or LGTM  ※同上（#6 の対レンズ）
+Round N — レビュアー 1 名がレンズを順に当てる（各レンズの findings を別ファイルへ）
+  1. Fresh Eyes        → finding or LGTM   ※最初に当てる（修正済み事項を読む前）
+  2. Security          → finding or LGTM
+  3. Core Logic        → finding or LGTM
+  4. Tests             → finding or LGTM
+  5. Domain            → finding or LGTM
+  6. Ambiguity Hunter  → finding or LGTM   ※対象に文章仕様が含まれる時のみ
+  7. Altitude Checker  → finding or LGTM   ※同上（#6 の対レンズ）
          ↓
   FP Registry 照合 → 既知FP は即棄却
          ↓
   真の指摘 → 修正 → テスト → 次ラウンドへ（確認なし）
          ↓
-  全員 LGTM → 完了レポートを出力
+  全レンズ LGTM → 完了レポートを出力
 ```
 
 ## ステップ 1: durable state と FP レジストリを初期化する
@@ -70,16 +68,17 @@ REVIEW_DIR="/tmp/review-cycle-${_wt}"
 
 グラフが無い、stale で拒否された、または MCP サーバーが未接続の場合は理由を1行記録し、**現行のレビュー動作を継続する**。文章仕様のみが対象なら呼び出さない。呼び出し形式とフォールバックは `references/minimal-context-feeder.md` を参照する。
 
-## ステップ 2: スペシャリストを並行ディスパッチする
+## ステップ 2: レビュアー 1 名にレンズを順に当てさせる
 
-`Agent` ツールを使い、各呼び出しを **単一メッセージ内** に並べて同時実行する。
-モデル指定は「実行モデル」節に従う（各 `Agent` 呼び出しで `model` を明示する）。
-ディスパッチ数は **5本**（コードのみ対象の場合）または **7本**（レビュー対象に文章仕様が1つ以上含まれる場合は #6 Ambiguity Hunter と #7 Altitude Checker を追加）。
-各 specialist には `Write` ツールを渡し、事前に `$REVIEW_DIR/round-N/` を作成する。完全な findings は `$REVIEW_DIR/round-N/<role>.md` へ書かせ、応答本文は結論とパスだけにする。オーケストレータは応答本文でなくファイルを集約する。
+`Agent` ツールを **1 回**呼び、適用するレンズを全部渡す。モデル指定は「実行モデル」節に従う（`model` を明示する）。
+適用するレンズは **5 つ**（コードのみ対象の場合）または **7 つ**（レビュー対象に文章仕様が1つ以上含まれる場合は #6 Ambiguity Hunter と #7 Altitude Checker を追加）。
+レビュアーには `Write` ツールを渡し、事前に `$REVIEW_DIR/round-N/` を作成する。レンズごとの完全な findings は `$REVIEW_DIR/round-N/<role>.md` へ書かせ（1 名が 5〜7 ファイルを書く）、応答本文は結論とパスだけにする。オーケストレータは応答本文でなくファイルを集約する。
+
+レンズの適用順は **Fresh Eyes を最初**にする。修正済み事項は `$REVIEW_DIR/round-N/fixed-items.md` に置き、プロンプトで「Fresh Eyes の findings を書き終えるまで読まない」と指示する（別人を立てずに Fresh Eyes の独立性を順序で担保する）。
 
 ### ロール構成
 
-各ラウンドで以下のロールをディスパッチする（#6・#7 は条件付き）。プロジェクトの特性に応じて Domain ロールをカスタマイズすること。
+各ラウンドで以下のレンズを順に当てる（#6・#7 は条件付き）。プロジェクトの特性に応じて Domain ロールをカスタマイズすること。
 
 | # | ロール | フォーカス |
 |---|--------|-----------|
@@ -91,38 +90,38 @@ REVIEW_DIR="/tmp/review-cycle-${_wt}"
 | 6 | Ambiguity Hunter | 文章仕様の未明文化（暗黙基準・未定義境界・閾値なし主観語・収束条件欠落・重複定義・宙吊り参照・anti-gaming欠落）。**対象に文章仕様が含まれる時のみ起動**。詳細 → `references/ambiguity-hunter.md` |
 | 7 | Altitude Checker | 文章仕様の詳細レベル overfit（固有語彙の漏れ・委譲可能な詳細の常駐・一回性の一般化・right altitude 違反・scope excess）。**対象に文章仕様が含まれる時のみ起動**（#6 の対レンズ）。詳細 → `references/altitude-checker.md` |
 
-> **Fresh Eyes の注意**: Fresh Eyes には「修正済み事項」を渡さない。修正済みのはずの問題が再浮上する場合、修正が不完全な可能性があるため。FP レジストリは渡す（確認済みの偽陽性は除外する）。
+> **Fresh Eyes の注意**: Fresh Eyes は「修正済み事項」を読む前に当てる。修正済みのはずの問題が再浮上する場合、修正が不完全な可能性があるため。FP レジストリは渡す（確認済みの偽陽性は除外する）。
 
-> **Ambiguity Hunter / Altitude Checker の注意**: コードのみが対象のサイクルではディスパッチしない（LGTM 扱い）。対象に文章仕様が1つ以上含まれる場合のみディスパッチする。
+> **Ambiguity Hunter / Altitude Checker の注意**: コードのみが対象のサイクルでは当てない（LGTM 扱い）。対象に文章仕様が1つ以上含まれる場合のみ当てる。
 
 
 ロール別のフォーカスエリアとプロンプトテンプレートは `references/specialist-roles.md` を参照。
 
-### スペシャリストへ伝える必須情報
+### レビュアーへ伝える必須情報
 
-各スペシャリストのプロンプトに必ず含めること:
+レビュアーのプロンプトに必ず含めること:
 
 1. **レビュー対象ファイル一覧** — 絶対パスで指定
-2. **修正済み事項** — 重複報告を防ぐため、前ラウンドまでに修正した内容を列挙（**Fresh Eyes には渡さない**——上記注意参照）
+2. **修正済み事項のパス** — 重複報告を防ぐため、前ラウンドまでに修正した内容を `$REVIEW_DIR/round-N/fixed-items.md` に列挙し、**Fresh Eyes の findings を書き終えてから読む**よう指示する（上記注意参照）
 3. **設計上の事実** — 意図的な設計判断（「これは仕様」と分かっているもの）
 4. **FP レジストリの内容** — `cat "$REVIEW_DIR/fp-registry.md"` で読み込んでプロンプトに展開
 5. **最小コンテキスト** — ステップ1.5で取得できた場合だけ、「まず読むべき起点」であり範囲制約ではないと明記して添付
-6. **findings の絶対パス** — オーケストレータが role ごとに解決した `{findings_path}`。このパス以外へ書かないよう明記する
+6. **レンズごとの findings の絶対パス** — オーケストレータが role ごとに解決した `{findings_path}` の一覧と適用順。これらのパス以外へ書かないよう明記する
 7. **報告フォーマット** — flag が無ければ「LGTM」（optional 所見があれば「LGTM／optional: <概要>」と併記。**optional を `[ISSUE]` 形式で書かせない**）。flag がある場合のみ `[ISSUE] ファイル:行 / 確信度 / 問題 / 修正案` の形式。完全な報告は指定 findings ファイルへ書き、応答本文は「LGTM / flag N件＋パス」のみにする
 
 ### 確信度フィルタと scope フィルタ
 
-スペシャリストには「**確信度 80% 以上の問題のみ報告**」を明示する。これにより低品質な指摘のノイズを減らす。
+レビュアーには「**確信度 80% 以上の問題のみ報告**」を明示する。これにより低品質な指摘のノイズを減らす。
 
 あわせて `references/agent-output-principles.md`（同スキル内）の **scope フィルタ**を各プロンプトに含める——flag（correctness・セキュリティ・明示要件に影響。文章仕様では誤実装・誤運用・収束不能に至る欠陥を含む。**過剰実装は降格理由の欠落のみ flag**——判定条件は同ファイルの scope フィルタが正本）と optional（それ以外）を分離報告させる。**サイクル継続判定・LGTM 相当の判定は flag のみ**で行う（確信度は severity/scope と直交——100%確信のスタイル指摘で収束を妨げない）。optional は修正不要だが、記録は正本の記録先規定に従い**ディスクへ残す**（コード変更なら `INSPECTION_STATUS` 併記、それ以外はレビュー成果物、無ければ対象ルートの `.docs/reviews/`）。チャットの最終レポートには要約のみ載せる。
 
 ## ステップ 3: 結果を収集し FP レジストリと照合する
 
-specialist が結果を返さない場合（エラー、タイムアウト、空応答、findings ファイル未作成・空・読取不能・形式不正）は LGTM として扱わない。有効性は `references/durable-state.md` の定義で検証する。同一ロールを1回だけ再ディスパッチし、それでも返らなければラウンドを未完のまま停止し、ユーザーへ報告する。試行回数は `state.md` に永続化し、再開用の `REVIEW_DIR` は削除しない。
+あるレンズの結果が返らない場合（エラー、タイムアウト、空応答、findings ファイル未作成・空・読取不能・形式不正）は LGTM として扱わない。有効性は `references/durable-state.md` の定義で検証する。欠けたレンズだけを 1 回だけ再依頼し（`Agent` を 1 回。並列起動はしない）、それでも返らなければラウンドを未完のまま停止し、ユーザーへ報告する。試行回数は `state.md` に永続化し、再開用の `REVIEW_DIR` は削除しない。
 
-各 specialist の findings ファイルが揃ったら:
+全レンズの findings ファイルが揃ったら:
 
-1. **flag なし（LGTM または optional のみ）** → そのロールは次ラウンド不要（ただし Fresh Eyes は毎ラウンド実行）。optional は記録リストに積む
+1. **flag なし（LGTM または optional のみ）** → そのレンズは次ラウンド不要（ただし Fresh Eyes は毎ラウンド当てる）。optional は記録リストに積む
 2. **flag あり** → FP レジストリと照合する
 
 ### FP 照合ルール
@@ -160,20 +159,20 @@ specialist が結果を返さない場合（エラー、タイムアウト、空
 
 ユーザーへの確認は一切行わず、即座に次のアクションへ移る。
 
-**最大ラウンド数: 10**（デフォルト）。10ラウンドを超えても指摘が残る場合は、現在の状況をユーザーに報告してサイクルを停止する。
+**最大ラウンド数: 3**（デフォルト。standards `AI_FIRST.md` §3 の収束条件と同じ値）。3ラウンドを超えても指摘が残る場合は、現在の状況をユーザーに報告してサイクルを停止する（残った指摘は修正か明示受容かをその場で決め、積み残さない）。
 
 ```
 flag された真の指摘が 1 件以上あった → テスト実行 → ステップ 2 へ（次ラウンド、確認なし）
 堂々巡り検出（FP レジストリ非該当の同一 flag が、修正後も2ラウンド連続で再出現） → 現状を報告してサイクル停止（ユーザーへエスカレーション。自律実行原則の例外）
-全スペシャリストが LGTM（flag 0。optional のみは LGTM 扱い） → ステップ 6 へ
-ラウンド数が 10 を超過     → 現状報告してサイクル停止
+全レンズが LGTM（flag 0。optional のみは LGTM 扱い） → ステップ 6 へ
+ラウンド数が 3 を超過     → 現状報告してサイクル停止
 ```
 
 ラウンド番号を R1, R2, R3 ... と管理し、各ラウンドの修正内容を記録しておく（最終レポートで使用）。
 
 ## ステップ 6: 学習ログ、クリーンアップ、完了レポート
 
-全員 LGTM、堂々巡り、ラウンド上限超過は terminal な終了としてこのステップへ進む。specialist の再試行失敗とユーザー中断は paused とし、ログも cleanup も行わず `REVIEW_DIR` を保持する。
+全レンズ LGTM、堂々巡り、ラウンド上限超過は terminal な終了としてこのステップへ進む。レビュアーの再試行失敗とユーザー中断は paused とし、ログも cleanup も行わず `REVIEW_DIR` を保持する。
 
 terminal な終了時は、対象リポジトリの `.docs/reviews/review-cycle-log.md` へラウンド数、終了理由、レンズ別 flag 件数、確定した偽陽性を**先に追記**する。形式と追記規則は `references/cycle-log-format.md` を参照する。レンズ実績は記録だけに使い、構成を自動変更しない。
 
@@ -230,10 +229,12 @@ FP レジストリは「偽陽性が上がってくる前に止める」プロ�
 - **未知 FP** → Checker も Specialist と同じコードを読んで同じ誤りをしうる（効果薄い）
 - **真のバグ** → Specialist が正しく報告（Checker は単なるラグ）
 
-### なぜ 5 名か
+### なぜレンズは 5〜7 で、レビュアーは 1 名か
 
-専門分化が効く最小構成。同じロールを 2 名にしても偽陽性が増えるだけ。
-Fresh Eyes を 2〜3 名にする方が ROI が高い（盲点の発見に有効）。
+専門分化（レンズ）が効く最小構成は 5〜7。同じレンズを 2 回当てても偽陽性が増えるだけ。
+一方、レンズごとに**別のエージェントを並列起動する**必要は無い——findings の品質を支えているのは「レンズごとに観点を絞り、独立したファイルへ書く」ことであり、別人格ではない。
+実測（2026-08-22、文書 PR 1 本）では 7 名×Opus×2 ラウンドでレビュアー 14 名分のコストが掛かり、R2 以降は収穫逓減だった。1 名が順に当てれば、コードを読む作業の重複（7 名が同じファイルを 7 回読む）も消える。
+Fresh Eyes の独立性だけは別人格に依存していたので、「最初に当てる・修正済み事項を後から読む」という順序で代替する。
 
 ### FP レジストリの寿命
 
