@@ -20,7 +20,7 @@
 
 | スキル | 発動キーワード例 | 用途 |
 |--------|----------------|------|
-| `parallel-review-cycle` | 「5人の専門家にレビューしてもらおう」「指摘が0になるまでレビュー」 | 5ロール並行レビューサイクルを自律実行 |
+| `lens-review-cycle` | 「レンズレビュー」「5人の専門家にレビューしてもらおう」「指摘が0になるまでレビュー」 | 5〜7 の専門レンズを順に当てるレビューサイクルを自律実行 |
 
 ## コマンド一覧
 
@@ -61,7 +61,7 @@ dev-tools/
 ├── references/
 │   └── config-template.md      # site-explorer 設定テンプレート
 └── skills/
-    └── parallel-review-cycle/
+    └── lens-review-cycle/
         ├── SKILL.md
         └── references/
             ├── agent-output-principles.md
@@ -76,7 +76,7 @@ dev-tools/
 ### コードレビュー
 
 ```
-「5人の専門家にレビューしてもらおう」→ parallel-review-cycle → 全員LGTM まで自律実行
+「5人の専門家にレビューしてもらおう」→ lens-review-cycle → 指摘 0 まで自律実行
 ```
 
 ### Webサイト調査
