@@ -17,6 +17,8 @@ fi
 failed=0
 checked=0
 unpinned=0
+instruction_count=0
+choice_count=0
 
 declared_name_exists() {
   local kind="$1"
@@ -48,7 +50,7 @@ if ! rows=$(rg '^\|' "$LEDGER"); then
   exit 1
 fi
 
-# retired を除き、対応実装・裏付けテスト・pin確認を取り出す。
+# retired を除き、対応実装・裏付けテスト・pin確認・出自種別・出自を取り出す。
 while IFS= read -r line; do
   case "$line" in
     *"(retired:"*) continue ;;
@@ -131,9 +133,20 @@ while IFS= read -r line; do
     continue
   fi
 
-  # 出自（7列目）。空と参照先ファイルの不在を検出する。
+  origin_kind=$(printf '%s\n' "$line" | awk -F'|' '{print $7}' | sed 's/`//g; s/^[[:space:]]*//; s/[[:space:]]*$//')
+  case "$origin_kind" in
+    指示) instruction_count=$((instruction_count + 1)) ;;
+    選択) choice_count=$((choice_count + 1)) ;;
+    *)
+      echo "BROKEN: 出自種別が不正: $id :: $origin_kind" >&2
+      failed=$((failed + 1))
+      continue
+      ;;
+  esac
+
+  # 出自（8列目）。空と参照先ファイルの不在を検出する。
   # 見出しの実在は検査しない。形式検査を意味検査と誤認させないため（設計文書「機械検査の境界」）。
-  provenance=$(printf '%s\n' "$line" | awk -F'|' '{print $7}' | sed 's/`//g; s/^[[:space:]]*//; s/[[:space:]]*$//')
+  provenance=$(printf '%s\n' "$line" | awk -F'|' '{print $8}' | sed 's/`//g; s/^[[:space:]]*//; s/[[:space:]]*$//')
   if [ -z "$provenance" ]; then
     echo "BROKEN: 出自が空: $id" >&2
     failed=$((failed + 1))
@@ -249,7 +262,7 @@ while IFS= read -r line; do
   checked=$((checked + 1))
 done <<< "$rows"
 
-echo "checked=$checked broken=$failed unpinned=$unpinned"
+echo "checked=$checked broken=$failed unpinned=$unpinned 指示=$instruction_count 選択=$choice_count"
 
 if [ "$failed" -gt 0 ]; then
   exit 1
