@@ -1,6 +1,6 @@
 # Structure ロール（import グラフ構造解析）
 
-> 旧 parallel-review-cycle specialist-roles.md の #7 Structure を watch-sprawl 専用に自己完結化したもの。正本はこのファイル。
+> 旧 parallel-review-cycle（現 lens-review-cycle）specialist-roles.md の #7 Structure を watch-sprawl 専用に自己完結化したもの。正本はこのファイル。
 
 **前提**: `~/projects/mizchi/sprawlens/packages/cli/dist/index.js` が存在すること（ビルド済み）。無ければ `git clone https://github.com/mizchi/sprawlens ~/projects/mizchi/sprawlens && cd ~/projects/mizchi/sprawlens && pnpm install && pnpm build` で用意する。
 

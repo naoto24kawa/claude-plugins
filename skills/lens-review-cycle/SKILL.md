@@ -1,10 +1,10 @@
 ---
-name: parallel-review-cycle
-description: 'This skill should be used when the user asks to "5人の専門家にレビューしてもらおう", "専門家並行レビュー", "parallel expert review", "parallel review cycle", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or wants to autonomously run multiple rounds of parallel specialist code review until all findings reach zero — without stopping to confirm between rounds. When the review target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md/index.md, README, design docs), a 6th "Ambiguity Hunter" lens also checks for underspecification — implicit criteria, undefined boundaries, threshold-less subjective terms, missing convergence conditions, duplicate definitions, dangling references — and a 7th "Altitude Checker" lens (its counterpart) checks for detail-level overfit — mechanism-specific vocabulary leaking upward, delegable details living in principle docs, one-off experiences generalized into permanent rules. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check". Default execution is ONE sub-agent applying the lenses sequentially; launching one agent per lens in parallel happens only when the user explicitly asks for it.'
+name: lens-review-cycle
+description: 'This skill should be used when the user asks to "レンズレビュー", "lens review cycle", "専門家レビュー", "expert review cycle", "5人の専門家にレビューしてもらおう", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or the legacy phrases "parallel review cycle" / "専門家並行レビュー" — to autonomously run multiple rounds of multi-lens specialist review until all findings reach zero, without stopping to confirm between rounds. ONE reviewer applies 5 lenses sequentially; one agent per lens in parallel only when the user explicitly asks. When the target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md, README, design docs), a 6th "Ambiguity Hunter" lens checks underspecification (implicit criteria, undefined boundaries, missing convergence conditions, dangling references) and a 7th "Altitude Checker" lens checks detail-level overfit (mechanism vocabulary leaking upward, one-off experiences generalized into rules). Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check".'
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, mcp__plugin_ts-review-graph_ts-review-graph__get_minimal_context]
 ---
 
-# Parallel Expert Review Cycle
+# Lens Review Cycle
 
 5〜7 の専門レンズを **1 名のレビュアーに順に当てさせ**、指摘が 0 件になるまでラウンドを繰り返すレビュー手法。
 レンズ（観点の分離と、レンズごとに独立した findings）が品質を支えており、エージェントの並列起動は支えていない。既定では並列起動しない。
