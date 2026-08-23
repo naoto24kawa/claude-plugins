@@ -43,7 +43,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ### plugins/ 変更時
 1. `plugins/<プラグイン名>/` 配下を編集
-2. marketplace.json のバージョン番号をインクリメント（スキル/エージェント追加削除時）
+2. marketplace.json と plugins/<name>/.claude-plugin/plugin.json のバージョン番号を同じ値にインクリメント（スキル/エージェント追加削除時）
 3. ルート `README.md` のプラグイン一覧と整合を取る
 
 ### marketplace.json の name は変更しない
@@ -63,6 +63,7 @@ This file provides guidance to Claude Code when working with this repository.
 | skills/ のスキル追加・削除 | README.md のスキル一覧 |
 | skills/lens-review-cycle | plugins/dev-tools/skills/lens-review-cycle（同期コピー） |
 | marketplace.json の plugins 配列 | README.md のプラグイン一覧 |
+| marketplace.json の plugins[].version | plugins/<name>/.claude-plugin/plugin.json の version（同じコミットで同じ値にする。`claude plugin update` はこちらを見る） |
 | ディレクトリ構造変更 | CLAUDE.md のディレクトリ構造セクション |
 | SKILL.md の「実行モデル」節 | 同じ SKILL.md の frontmatter `model` / `effort` |
 
