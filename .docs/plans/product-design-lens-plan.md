@@ -506,13 +506,13 @@ git rev-parse HEAD
 
 - [ ] **Step 2: `description` に棲み分け1文を追加する**
 
-`SKILL.md` の frontmatter `description` の末尾（閉じクォートの直前）へ次を追記する:
+`SKILL.md` のfrontmatter `description` へ、次の棲み分けを追加する。変更前のdescriptionが行全体で1024文字に達しているため、既存トリガーワードをすべて保ったまま実行モデル要約と棲み分け文を意味保存で圧縮する。
 
 ```
 プロダクト構想段階で「その判断自体が正しいか」を外側から問い直す場合は、このスキルではなく product-design-lens を使う。
 ```
 
-**規律**: description 全体で1024文字以内を保つ。超える場合は既存のトリガーワード列挙を削らず、追記文を短縮する。
+**規律**: `description:` キーと外側quoteを含む行全体で1024 code points以内を保つ。既存のトリガーワード列挙は削らない。実行モデル要約には①複数ラウンド反復、②ラウンド間の確認なし、③レビュアー1名が5レンズを順次適用、④並列起動はユーザー明示時のみ、⑤文章仕様ではAmbiguity HunterとAltitude Checkerを追加、の5点を残す。圧縮で削る情報がSKILL.md本文にも無い場合は削除しない。
 
 - [ ] **Step 3: 冒頭へ「このスキルを使わない場合」節を追加する**
 
@@ -571,6 +571,31 @@ Expected: `SKILL.md` と `references/ambiguity-hunter.md` の2ファイルのみ
 git diff -U0 SKILL.md | grep -E '^[+-]' | grep -vE '^(\+\+\+|---)'
 ```
 Expected: 変更行が Step 2・3・5 の3箇所のみ。次のいずれかに触れていたら**やり直す**——「実行モデル」節、FP レジストリ、durable-state、最大ラウンド数、ロール構成表の7行。
+
+descriptionの圧縮でトリガーや実行モデル要約を落としていないことを機械検査する:
+
+```bash
+node - <<'NODE'
+const fs = require('node:fs');
+const line = fs.readFileSync('SKILL.md', 'utf8').split('\n').find((row) => row.startsWith('description:'));
+const required = [
+  '"レンズレビュー"', '"lens review cycle"', '"専門家レビュー"', '"expert review cycle"',
+  '"5人の専門家にレビューしてもらおう"', '"指摘が0になるまでレビュー"',
+  '"レビューサイクルを回す"', '"繰り返しレビュー"',
+  '"parallel review cycle"', '"専門家並行レビュー"',
+  '"仕様の曖昧さをチェック"', '"ルールの曖昧さ"', '"未明文化を洗い出す"',
+  '"ambiguity check"', '"overfit チェック"', '"過剰実装チェック"', '"altitude check"',
+  'multiple autonomous review rounds', 'without between-round confirmation',
+  'One reviewer applies 5 lenses sequentially', 'parallel agents only when the user explicitly asks',
+  'For prose targets', 'Ambiguity Hunter', 'Altitude Checker', 'product-design-lens',
+];
+console.log(`description-line-codepoints=${[...line].length}`);
+for (const text of required) console.log(`${line.includes(text) ? 'OK' : 'MISSING'}  ${text}`);
+if ([...line].length > 1024 || required.some((text) => !line.includes(text))) process.exitCode = 1;
+NODE
+```
+
+Expected: 行全体が1024 code points以下で、全項目が `OK`。`MISSING` は0件。
 
 ```bash
 grep -c '最大ラウンド数: 3' SKILL.md

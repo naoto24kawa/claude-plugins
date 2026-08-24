@@ -37,6 +37,51 @@ PASS
 - #5: `lens-review-cycle` から `product-design-lens` は4件、逆方向は5件で、両方向とも1件以上。
 - #7: ロール構成表は7行。`最大ラウンド数: 3` は1件、`サブエージェント 1 名` は1件、`並列起動はしない` は2件で、変更前の実測値と一致。
 
+## lens-review-cycle の非退行検証
+
+Task 3 完了時点の `e48dbe9` を比較元として、変更範囲を確認した。
+
+```text
+ skills/lens-review-cycle/SKILL.md                       | 13 ++++++++++++-
+ skills/lens-review-cycle/references/ambiguity-hunter.md | 16 ++++++++++++++++
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+```
+
+`git diff -U0 e48dbe9 -- skills/lens-review-cycle/SKILL.md` の変更箇所は、計画どおり frontmatter `description`、冒頭の「このスキルを使わない場合」、完了レポートの「判断レンズへの差し戻し」の3箇所だった。`実行モデル`、FPレジストリ、durable-state、最大ラウンド数、ロール構成表には変更が無い。
+
+変更前のdescription行が1024 code pointsだったため、司令塔の裁定に従い、トリガー列挙と実行契約を保持する意味保存圧縮を行った。圧縮後の行全体は802 code pointsで、機械検査の結果は次のとおりだった。
+
+```text
+description-line-codepoints=802
+OK  "レンズレビュー"
+OK  "lens review cycle"
+OK  "専門家レビュー"
+OK  "expert review cycle"
+OK  "5人の専門家にレビューしてもらおう"
+OK  "指摘が0になるまでレビュー"
+OK  "レビューサイクルを回す"
+OK  "繰り返しレビュー"
+OK  "parallel review cycle"
+OK  "専門家並行レビュー"
+OK  "仕様の曖昧さをチェック"
+OK  "ルールの曖昧さ"
+OK  "未明文化を洗い出す"
+OK  "ambiguity check"
+OK  "overfit チェック"
+OK  "過剰実装チェック"
+OK  "altitude check"
+OK  multiple autonomous review rounds
+OK  without between-round confirmation
+OK  One reviewer applies 5 lenses sequentially
+OK  parallel agents only when the user explicitly asks
+OK  For prose targets
+OK  Ambiguity Hunter
+OK  Altitude Checker
+OK  product-design-lens
+```
+
+圧縮でdescriptionから除いたのは、`underspecification` と `detail-level overfit` の例示括弧、ならびに同じ実行契約を冗長に表していた語句である。各レンズの詳細は本文とreferencesに残り、複数ラウンド、ラウンド間確認なし、1名が5レンズを順次適用、並列はユーザー明示時のみ、文章仕様ではAmbiguity HunterとAltitude Checkerを追加する、という5つの実行契約はdescriptionにも残っている。
+
 ## 負の検査のpositive control
 
 案件固有語の引用ブロック外漏れを検出する検査に対し、`lens-catalog.md` の末尾へ意図的に `案件のグッズを例に説明する。` を追加した。再実行した検査は引用記号 `>` の無い違反行を次のとおり検出した。
