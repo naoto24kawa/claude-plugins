@@ -39,6 +39,10 @@ spec と agent-toolkit `CLAUDE.md` から。すべてのタスクの要件に暗
 | `plugins/dev-tools/skills/lens-review-cycle/` | 同期コピー（再同期） | 変更 |
 | `README.md` | スキル一覧へ追記 | 変更 |
 | `CLAUDE.md` | 「整合性の維持対象」表へ同期対象を追記 | 変更 |
+| `plugins/dev-tools/.claude-plugin/plugin.json` | プラグインの version（marketplace.json と同値） | 変更 |
+| `.claude-plugin/marketplace.json` | マーケットプレース定義の version | 変更 |
+| `.docs/reviews/product-design-lens-verification.md` | rubric の実測値と発火実測の手順書 | 新規 |
+| `.docs/reviews/review-cycle-log.md` | lens-review-cycle のサイクル横断ログ | 追記または新規 |
 
 ---
 

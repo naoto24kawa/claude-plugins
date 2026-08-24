@@ -38,7 +38,7 @@ This file provides guidance to Claude Code when working with this repository.
 ### skills/ 変更時
 1. `skills/<name>/` を編集して push
 2. 各マシンで `npx skills update -g` を実行して反映（自動では反映されない）
-3. `lens-review-cycle` を変更したら **`plugins/dev-tools/skills/lens-review-cycle` へ同期コピー**する（`cp -R skills/lens-review-cycle/ plugins/dev-tools/skills/lens-review-cycle/`）。プラグイン側を直接編集しない
+3. `lens-review-cycle` または `product-design-lens` を変更したら、それぞれ **`plugins/dev-tools/skills/<name>` へ同期コピー**する（`cp -R skills/<name>/ plugins/dev-tools/skills/<name>/`）。プラグイン側を直接編集しない
 4. ルート `README.md` のスキル一覧と整合を取る
 
 ### plugins/ 変更時
@@ -62,6 +62,7 @@ This file provides guidance to Claude Code when working with this repository.
 |----------|--------|
 | skills/ のスキル追加・削除 | README.md のスキル一覧 |
 | skills/lens-review-cycle | plugins/dev-tools/skills/lens-review-cycle（同期コピー） |
+| skills/product-design-lens | plugins/dev-tools/skills/product-design-lens（同期コピー） |
 | marketplace.json の plugins 配列 | README.md のプラグイン一覧 |
 | marketplace.json の plugins[].version | plugins/<name>/.claude-plugin/plugin.json の version（同じコミットで同じ値にする。`claude plugin update` はこちらを見る） |
 | ディレクトリ構造変更 | CLAUDE.md のディレクトリ構造セクション |
