@@ -128,9 +128,17 @@ grep -c '実例（1案件からの観測）' references/lens-catalog.md
 Expected: 1以上（実例を書いたレンズの数と一致すること）
 
 ```bash
-grep -nE 'グッズ|交換会|三角トレード' references/lens-catalog.md | grep -v '実例（1案件からの観測）' | grep -v '^\s*>' 
+grep -nE 'グッズ|交換会|三角トレード|臨界密度' references/lens-catalog.md
 ```
-Expected: 出力なし（案件固有語が実例ブロックの外に漏れていないこと）
+Expected: **出力された全行が `>` で始まる引用行であること**（案件固有語が実例ブロックの外に漏れていないこと）。行番号と内容を目視で判定する——pipe で絞り込まない（絞り込むと exit code が最後の grep のものになり、検査の生死が見えなくなる）。
+
+**この検査の positive control を取ること**（検査が本当に鳴るか確かめる）:
+
+```bash
+printf '\n案件のグッズを例に説明する。\n' >> references/lens-catalog.md
+grep -nE 'グッズ|交換会|三角トレード|臨界密度' references/lens-catalog.md
+```
+Expected: 末尾に `>` で始まらない行が1件現れる（＝検査が機能している）。確認したらその行を削除し、再度検査を実行して全行が `>` 始まりに戻ることを確認する。
 
 - [ ] **Step 5: サブディレクトリを作っていないことを確認**
 
@@ -561,9 +569,11 @@ git diff -U0 SKILL.md | grep -E '^[+-]' | grep -vE '^(\+\+\+|---)'
 Expected: 変更行が Step 2・3・5 の3箇所のみ。次のいずれかに触れていたら**やり直す**——「実行モデル」節、FP レジストリ、durable-state、最大ラウンド数、ロール構成表の7行。
 
 ```bash
-grep -nE '最大ラウンド数: 3|サブエージェント 1 名|並列起動はしない' SKILL.md
+grep -c '最大ラウンド数: 3' SKILL.md
+grep -c 'サブエージェント 1 名' SKILL.md
+grep -c '並列起動はしない' SKILL.md
 ```
-Expected: 変更前と同じ内容で存在すること（収束条件と実行モデルが無傷）
+Expected: 順に `1` / `1` / `2`（2026-08-25 に変更前の実測で確認した値）。1つでも異なれば収束条件か実行モデルを壊しているので**やり直す**。
 
 ```bash
 grep -cE '^\| [1-7] \|' SKILL.md
