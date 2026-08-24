@@ -214,12 +214,24 @@
 | # | 検証項目 | 方法 | 成功条件 |
 |---|---|---|---|
 | 1 | SKILL.md の行数上限 | `wc -l skills/product-design-lens/SKILL.md` | 500以下 |
-| 2 | 外部参照が1階層 | `references/` 内のファイルが更に別ファイルを参照していないこと | 参照0件 |
+| 2 | 外部参照が1階層 | ① `find skills/product-design-lens/references -mindepth 1 -type d` ② references 内の `references/*.md` 参照先が全て同 references 内に実在するか | ①0件（サブディレクトリなし） ②宙吊り0件 |
 | 3 | frontmatter 必須項目 | `name` / `description` の存在 | 両方あり |
 | 4 | 同期コピーがバイト一致 | `diff -r skills/product-design-lens plugins/dev-tools/skills/product-design-lens` | 差分なし |
 | 5 | 相互参照が実在 | 両 SKILL.md が互いのスキル名を正しく綴っているか | 両方向とも実在するスキル名 |
 | 6 | **スキルが正しく発火する** | 新セッションで両方向のトリガー語を入力 | 「プロダクト設計のレンズを通したい」→ product-design-lens ／「レビューサイクルを回して」→ lens-review-cycle |
 | 7 | 既存 lens-review-cycle の非退行 | 変更した4箇所以外に差分が無いこと（`git diff`） | 実行モデル・FP レジストリ・収束条件・7レンズ構成に差分なし |
+
+### 6.1 ベースライン実測（2026-08-25・既存 lens-review-cycle で取得）
+
+rubric は書く前に既存スキルで実行し、検査が機能することを確認した。
+
+| # | 実測値 | 判定 |
+|---|---|---|
+| 1 | `wc -l skills/lens-review-cycle/SKILL.md` = 251 | 上限500に対し余裕あり |
+| 2 | references サブディレクトリ 0件 ／ 参照先4種すべて実在 | PASS（positive control 取得） |
+| 4 | `diff -r skills/lens-review-cycle plugins/dev-tools/skills/lens-review-cycle` 差分なし | PASS（検査が機能する） |
+
+**当初 rubric #2 を「references 内から更に参照していないこと＝参照0件」と書いていたが、実測により既存 lens-review-cycle が references 間で8件相互参照していることが判明したため破棄した。** agent-toolkit CLAUDE.md の「外部参照: 1階層まで」は「references より深い階層を作らない」の意であり、references 同士の参照は同一階層内で規約に反しない。決め打ちのまま採用していれば、worker が正しく作っても不合格になり「基準へ合わせるための改悪」を招いていた。
 
 検証 #6 が本命である。description に棲み分けを書いても、実際にエージェントが正しく分岐するかは実測するまで分からない（「記述は到達を意味しない」）。名前が近いスキルを2つ並べるため、誤発火が起きるならここである。#4 も同種で、`cp -R` を忘れると片側だけ古くなるが見た目では判別できない。
 
