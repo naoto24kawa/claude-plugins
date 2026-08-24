@@ -173,7 +173,7 @@
 | 1 | `SKILL.md` frontmatter `description` | 棲み分け1文を追加（「プロダクト構想段階の判断訂正は product-design-lens を使う」） | 1行 |
 | 2 | `SKILL.md` 冒頭 | 「このスキルを使わない場合」節を追加（product-design-lens への分岐） | 3〜5行 |
 | 3 | `references/ambiguity-hunter.md` | **逆流ルール**を追加 | 1ブロック |
-| 4 | `SKILL.md` ステップ6 完了レポート | 「判断レンズ未通過なら product-design-lens を推奨」の1行 | 1行 |
+| 4 | `SKILL.md` ステップ6 完了レポート | 「判断レンズへの差し戻し」節を追加（#3 の逆流ルールが出した差し戻しの件数と、product-design-lens での裁定要求を報告する） | 3行 |
 
 ### 4.1 逆流ルール（#3 の内容）
 
