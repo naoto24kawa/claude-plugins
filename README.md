@@ -14,6 +14,7 @@
 | スキル | 概要 |
 |--------|------|
 | `lens-review-cycle` | 複数の専門レンズを 1 名のレビュアーに順に当て、指摘ゼロまで反復するレビューサイクル |
+| `product-design-lens` | プロダクト構想へ設計レンズを順に当てて判断を訂正する（成果物の欠陥検出は `lens-review-cycle`） |
 | `agent-team` | TEAM モードの Role Contract（役割定義）と dev-cycle 連携 |
 | `sentinel` | 品質＋セキュリティレビュー（3-vote 偽陽性フィルタ付き） |
 | `watch-sentinel` | オープン PR への sentinel レビュー適用 |
@@ -57,7 +58,7 @@ npx skills update -g
 - **verification-documenter** — 動作検証を実行して手順・結果・エビデンスを再現可能な資料として残すエージェント（証跡の既定保存先は `.docs/reviews/`）
 - **guardrails** — エージェントの安全装置。`kill-switch`（STOP ファイルで全ツール緊急停止）/ `path-allowlist`（書込先の制限）/ `rate-fuse`（呼び出し回数の上限）/ `audit-log`（実行の記録）と、hook でなくスキル本体へ組み込むときのパターン集（`hooks/guardrails/`）
   - **既定では配線しない**。ツール実行をブロックする挙動を含むため、使うときに `settings.example.json` を参照して明示的に配線する
-- **skills** — `lens-review-cycle`（`skills/` 側が正本、プラグインへは同期コピー）
+- **skills** — `lens-review-cycle` / `product-design-lens`（`skills/` 側が正本、プラグインへは同期コピー）
 
 > v1.6.0 で tmux-manager と agmsg 未読送信フックを撤去した（エージェント間連絡の agmsg → Orca orchestration 移行に伴う。standards rev.63）。
 

@@ -1,6 +1,6 @@
 ---
 name: lens-review-cycle
-description: 'This skill should be used when the user asks to "レンズレビュー", "lens review cycle", "専門家レビュー", "expert review cycle", "5人の専門家にレビューしてもらおう", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or the legacy phrases "parallel review cycle" / "専門家並行レビュー" — to autonomously run multiple rounds of multi-lens specialist review until all findings reach zero, without stopping to confirm between rounds. ONE reviewer applies 5 lenses sequentially; one agent per lens in parallel only when the user explicitly asks. When the target includes prose rules/specs (CLAUDE.md, .docs/plans, SKILL.md, README, design docs), a 6th "Ambiguity Hunter" lens checks underspecification (implicit criteria, undefined boundaries, missing convergence conditions, dangling references) and a 7th "Altitude Checker" lens checks detail-level overfit (mechanism vocabulary leaking upward, one-off experiences generalized into rules). Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check".'
+description: 'This skill should be used when the user asks to "レンズレビュー", "lens review cycle", "専門家レビュー", "expert review cycle", "5人の専門家にレビューしてもらおう", "指摘が0になるまでレビュー", "レビューサイクルを回す", "繰り返しレビュー", or the legacy phrases "parallel review cycle" / "専門家並行レビュー" — to run multiple autonomous review rounds until all findings reach zero, without between-round confirmation. One reviewer applies 5 lenses sequentially; parallel agents only when the user explicitly asks. For prose targets (CLAUDE.md, .docs/plans, SKILL.md, README, design docs), also use a 6th "Ambiguity Hunter" for underspecification and a 7th "Altitude Checker" for detail-level overfit. Triggers also: "仕様の曖昧さをチェック", "ルールの曖昧さ", "未明文化を洗い出す", "ambiguity check", "overfit チェック", "過剰実装チェック", "altitude check". 構想段階の判断訂正には product-design-lens を使う。'
 allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, mcp__plugin_ts-review-graph_ts-review-graph__get_minimal_context]
 ---
 
@@ -10,6 +10,12 @@ allowed-tools: [Read, Write, Edit, Bash, Glob, Grep, Agent, mcp__plugin_ts-revie
 レンズ（観点の分離と、レンズごとに独立した findings）が品質を支えており、エージェントの並列起動は支えていない。既定では並列起動しない。
 セッションスコープの偽陽性レジストリにより、同じ誤判定が繰り返しエスカレートされることを防ぐ。
 レビュー対象に文章仕様（CLAUDE.md / `.docs/plans` / スキル定義 / README / 設計書）が含まれる時は、6人目の **Ambiguity Hunter**（未明文化ハンター・詳細 → `references/ambiguity-hunter.md`）と、その対レンズである7人目の **Altitude Checker**（高度検査＝詳細レベルの overfit 検出・詳細 → `references/altitude-checker.md`）も起動する。明文化圧と抽象化圧を対にしてレビューの一方向膨張を防ぐ。
+
+## このスキルを使わない場合
+
+**まだ確定していない判断を訂正する用途には使わない。** 競合・法令・時間軸・失敗シナリオといった「文書の外」に照らして判断そのものを書き換えるのは `product-design-lens` である。このスキルは「文書の中」を見て記述の破綻を直す。
+
+判断を確定させてから（product-design-lens）、記述を締める（このスキル）という順番になる。
 
 ## 実行モデル
 
@@ -216,6 +222,11 @@ rm -rf "$REVIEW_DIR"
 ### optional 指摘（終了条件外）
 
 {N}件・記録先: {ディスク上のパス}
+
+### 判断レンズへの差し戻し
+
+{N}件（0件なら「なし」）
+{1件以上ある場合のみ}: 判断の未検証が残っている。product-design-lens で裁定すること。
 ```
 
 ## 設計原則
