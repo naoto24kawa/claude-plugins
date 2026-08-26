@@ -37,9 +37,17 @@ This file provides guidance to Claude Code when working with this repository.
 
 ### skills/ 変更時
 1. `skills/<name>/` を編集して push
-2. 各マシンで `npx skills update -g` を実行して反映（自動では反映されない）
+2. 各マシンへ反映する（自動では反映されない）。**既存スキルの更新と新規スキルの追加でコマンドが違う**
+   - **既存スキルを変更した** → `npx skills update -g`
+   - **スキルを新規追加した** → `npx skills add elchika-inc/agent-toolkit -g`。`update -g` は**インストール済みのスキルしか見ないため、新規スキルは1つも入らない**（2026-08-25 実測。`product-design-lens` 追加時に `update -g` が「✓ Updated 2 skill(s)」と成功表示を出しながら当該スキルを配布しなかった）
 3. `lens-review-cycle` または `product-design-lens` を変更したら、それぞれ **`plugins/dev-tools/skills/<name>` へ同期コピー**する（`cp -R skills/<name>/ plugins/dev-tools/skills/<name>/`）。プラグイン側を直接編集しない
 4. ルート `README.md` のスキル一覧と整合を取る
+5. 反映は**コマンドの成功表示でなく配布先の実体**で確認する（`ls ~/.agents/skills/<name>`）
+
+#### `npx skills add` の既知の挙動（2026-08-25 実測）
+
+- **`elchika-inc/agent-toolkit/<skill-name>` のようなパス指定はできない。** 第3要素は**ブランチ名**として解釈され、`No skills found` で終わる。リポジトリまで（`elchika-inc/agent-toolkit`）を指定する
+- **PromptScript 向けに `does not support global skill installation` が全スキル分エラー表示されるが、失敗ではない。** Claude Code（`~/.claude/skills/`）と `~/.agents/skills/` へは正常に配置される。エラー表示だけを見て失敗と判断しない
 
 ### plugins/ 変更時
 1. `plugins/<プラグイン名>/` 配下を編集
