@@ -1,10 +1,11 @@
 # Durable State
 
-レビューサイクルの進行状態を `REVIEW_DIR` へ落とし、中断後に同一対象から再開するための構造と規則。
+レビューサイクルの進行状態を `REVIEW_DIR` へ落とし、中断後に同一対象から再開するための構造と規則。`REVIEW_DIR` の作成、state 更新、レビュアー応答の分割、findings の書き込みはすべてオーケストレータが行う。レビュアーにはこのディレクトリへの書き込みもアクセスも要求しない。
 
 ## REVIEW_DIR の作成と安全検査
 
 ```bash
+# このスニペットはオーケストレータが実行する
 # worktree ごとの決定的パスを選ぶ
 _worktree=$(git rev-parse --show-toplevel)
 _wt=$(basename "$_worktree")
@@ -54,9 +55,11 @@ $REVIEW_DIR/
 - cycle ID と phase（`active` / `paused` / `terminal-pending` / `log-appended`）
 - worktree の絶対パスと、対象ファイルごとの content fingerprint
 - 修正事項ごとの状態（`pending` / `applied`）
-- ロールごとの試行回数（0 / 1 / 2）と結果状態（pending / findings-received / failed）
+- ラウンドごと・ロールごとの reviewer 試行回数（0 / 1 / 2）、書き込み試行回数（0 / 1 / 2）、結果状態（pending / response-received / findings-persisted / failed）
 
-`paused` は specialist の再試行失敗またはユーザー中断で意図的に保持した状態を指し、ログ追記も cleanup も行わない。これによりクラッシュで `active` のまま残った状態と区別できる。`terminal-pending` / `log-appended` は終了処理の checkpoint である。
+`paused` は specialist の再試行失敗、findings の書き込み失敗、またはユーザー中断で意図的に保持した状態を指し、ログ追記も cleanup も行わない。これによりクラッシュで `active` のまま残った状態と区別できる。`terminal-pending` / `log-appended` は終了処理の checkpoint である。
+
+新しいラウンドでは `$REVIEW_DIR/round-N/` を作成した後、最初の role をディスパッチする前に、同じ `state.md` 更新で round を N に進め、全 role の reviewer 試行回数と書き込み試行回数を0、結果状態を `pending` として初期化する。この checkpoint の書き込みと読み返しに成功するまでは前ラウンドの state を正とし、新ラウンドをディスパッチしない。
 
 ## 再開判定
 
@@ -68,9 +71,25 @@ $REVIEW_DIR/
 | `state.md` はあるがいずれかが不一致 | `mv "$REVIEW_DIR" "${REVIEW_DIR}-abandoned-$(date +%s)"` で退避し、新規開始する |
 | `state.md` が無い | 壊れた残骸として同様に退避し、新規開始する |
 
-新規開始時はディレクトリと空の `fp-registry.md` を作り、最初のディスパッチ前に安定した cycle ID と `state.md` を書く。ディスパッチ前に `attempts` を増やし、findings 到着後に結果状態を更新する。再開時は valid findings がなく `attempts=1` なら2回目を実行し、`attempts=2` なら未完のまま停止する。
+新規開始時はディレクトリと空の `fp-registry.md` を作り、最初のディスパッチ前に安定した cycle ID と `state.md` を書く。ディスパッチ前に reviewer 試行回数を増やし、role の応答ブロック到着時に `response-received`、role 別ファイルへの書き込みと検証後にだけ `findings-persisted` へ更新する。再開時は valid findings がなく reviewer 試行回数が1なら2回目を実行し、2なら結果状態を `failed` へ更新して未完のまま停止する。valid findings があれば `state.md` の状態より実体を優先し、再ディスパッチせず `findings-persisted` へ回復する。
 
 修正は `pending` を先に記録し、修正前 fingerprint と検証可能な期待状態も保存する。再開時は一般の fingerprint 不一致判定より先に `pending` を確認する。現在値が修正前 fingerprint と一致すれば再実行し、期待状態を満たせば `applied` と新 fingerprint を checkpoint する。どちらでもなければ状態を保持したまま fail-closed で停止する。`pending` がない説明不能な fingerprint 不一致だけを abandoned へ退避する。
+
+## レビュアー応答の分割と永続化
+
+レビュアーには role ごとに次の境界を1組だけ返させる。
+
+```text
+<<<LENS_FINDINGS role="<role>">>>
+<findings 本文>
+<<<END_LENS_FINDINGS>>>
+```
+
+role は `fresh-eyes`、`security`、`core-logic`、`tests`、`domain`、条件付きで `ambiguity-hunter`、`altitude-checker` のいずれかに限る。オーケストレータは期待する role の集合、重複、開始・終了境界の対応、本文の非空に加え、後述する findings ファイルの有効性（先頭行の結論形式と flag 件数整合を含む）を永続化の前後で検証する。有効なブロックは境界行だけを除き、本文の文字・順序・改行を変えず `$REVIEW_DIR/round-N/<role>.md` へ書く。要約、言い換え、複数 role の結合、optional の削除をしない。
+
+ブロック欠落・重複・未知 role・境界不正・空本文は、その role の findings が返らなかったものとして扱う。有効な role は先に別ファイルへ保存し、失敗した role だけを1回再依頼する。再依頼の応答にも同じ境界と検証を適用する。同一セッション内の再依頼でも有効な応答を得られず reviewer 試行回数が2へ達した場合は、当該 role の結果状態を `failed` へ更新して `paused` で停止する。
+
+role 別ファイルへ書く直前に当該 role の書き込み試行回数を増やし、書き込みと検証が成功した後にだけ結果状態を `findings-persisted` へ更新する。書き込みに失敗したら、同じ未変更ブロックの書き込みだけを1回再試行する。2回目も失敗した場合は結果状態を `failed` へ更新して `paused` で停止し、可能なら `state.md` に失敗 role と書き込み試行回数を記録する。ユーザーへの報告には、失敗 role、保存先、原文が未永続化であること、正確なエラー、書き込み試行回数、保持できた `REVIEW_DIR`、再開時に当該 role を再取得する必要があることを含める。`state.md` 自体へ書けない場合も同じ情報を直接報告し、LGTM 扱いで続行しない。
 
 ## findings ファイルの有効性
 
