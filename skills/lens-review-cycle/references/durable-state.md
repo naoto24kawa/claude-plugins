@@ -26,7 +26,7 @@ if [ ! -d "$REVIEW_DIR" ] || [ -L "$REVIEW_DIR" ] || [ "$_review_dir_ok" != "$RE
   return 1 2>/dev/null || exit 1
 fi
 
-# cycle log への書き出し確認後、同じ安全検査を再実行してクリーンアップする
+# cycle ファイルへの書き出し確認後、同じ安全検査を再実行してクリーンアップする
 _review_dir_ok=$(find "$REVIEW_DIR" -prune -type d -user "$(id -un)" -perm 700 -print 2>/dev/null)
 if [ ! -d "$REVIEW_DIR" ] || [ -L "$REVIEW_DIR" ] || [ "$_review_dir_ok" != "$REVIEW_DIR" ]; then
   printf 'review-cycle: cleanup 前の安全検査に失敗しました: %s\n' "$REVIEW_DIR" >&2
@@ -57,7 +57,7 @@ $REVIEW_DIR/
 - 修正事項ごとの状態（`pending` / `applied`）
 - ラウンドごと・ロールごとの reviewer 試行回数（0 / 1 / 2）、書き込み試行回数（0 / 1 / 2）、結果状態（pending / response-received / findings-persisted / failed）
 
-`paused` は specialist の再試行失敗、findings の書き込み失敗、またはユーザー中断で意図的に保持した状態を指し、ログ追記も cleanup も行わない。これによりクラッシュで `active` のまま残った状態と区別できる。`terminal-pending` / `log-appended` は終了処理の checkpoint である。
+`paused` は specialist の再試行失敗、findings の書き込み失敗、またはユーザー中断で意図的に保持した状態を指し、cycle ファイルへの書込も cleanup も行わない。これによりクラッシュで `active` のまま残った状態と区別できる。`terminal-pending` / `log-appended` は終了処理の checkpoint であり、前者は cycle ファイルの書込前、後者は `.docs/reviews/cycles/<cycle-id>.md` の完全性を読み返して確認した後を表す。
 
 新しいラウンドでは `$REVIEW_DIR/round-N/` を作成した後、最初の role をディスパッチする前に、同じ `state.md` 更新で round を N に進め、全 role の reviewer 試行回数と書き込み試行回数を0、結果状態を `pending` として初期化する。この checkpoint の書き込みと読み返しに成功するまでは前ラウンドの state を正とし、新ラウンドをディスパッチしない。
 
@@ -71,7 +71,7 @@ $REVIEW_DIR/
 | `state.md` はあるがいずれかが不一致 | `mv "$REVIEW_DIR" "${REVIEW_DIR}-abandoned-$(date +%s)"` で退避し、新規開始する |
 | `state.md` が無い | 壊れた残骸として同様に退避し、新規開始する |
 
-新規開始時はディレクトリと空の `fp-registry.md` を作り、最初のディスパッチ前に安定した cycle ID と `state.md` を書く。ディスパッチ前に reviewer 試行回数を増やし、role の応答ブロック到着時に `response-received`、role 別ファイルへの書き込みと検証後にだけ `findings-persisted` へ更新する。再開時は valid findings がなく reviewer 試行回数が1なら2回目を実行し、2なら結果状態を `failed` へ更新して未完のまま停止する。valid findings があれば `state.md` の状態より実体を優先し、再ディスパッチせず `findings-persisted` へ回復する。
+新規開始時はディレクトリと空の `fp-registry.md` を作り、最初のディスパッチ前に安定した cycle ID と `state.md` を書く。cycle ID は `YYYY-MM-DD-` で始まる安全な単一ファイル名成分とし、詳細な文字集合と path 検証は `references/cycle-log-format.md` を正本とする。ディスパッチ前に reviewer 試行回数を増やし、role の応答ブロック到着時に `response-received`、role 別ファイルへの書き込みと検証後にだけ `findings-persisted` へ更新する。再開時は valid findings がなく reviewer 試行回数が1なら2回目を実行し、2なら結果状態を `failed` へ更新して未完のまま停止する。valid findings があれば `state.md` の状態より実体を優先し、再ディスパッチせず `findings-persisted` へ回復する。
 
 修正は `pending` を先に記録し、修正前 fingerprint と検証可能な期待状態も保存する。再開時は一般の fingerprint 不一致判定より先に `pending` を確認する。現在値が修正前 fingerprint と一致すれば再実行し、期待状態を満たせば `applied` と新 fingerprint を checkpoint する。どちらでもなければ状態を保持したまま fail-closed で停止する。`pending` がない説明不能な fingerprint 不一致だけを abandoned へ退避する。
 

@@ -199,7 +199,7 @@ flag された真の指摘が 1 件以上あった → テスト実行 → ス�
 
 全レンズ LGTM、堂々巡り、ラウンド上限超過は terminal な終了としてこのステップへ進む。レビュアーの再試行失敗、findings の書き込み失敗、ユーザー中断は paused とし、ログも cleanup も行わず `REVIEW_DIR` を保持する。
 
-terminal な終了時は、対象リポジトリの `.docs/reviews/review-cycle-log.md` へラウンド数、終了理由、レンズ別 flag 件数、確定した偽陽性を**先に追記**する。形式と追記規則は `references/cycle-log-format.md` を参照する。レンズ実績は記録だけに使い、構成を自動変更しない。
+terminal な終了時は、対象リポジトリの `.docs/reviews/cycles/<cycle-id>.md` へラウンド数、終了理由、レンズ別 flag 件数、確定した偽陽性を**先に書き出す**。形式・書込規則・legacy ログからの読取フォールバックは `references/cycle-log-format.md` を参照する。レンズ実績は記録だけに使い、構成を自動変更しない。
 
 ログへの書き出しを確認してから一時状態を削除し、サイクル全体のサマリーをユーザーに報告する。
 
@@ -276,6 +276,6 @@ Fresh Eyes の独立性だけは別人格に依存していたので、「最初
 - **`references/fp-registry-format.md`** — FP レジストリのエントリフォーマット・照合ルール・前回ログからの carry-over
 - **`references/durable-state.md`** — `REVIEW_DIR` の生成と安全検査・state の構造と再開判定・findings ファイルの有効性
 - **`references/minimal-context-feeder.md`** — ts-review-graph の起動条件・呼び出し・fail-open フォールバック
-- **`references/cycle-log-format.md`** — サイクル横断ログの形式・追記規則
+- **`references/cycle-log-format.md`** — サイクル横断ログの形式・ファイル書込規則・最新エントリの選択
 - **`references/ambiguity-hunter.md`** — #6 Ambiguity Hunter（文章仕様の曖昧さ）の7分類・出力・明文化案・起動条件
 - **`references/altitude-checker.md`** — #7 Altitude Checker（詳細レベル overfit）の5分類・出力・移設案・#6 との裁定
