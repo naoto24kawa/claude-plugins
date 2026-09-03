@@ -98,7 +98,7 @@ grep -c "^## FP-" "$REVIEW_DIR/fp-registry.md" 2>/dev/null || echo "0"
 
 ## 前回ログからの carry-over
 
-対象リポジトリに `.docs/reviews/review-cycle-log.md` がある場合、最後の `## YYYY-MM-DD ...` エントリにある偽陽性だけを候補にする。
+`references/cycle-log-format.md` の「最新エントリ」に従い、`.docs/reviews/cycles/` 内で完全 marker を持つファイルの辞書順最大を選び、その偽陽性だけを候補にする。`cycles/` が無い、または完全なファイルが無い場合だけ、legacy の `.docs/reviews/review-cycle-log.md` の末尾に最も近い完全なエントリへフォールバックする。どちらにも候補が無ければ carry-over をスキップする。
 
 carry-over は前サイクルの学習を持ち越す高速化であってゲートではない。ログが読めない、完全な最新エントリを特定できない、エントリを解釈できないといった場合は、理由を1行記録して **carry-over をスキップし、空の FP レジストリでサイクルを開始する**（fail-open）。ここで停止するとログの破損だけでレビュー自体が回らなくなる。
 
