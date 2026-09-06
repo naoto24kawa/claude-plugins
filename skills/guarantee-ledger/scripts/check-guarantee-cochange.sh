@@ -39,13 +39,19 @@ if ! git rev-parse --verify --quiet "$BASE_REF^{commit}" >/dev/null; then
   fail "base refを解決できない: $BASE_REF"
 fi
 
+# 表の行のみ（| で始まる行）を読み取る。0 行は許容し、読取エラーは fail-closed にする。
 rows=$(rg '^\|' "$LEDGER")
 rg_status=$?
 case "$rg_status" in
-  0) ;;
-  1) fail "保証レコードの表を読み取れない: $LEDGER" ;;
-  *) fail "保証レコードの表検査に失敗: $LEDGER" ;;
+  0|1) ;;
+  *) fail "保証レコードの表を読み取れない: $LEDGER" ;;
 esac
+
+# 表の行が 0 なら突合対象が無いので、差分収集へ進まず 0 件で終える。
+if [ "$rg_status" -eq 1 ]; then
+  summary
+  exit 0
+fi
 
 changed_files=$(mktemp)
 untracked_files=$(mktemp)
