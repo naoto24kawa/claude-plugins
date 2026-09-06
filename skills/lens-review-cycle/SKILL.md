@@ -199,7 +199,7 @@ flag された真の指摘が 1 件以上あった → テスト実行 → ス�
 
 全レンズ LGTM、堂々巡り、ラウンド上限超過は terminal な終了としてこのステップへ進む。レビュアーの再試行失敗、findings の書き込み失敗、ユーザー中断は paused とし、ログも cleanup も行わず `REVIEW_DIR` を保持する。
 
-terminal な終了時は、対象リポジトリの `.docs/reviews/cycles/<cycle-id>.md` へラウンド数、終了理由、レンズ別 flag 件数、確定した偽陽性を**先に書き出す**。形式・書込規則・legacy ログからの読取フォールバックは `references/cycle-log-format.md` を参照する。レンズ実績は記録だけに使い、構成を自動変更しない。
+terminal な終了時は、対象リポジトリの `.docs/reviews/cycles/<cycle-id>.md` へラウンド数、終了理由、レンズ別 flag 件数、確定した偽陽性を**先に書き出す**。このファイルはレビュードキュメント（standards DOCS_OPS §3「呼び名」）であり、1 サイクル 1 ファイルで書き切り、後から書き換えない。形式・書込規則・legacy ログからの読取フォールバックは `references/cycle-log-format.md` を参照する。レンズ実績は記録だけに使い、構成を自動変更しない。
 
 ログへの書き出しを確認してから一時状態を削除し、サイクル全体のサマリーをユーザーに報告する。
 

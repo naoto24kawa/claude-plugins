@@ -1,5 +1,7 @@
 # Review Cycle Log Format
 
+サイクルの成果物はレビュードキュメント（standards DOCS_OPS §3「呼び名」）であり、1 サイクル 1 ファイルで書き切り、後から書き換えない。
+
 完了したレビューサイクルの学習を、対象リポジトリの `.docs/reviews/cycles/<cycle-id>.md` へ1サイクル1ファイルで保存する。`cycle-id` は `state.md` の安定 ID を使い、`YYYY-MM-DD-` で始まる安全な単一ファイル名成分に限定する。既存の `.docs/reviews/review-cycle-log.md` は読み取り専用の legacy 履歴として残し、新規追記しない。
 
 ## エントリフォーマット

@@ -1,4 +1,4 @@
-# 保証台帳（fixture）
+# 保証レコード（fixture）
 
 雛形 scripts の自己検証に使う worked example。実在のプロジェクトの保証ではない。
 

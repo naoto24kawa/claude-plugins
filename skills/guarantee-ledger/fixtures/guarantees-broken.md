@@ -1,4 +1,4 @@
-# 保証台帳（fixture・負例）
+# 保証レコード（fixture・負例）
 
 `self-check.sh` が出自検査の退行を検出するための負例。実在のプロジェクトの保証ではない。
 このファイルへ `bash scripts/check-guarantees.sh` を通すと exit 1 になることが期待値である。

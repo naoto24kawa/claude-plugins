@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # テストファイルは保証間で共有され、追加のたびに無関係な保証がWARNになるため、
-# 保証台帳の各行について、対応実装の変更のみを同じ保証行の更新と突合する。
+# 保証レコードの各行について、対応実装の変更のみを同じ保証行の更新と突合する。
 # 導入時はプロジェクトの実パスへ書き換える。既定値は同梱 fixture を指す。
 set -uo pipefail
 
@@ -32,7 +32,7 @@ if ! cd "$ROOT"; then
 fi
 
 if [ ! -r "$LEDGER" ]; then
-  fail "台帳を読み取れない: $LEDGER"
+  fail "保証レコードを読み取れない: $LEDGER"
 fi
 
 if ! git rev-parse --verify --quiet "$BASE_REF^{commit}" >/dev/null; then
@@ -43,8 +43,8 @@ rows=$(rg '^\|' "$LEDGER")
 rg_status=$?
 case "$rg_status" in
   0) ;;
-  1) fail "台帳の表を読み取れない: $LEDGER" ;;
-  *) fail "台帳の表検査に失敗: $LEDGER" ;;
+  1) fail "保証レコードの表を読み取れない: $LEDGER" ;;
+  *) fail "保証レコードの表検査に失敗: $LEDGER" ;;
 esac
 
 changed_files=$(mktemp)
@@ -68,10 +68,10 @@ fi
 
 # G-ID行の更新もcommit済みと未commitの双方から集める。
 if ! git diff "$BASE_REF"...HEAD -- "$LEDGER" >"$ledger_diff"; then
-  fail "台帳のcommit済み差分を取得できない: $LEDGER"
+  fail "保証レコードのcommit済み差分を取得できない: $LEDGER"
 fi
 if ! git diff HEAD -- "$LEDGER" >>"$ledger_diff"; then
-  fail "台帳の未commit差分を取得できない: $LEDGER"
+  fail "保証レコードの未commit差分を取得できない: $LEDGER"
 fi
 
 ledger_untracked=0
@@ -80,7 +80,7 @@ rg_status=$?
 case "$rg_status" in
   0) ledger_untracked=1 ;;
   1) ;;
-  *) fail "未追跡台帳の判定に失敗: $LEDGER" ;;
+  *) fail "未追跡保証レコードの判定に失敗: $LEDGER" ;;
 esac
 
 path_changed() {
@@ -106,7 +106,7 @@ ledger_row_changed() {
   case "$rg_status" in
     0) return 0 ;;
     1) return 1 ;;
-    *) fail "台帳行の変更判定に失敗: $id" ;;
+    *) fail "保証レコード行の変更判定に失敗: $id" ;;
   esac
 }
 
@@ -123,7 +123,7 @@ while IFS= read -r line; do
   esac
 
   if ! IFS='|' read -r _ id _ implementation _ _ <<< "$line"; then
-    fail "台帳行を解析できない"
+    fail "保証レコード行を解析できない"
   fi
   trim_cell "$id"
   id="$TRIMMED_CELL"
