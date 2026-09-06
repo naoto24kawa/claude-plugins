@@ -51,6 +51,15 @@ if [ "$empty_exit" -ne 0 ] || [ "$empty_output" != 'checked=0 broken=0 unpinned=
   failed=1
 fi
 
+echo "== 表の無い保証レコードで cochange を検査する =="
+empty_cochange_output=$(LEDGER="$empty_ledger_file" BASE_REF=HEAD bash scripts/check-guarantee-cochange.sh)
+empty_cochange_exit=$?
+printf '%s\n' "$empty_cochange_output"
+if [ "$empty_cochange_exit" -ne 0 ] || [ "$empty_cochange_output" != 'cochange_checked=0 cochange_warn=0' ]; then
+  echo "FAIL: 表の無い保証レコードで cochange_checked=0・exit 0 を期待したが exit $empty_cochange_exit だった" >&2
+  failed=1
+fi
+
 if [ "$failed" -ne 0 ]; then
   echo "self-check: FAIL"
   exit 1

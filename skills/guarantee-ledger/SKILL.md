@@ -140,7 +140,7 @@ CLI や画面に固有の判定基準はここでは定めない。上記は原�
 ## ⑧ 導入手順
 
 1. `scripts/check-guarantees.sh` と `scripts/check-guarantee-cochange.sh` を **`<リポジトリルート>/scripts/`** へコピーし、既定値（`check-guarantees.sh` は `LEDGER` / `TEST_DIR`、`check-guarantee-cochange.sh` は `LEDGER` / `BASE_REF`）をプロジェクトの実パスへ書き換える。両スクリプトは `ROOT` を自身の置き場所（`$(cd "$script_dir/.." && pwd -P)`）から導出しており、`<リポジトリルート>/scripts/` の 1 階層下に置かないと保証レコードのパス解決がずれる
-2. 保証レコードを空で開始する。または指示の情報源（`.docs/plans` の決定・PR rubric・レビュー裁定・risk-registry）から起こす。レコードを空で開始したとき checker は `checked=0` で exit 0 になる（表ヘッダも不要）。
+2. 保証レコードを空で開始する。または指示の情報源（`.docs/plans` の決定・PR rubric・レビュー裁定・risk-registry）から起こす。レコードを空で開始したとき両 checker（`check-guarantees.sh` は `checked=0`、`check-guarantee-cochange.sh` は `cochange_checked=0`）は exit 0 になる（表ヘッダも不要）。
 3. プロジェクトの `CLAUDE.md` / `AGENTS.md` へ追記トリガーを 1 行加える
 4. PR 前チェックへ checker を配線し、exit code 契約（⑨参照）を明記する
 
