@@ -13,6 +13,10 @@ if [ ! -f "$LEDGER" ]; then
   echo "ERROR: $LEDGER が存在しない" >&2
   exit 1
 fi
+if [ ! -r "$LEDGER" ]; then
+  echo "ERROR: 保証レコードを読み取れない: $LEDGER" >&2
+  exit 1
+fi
 
 failed=0
 checked=0
@@ -44,11 +48,16 @@ declared_name_exists() {
   ' "$file"
 }
 
-# 表の行のみ（| で始まる行）をfail-closedで読み取る。
-if ! rows=$(rg '^\|' "$LEDGER"); then
-  echo "ERROR: 台帳の表を読み取れない: $LEDGER" >&2
-  exit 1
-fi
+# 表の行のみ（| で始まる行）を読み取る。0 行は許容し、読取エラーは fail-closed にする。
+rows=$(rg '^\|' "$LEDGER")
+rows_exit=$?
+case "$rows_exit" in
+  0|1) ;;
+  *)
+    echo "ERROR: 保証レコードの表を読み取れない: $LEDGER" >&2
+    exit 1
+    ;;
+esac
 
 # retired を除き、対応実装・裏付けテスト・pin確認・出自種別・出自を取り出す。
 while IFS= read -r line; do

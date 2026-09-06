@@ -1,13 +1,14 @@
 ---
 name: guarantee-pin-check
-description: 'Use when 保証台帳の pin 未確認（unpinned）な保証をまとめて潰すとき。保証を意図的に壊して裏付けテストが赤くなることを観測し、証跡を台帳へ記入する多主体の手順。トリガー: 「pin 確認」「unpinned を潰す」「保証が本当に守られているか確かめる」「mutation で台帳を検証する」。台帳そのものの書式・出自ルールは guarantee-ledger を使う。'
+description: 'Use when 保証レコードの pin 未確認（unpinned）な保証をまとめて潰すとき。保証を意図的に壊して裏付けテストが赤くなることを観測し、証跡を保証レコードへ記入する多主体の手順。トリガー: 「pin 確認」「unpinned を潰す」「保証が本当に守られているか確かめる」「mutation で台帳を検証する」。保証レコードそのものの書式・出自ルールは guarantee-ledger を使う。'
 ---
 
 # Guarantee Pin Check — 保証の pin 確認
 
 ## ① 目的と前提
 
-pin 確認とは、保証台帳に載っている保証を意図的に壊し、その保証を裏付けるはずのテストが赤くなることを観測する行為である。`guarantee-ledger` の `check-guarantees.sh` が数える `unpinned`（`pin確認` 欄が空の行）を潰す対象とする。
+pin 確認とは、保証レコードに載っている保証を意図的に壊し、その保証を裏付けるはずのテストが赤くなることを観測する行為である。`guarantee-ledger` の `check-guarantees.sh` が数える `unpinned`（`pin確認` 欄が空の行）を潰す対象とする。
+呼び名は standards DOCS_OPS §3「呼び名」に従う（レコード＝行を足す集合。旧称: 保証台帳）。
 
 なぜ必要か:
 
@@ -17,7 +18,7 @@ pin 確認とは、保証台帳に載っている保証を意図的に壊し、�
 
 > この手順は manako の 1 回のキャンペーン（2026-08-14、G-001〜G-006）の実施記録から復元したものであり、n=1 である。
 
-台帳の書式・列の意味・出自ルールは `guarantee-ledger` を使う。本スキルは pin 確認の実施手順だけを持つ。
+保証レコードの書式・列の意味・出自ルールは `guarantee-ledger` を使う。本スキルは pin 確認の実施手順だけを持つ。
 
 ## ② 手順（Step A〜D）
 
@@ -26,7 +27,7 @@ pin 確認とは、保証台帳に載っている保証を意図的に壊し、�
 | A | 裏付けテストを読まずに（test-blind）、保証文と実装だけから mutant を設計する。網羅性を主張する保証は条件ごとに mutant を分ける |
 | B | mutant を適用し、裏付けテストが赤くなることを確認する。exit code と失敗したテスト名を記録する |
 | C | mutant を復元し、`git status --porcelain` の出力が空であることを確認する |
-| D | 台帳の `pin確認` 欄へ `YYYY-MM-DD <壊し方の散文>` を記入する |
+| D | 保証レコードの `pin確認` 欄へ `YYYY-MM-DD <壊し方の散文>` を記入する |
 
 Step A が test-blind である理由: テストを先に読むと、テストが検査している条件をなぞった mutant しか思いつかなくなり、「テストが検出できない壊し方」を発見できなくなる。
 
@@ -46,10 +47,10 @@ Step C で `git diff` でなく `git status --porcelain` を使う理由: `git d
 
 > mutant の一部が緑のままだった場合、`pin確認` を空欄のまま残す。「一部は pin できた」を pin 済みとして記入しない。緑のままだった条件を Action へ積む。
 >
-> 実例: manako の G-005 は 4 つの mutant のうち free 上限と未知プラン fallback は赤になったが、pro / business の上限を 1 増やす mutant は緑のままだった。台帳の `pin確認` は空欄のままとし、`unpinned=1` として残した。
+> 実例: manako の G-005 は 4 つの mutant のうち free 上限と未知プラン fallback は赤になったが、pro / business の上限を 1 増やす mutant は緑のままだった。保証レコードの `pin確認` は空欄のままとし、`unpinned=1` として残した。
 
 ## ⑤ 委任と記録
 
 - 委任は `delegation-spec` スキルに従う
 - 実施記録に残すもの: 各 mutant の内容、mutant 数、実行したテスト、exit code、判定、復元確認の結果
-- 記録は台帳と同じリポジトリの `.docs/plans/` へ残す（チャットへ揮発させない）
+- 記録は保証レコードと同じリポジトリの `.docs/plans/` へ残す（チャットへ揮発させない）

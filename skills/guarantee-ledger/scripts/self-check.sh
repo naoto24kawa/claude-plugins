@@ -36,6 +36,21 @@ if ! rg -F '出自種別が不正' "$negative_stderr_file" >/dev/null; then
   failed=1
 fi
 
+echo "== 表の無い保証レコードを検査する =="
+if ! empty_ledger_file=$(mktemp); then
+  echo "FAIL: 空の保証レコード用の一時ファイルを作成できない" >&2
+  exit 1
+fi
+trap 'rm -f "$negative_stderr_file" "$empty_ledger_file"' EXIT
+printf '# x\n\n本文\n' > "$empty_ledger_file"
+empty_output=$(LEDGER="$empty_ledger_file" TEST_DIR=fixtures/tests bash scripts/check-guarantees.sh)
+empty_exit=$?
+printf '%s\n' "$empty_output"
+if [ "$empty_exit" -ne 0 ] || [ "$empty_output" != 'checked=0 broken=0 unpinned=0 指示=0 選択=0' ]; then
+  echo "FAIL: 表の無い保証レコードで全件数 0・exit 0 を期待したが exit $empty_exit だった" >&2
+  failed=1
+fi
+
 if [ "$failed" -ne 0 ]; then
   echo "self-check: FAIL"
   exit 1
